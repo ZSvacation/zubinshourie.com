@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zubin Shourie</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
 
     :root {
       --cream: #F4F1EB;
@@ -15,15 +15,14 @@
       --charcoal: #2A2A2A;
       --soft-black: #1A1A1A;
       --forest: #3D5A47;
-      --forest-light: #4A6B55;
-      --forest-dark: #2E4536;
-      --warm-gray: #8C8578;
+      --forest-light: #5A7A63;
+      --forest-dark: #2B3E30;
+      --warm-gray: #8A8478;
       --mid-gray: #6B655D;
       --light-gray: #B5AFA6;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html { font-size: 16px; scroll-behavior: smooth; }
 
     body {
@@ -99,6 +98,8 @@
       letter-spacing: 0.15em;
       color: var(--forest);
       margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
     }
 
     .hero h1 {
@@ -110,6 +111,8 @@
       letter-spacing: -0.02em;
       max-width: 850px;
       margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.4s forwards;
     }
 
     .hero h1 em {
@@ -125,6 +128,8 @@
       max-width: 480px;
       line-height: 1.75;
       margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
     }
 
     .hero-cta {
@@ -141,11 +146,18 @@
       padding: 1rem 0;
       border-bottom: 1.5px solid var(--forest);
       transition: gap 0.3s ease;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.8s forwards;
     }
 
     .hero-cta:hover { gap: 1.25rem; }
     .hero-cta .arrow { transition: transform 0.3s ease; }
     .hero-cta:hover .arrow { transform: translateX(4px); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* ============ DIVIDER ============ */
     .divider { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
@@ -186,6 +198,24 @@
 
     .about-strip .content p strong { font-weight: 500; }
 
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .about-tags span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--forest);
+      border: 1px solid var(--tan);
+      padding: 0.35rem 0.75rem;
+      border-radius: 2px;
+    }
+
     /* ============ WORK GRID ============ */
     .work-section {
       max-width: 1200px;
@@ -208,14 +238,12 @@
       letter-spacing: -0.02em;
     }
 
-    .section-header a {
-      font-family: 'Sora', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 500;
+    .section-header .section-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--forest);
-      text-decoration: none;
+      color: var(--warm-gray);
     }
 
     .work-grid {
@@ -268,6 +296,7 @@
       font-weight: 500;
       color: var(--soft-black);
       margin-bottom: 0.4rem;
+      line-height: 1.2;
     }
 
     .work-card .card-desc {
@@ -276,6 +305,41 @@
       font-weight: 300;
       color: var(--warm-gray);
       line-height: 1.6;
+    }
+
+    .work-card .card-metrics {
+      display: flex;
+      gap: 1.25rem;
+      margin-top: 0.75rem;
+    }
+
+    .work-card .card-metrics .metric {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .work-card .card-metrics .metric-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--soft-black);
+    }
+
+    .work-card .card-metrics .metric-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--warm-gray);
+    }
+
+    /* Full-width card variant */
+    .work-card.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .work-card.full-width .card-image {
+      aspect-ratio: 21/9;
     }
 
     /* ============ FEATURED STRIP ============ */
@@ -332,7 +396,10 @@
       text-decoration: none;
       border-bottom: 1px solid var(--cream);
       padding-bottom: 0.25rem;
+      transition: border-color 0.3s;
     }
+
+    .featured-strip .cta:hover { border-bottom-color: var(--forest-light); }
 
     .featured-image {
       width: 100%;
@@ -346,6 +413,24 @@
       height: 100%;
       object-fit: cover;
       filter: saturate(0.8) contrast(1.1);
+    }
+
+    .featured-tech {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .featured-tech span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--forest-light);
+      border: 1px solid rgba(90, 122, 99, 0.4);
+      padding: 0.3rem 0.6rem;
+      border-radius: 2px;
     }
 
     /* ============ PHOTOGRAPHY ============ */
@@ -367,6 +452,8 @@
       border-radius: 2px;
       overflow: hidden;
       cursor: pointer;
+      position: relative;
+      background: var(--tan);
     }
 
     .photo-grid .photo img {
@@ -387,7 +474,25 @@
       aspect-ratio: auto;
     }
 
-    /* Photo mood group labels */
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--tan);
+    }
+
+    .photo-placeholder span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--warm-gray);
+      text-align: center;
+      padding: 1rem;
+    }
+
     .photo-group-label {
       grid-column: 1 / -1;
       font-family: 'JetBrains Mono', monospace;
@@ -404,6 +509,30 @@
       border-top: none;
       padding-top: 0;
       margin-top: 0;
+    }
+
+    .photo-note {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .photo-note p {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: var(--warm-gray);
+      font-style: italic;
+    }
+
+    .photo-note span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--light-gray);
+      display: block;
+      margin-top: 0.5rem;
     }
 
     /* ============ CONTACT ============ */
@@ -474,6 +603,19 @@
       color: var(--light-gray);
     }
 
+    footer a {
+      color: var(--warm-gray);
+      text-decoration: none;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: color 0.3s;
+    }
+
+    footer a:hover { color: var(--forest); }
+
     /* ============ MOBILE ============ */
     @media (max-width: 768px) {
       nav { padding: 1.25rem 1.5rem; }
@@ -483,8 +625,10 @@
       .about-strip .label { position: static; }
       .work-section { padding: 4rem 1.5rem; }
       .work-grid { grid-template-columns: 1fr; }
+      .work-card.full-width .card-image { aspect-ratio: 16/9; }
       .featured-inner { grid-template-columns: 1fr; }
       .featured-strip { padding: 4rem 1.5rem; }
+      .featured-image { display: none; }
       .photo-section { padding: 4rem 1.5rem; }
       .photo-grid { grid-template-columns: 1fr 1fr; }
       .contact-section { padding: 4rem 1.5rem; }
@@ -512,6 +656,7 @@
       <li><a href="#work" class="active">Work</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#photos">Photos</a></li>
+      <li><a href="dashboard.html">Daily Brief</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
@@ -531,69 +676,141 @@
     <div class="label">About</div>
     <div class="content">
       <p>I'm a senior at the <strong>University of Colorado Boulder</strong>, studying marketing at the Leeds School of Business. My focus is on brand strategy, consumer behavior, and the intersection of culture and commerce.</p>
-      <p>I've worked across real estate marketing, media, and publishing. I'm drawn to how brands in sports, music, and entertainment build lasting relationships with their audiences.</p>
-      <p>Outside of work, I shoot on a <strong>Fujifilm X-T5</strong>, travel with purpose, and build things with AI tools. Currently exploring how autonomous agents can augment creative and strategic work.</p>
+      <p>I've worked across real estate marketing, media and publishing, and political communications. I'm drawn to how brands in sports, music, and entertainment build lasting relationships with their audiences.</p>
+      <p>Outside of work, I shoot on a <strong>Fujifilm X-T5</strong>, invest with conviction, and build things with AI tools. Currently exploring how autonomous agents can augment creative and strategic work.</p>
+      <div class="about-tags">
+        <span>Brand Strategy</span>
+        <span>Digital Marketing</span>
+        <span>Google Analytics</span>
+        <span>Google Ads</span>
+        <span>Consumer Research</span>
+        <span>Photography</span>
+      </div>
     </div>
   </section>
 
   <div class="divider"><hr></div>
 
+  <!-- ============ WORK ============ -->
   <section class="work-section" id="work">
     <div class="section-header">
       <h2>Selected Work</h2>
-      <a href="#">View all &rarr;</a>
+      <span class="section-count">5 Projects</span>
     </div>
     <div class="work-grid">
-      <a href="#" class="work-card fade-in">
+
+      <!-- BuffBites — Digital Marketing -->
+      <a href="work-buffbites.html" class="work-card fade-in">
         <div class="card-image">
-          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop&q=80" alt="Beach at golden hour">
+          <img src="img/work/buffbites-card.jpg" alt="Healthy meal prep bowls">
         </div>
         <div class="card-info">
-          <div class="card-tag">Brand Strategy</div>
-          <div class="card-title">Innovation Project: Beach Security</div>
-          <div class="card-desc">Product ideation sprint targeting active beachgoers in the $50B smart safety market.</div>
+          <div class="card-tag">Digital Marketing &middot; SEO &middot; A/B Testing</div>
+          <div class="card-title">BuffBites: Driving Traffic to a Student Meal Platform</div>
+          <div class="card-desc">Built and marketed a recipe website for budget-conscious college students. Led SEO strategy, Facebook Group outreach, and Instagram A/B testing across ad copy variants.</div>
+          <div class="card-metrics">
+            <div class="metric">
+              <span class="metric-val">3,816</span>
+              <span class="metric-label">Page Views</span>
+            </div>
+            <div class="metric">
+              <span class="metric-val">6.6</span>
+              <span class="metric-label">Avg. Google Position</span>
+            </div>
+            <div class="metric">
+              <span class="metric-val">10m 27s</span>
+              <span class="metric-label">Avg. Session</span>
+            </div>
+          </div>
         </div>
       </a>
-      <a href="#" class="work-card fade-in">
+
+      <!-- Beach Security — Innovation Project -->
+      <a href="work-beach-security.html" class="work-card fade-in">
         <div class="card-image">
-          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&q=80" alt="Data dashboard">
+          <img src="img/work/beach-security-card.jpg" alt="Beach at golden hour">
         </div>
         <div class="card-info">
-          <div class="card-tag">Marketing Analytics</div>
-          <div class="card-title">Campaign Performance Dashboard</div>
-          <div class="card-desc">Real-time analytics visualization built with AI-powered data pipelines.</div>
+          <div class="card-tag">Product Strategy &middot; Consumer Research</div>
+          <div class="card-title">Beach Security: Opportunity Assessment</div>
+          <div class="card-desc">Led consumer research and competitive analysis for an innovation project targeting the $50B smart safety market. Identified the "Fixed Object Gap" in beach belonging security.</div>
+          <div class="card-metrics">
+            <div class="metric">
+              <span class="metric-val">$50B</span>
+              <span class="metric-label">TAM</span>
+            </div>
+            <div class="metric">
+              <span class="metric-val">11.2%</span>
+              <span class="metric-label">CAGR</span>
+            </div>
+          </div>
         </div>
       </a>
-      <a href="dashboard.html" class="work-card fade-in">
+
+      <!-- C-Elite — Go-to-Market -->
+      <a href="work-celite.html" class="work-card fade-in">
         <div class="card-image">
-          <img src="https://images.unsplash.com/photo-1504711434969-e33886168d0c?w=800&h=600&fit=crop&q=80" alt="Morning newspaper and coffee">
+          <img src="img/work/celite-card.jpg" alt="Product launch planning">
         </div>
         <div class="card-info">
-          <div class="card-tag">Intelligence Platform</div>
+          <div class="card-tag">Go-to-Market &middot; Brand Positioning</div>
+          <div class="card-title">C-Elite: Go-to-Market Plan</div>
+          <div class="card-desc">Developed a full go-to-market strategy for a premium creativity supplement. Positioned as a luxury D2C brand targeting high-achieving creative professionals through scarcity marketing and exclusive launch events.</div>
+        </div>
+      </a>
+
+      <!-- Sales Playbook -->
+      <a href="work-sales-playbook.html" class="work-card fade-in">
+        <div class="card-image">
+          <img src="img/work/sales-playbook-card.jpg" alt="Sales and CRM analytics">
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Sales Strategy &middot; Salesforce CRM</div>
+          <div class="card-title">Sales Playbook: Personal Brand &amp; Salesforce</div>
+          <div class="card-desc">Dual-product sales playbook examining prospecting strategy, SPIN selling methodology, and quantifiable value propositions for both a personal professional brand and Salesforce CRM.</div>
+          <div class="card-metrics">
+            <div class="metric">
+              <span class="metric-val">$93K</span>
+              <span class="metric-label">Personal QVP</span>
+            </div>
+            <div class="metric">
+              <span class="metric-val">$1.92M</span>
+              <span class="metric-label">Salesforce QVP</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- The Daily Brief — Full Width -->
+      <a href="dashboard.html" class="work-card full-width fade-in">
+        <div class="card-image">
+          <img src="https://images.unsplash.com/photo-1504711434969-e33886168d0c?w=1200&h=500&fit=crop&q=80" alt="Morning newspaper and coffee">
+        </div>
+        <div class="card-info">
+          <div class="card-tag">AI Engineering &middot; Intelligence Platform</div>
           <div class="card-title">The Daily Brief</div>
-          <div class="card-desc">AI agent that aggregates finance, news, sports, and culture into a daily editorial brief.</div>
+          <div class="card-desc">AI-powered personal intelligence briefing covering markets, global news, sports, entertainment, and marketing. Built with an autonomous agent pipeline that generates structured JSON, scrapes editorial images, and publishes to a custom editorial interface daily.</div>
         </div>
       </a>
-      <a href="#" class="work-card fade-in">
-        <div class="card-image">
-          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&q=80" alt="Brand analytics">
-        </div>
-        <div class="card-info">
-          <div class="card-tag">Content Strategy</div>
-          <div class="card-title">Brand Sentiment Tracker</div>
-          <div class="card-desc">Automated monitoring and scoring of brand mentions across social platforms.</div>
-        </div>
-      </a>
+
     </div>
   </section>
 
+  <!-- ============ FEATURED STRIP ============ -->
   <section class="featured-strip">
     <div class="featured-inner">
       <div>
         <div class="label">Featured Project</div>
         <h3>The Daily Brief</h3>
-        <p>A personal intelligence platform that uses AI agents to aggregate and synthesize news across finance, politics, sports, and culture. Published daily to a custom-built editorial interface.</p>
-        <a href="dashboard.html" class="cta">View the dashboard &rarr;</a>
+        <p>A personal intelligence platform that uses AI agents to aggregate and synthesize news across finance, politics, sports, and culture. Published daily to a custom editorial interface with real images sourced from article metadata.</p>
+        <div class="featured-tech">
+          <span>OpenClaw</span>
+          <span>Python</span>
+          <span>Anthropic API</span>
+          <span>OG Image Scraping</span>
+          <span>Vercel</span>
+        </div>
+        <a href="dashboard.html" class="cta">View today's brief &rarr;</a>
       </div>
       <div class="featured-image">
         <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?w=600&h=800&fit=crop&q=80" alt="Newspaper stack">
@@ -601,83 +818,65 @@
     </div>
   </section>
 
+  <!-- ============ PHOTOGRAPHY ============ -->
   <section class="photo-section" id="photos">
     <div class="section-header">
       <h2>Photography</h2>
-      <a href="#">View gallery &rarr;</a>
+      <span class="section-count">Fujifilm X-T5</span>
     </div>
     <div class="photo-grid">
 
-      <!-- ── Morocco & Desert (warm earth, burnt orange, sienna) ── -->
       <div class="photo-group-label">Morocco &amp; The Sahara</div>
 
       <div class="photo tall">
-        <!-- Lone figure walking desert dunes at sunset — cinematic silhouette -->
-        <img src="img/photos/desert-silhouette.jpg" alt="Desert dunes at sunset">
+        <div class="photo-placeholder"><span>Desert dunes at sunset</span></div>
       </div>
       <div class="photo">
-        <!-- Camel caravan crossing Saharan dunes at golden hour -->
-        <img src="img/photos/camel-caravan.jpg" alt="Camel caravan, Sahara">
+        <div class="photo-placeholder"><span>Camel caravan, Sahara</span></div>
       </div>
       <div class="photo">
-        <!-- Silhouetted couple walking through arched tunnel, Montserrat -->
-        <img src="img/photos/tunnel-couple.jpg" alt="Montserrat tunnel">
+        <div class="photo-placeholder"><span>Montserrat tunnel</span></div>
       </div>
       <div class="photo">
-        <!-- Terracotta rooftops and Montserrat peaks at golden hour -->
-        <img src="img/photos/montserrat-rooftops.jpg" alt="Montserrat rooftops">
+        <div class="photo-placeholder"><span>Montserrat rooftops</span></div>
       </div>
       <div class="photo">
-        <!-- Artisan working traditional loom, Morocco -->
-        <img src="img/photos/artisan-loom.jpg" alt="Moroccan artisan at loom">
+        <div class="photo-placeholder"><span>Moroccan artisan at loom</span></div>
       </div>
 
-      <!-- ── Europe & Architecture (amber, golden, warm) ── -->
       <div class="photo-group-label">Europe</div>
 
       <div class="photo">
-        <!-- Colosseum exterior, Rome — honey-gold sandstone, teal sky -->
-        <img src="img/photos/colosseum.jpg" alt="Colosseum, Rome">
+        <div class="photo-placeholder"><span>Colosseum, Rome</span></div>
       </div>
       <div class="photo tall">
-        <!-- Museum sculptures dramatically lit — almost painterly -->
-        <img src="img/photos/museum-sculptures.jpg" alt="Classical sculptures, Rome">
+        <div class="photo-placeholder"><span>Classical sculptures, Rome</span></div>
       </div>
       <div class="photo">
-        <!-- Gelato cart beneath Roman stone pines — charming summer scene -->
-        <img src="img/photos/gelato-cart-rome.jpg" alt="Gelato cart, Rome">
+        <div class="photo-placeholder"><span>Gelato cart, Rome</span></div>
       </div>
 
-      <!-- ── New York (film grain, amber, city energy) ── -->
       <div class="photo-group-label">New York</div>
 
       <div class="photo">
-        <!-- SoHo street corner at dusk — moody film grain -->
-        <img src="img/photos/soho-dusk.jpg" alt="SoHo at dusk, New York">
+        <div class="photo-placeholder"><span>SoHo at dusk</span></div>
       </div>
       <div class="photo">
-        <!-- PARK sign over street mural, NYC — retro analog -->
-        <img src="img/photos/park-mural-nyc.jpg" alt="Street mural, New York">
+        <div class="photo-placeholder"><span>Street mural, NYC</span></div>
       </div>
 
-      <!-- ── Colorado & The West (greens, dramatic golden light) ── -->
       <div class="photo-group-label">Colorado</div>
 
       <div class="photo">
-        <!-- Flatirons sunset with dramatic orange-teal sky -->
-        <img src="img/photos/flatirons-sunset.jpg" alt="Flatirons at sunset, Boulder">
+        <div class="photo-placeholder"><span>Flatirons at sunset</span></div>
       </div>
       <div class="photo">
-        <!-- Silhouetted Flatirons against blazing backlit sky -->
-        <img src="img/photos/flatirons-silhouette.jpg" alt="Flatirons silhouette, Boulder">
+        <div class="photo-placeholder"><span>Flatirons silhouette</span></div>
       </div>
 
-      <!-- ── Iceland (cool steel, cinematic, raw) ── -->
-      <div class="photo-group-label">Iceland</div>
-
-      <div class="photo tall">
-        <!-- Black sand beach at golden sunset, Reynisdrangar sea stacks -->
-        <img src="img/photos/iceland-beach.jpg" alt="Black sand beach, Iceland">
+      <div class="photo-note">
+        <p>Gallery loading soon &mdash; shot on Fujifilm X-T5, graded in DaVinci Resolve.</p>
+        <span>Drop your photos into img/photos/ to populate</span>
       </div>
 
     </div>
@@ -685,11 +884,12 @@
 
   <div class="divider"><hr></div>
 
+  <!-- ============ CONTACT ============ -->
   <section class="contact-section" id="contact">
     <h2>Let's connect.</h2>
     <p>Currently looking for opportunities in marketing, brand partnerships, and creative strategy in New York, LA, or Denver.</p>
     <div class="contact-links">
-      <a href="mailto:zubin.shourie@icloud.com">Email</a>
+      <a href="/cdn-cgi/l/email-protection#ccb6b9aea5a2e2bfa4a3b9bea5a98cafa3a0a3beada8a3e2a9a8b9">Email</a>
       <a href="#">LinkedIn</a>
       <a href="#">Resume</a>
     </div>
@@ -697,10 +897,12 @@
 
   <footer>
     <span>&copy; 2026 Zubin Shourie</span>
+    <a href="dashboard.html">Today's Brief &rarr;</a>
     <span>Built from scratch</span>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Fade-in observer
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('visible');
@@ -708,19 +910,13 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
+    // Active nav tracking
     const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
     window.addEventListener('scroll', () => {
       let current = '';
       sections.forEach(section => {
         if (scrollY >= section.offsetTop - 200) current = section.getAttribute('id');
       });
       navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
-      });
-    });
-  </script>
-
-</body>
-</html>
+        link.class
