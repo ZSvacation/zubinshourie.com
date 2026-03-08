@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuffBites: Driving Traffic — Zubin Shourie</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --cream: #F4F1EB;
+      --warm-white: #FAF8F5;
+      --tan: #E5DDD0;
+      --sand: #D4C9B8;
+      --charcoal: #2A2A2A;
+      --soft-black: #1A1A1A;
+      --forest: #3D5A47;
+      --forest-light: #4A6B55;
+      --forest-dark: #2E4536;
+      --warm-gray: #8C8578;
+      --faded-coral: #D4A08F;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Sora', -apple-system, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+
+    .article-nav { padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; }
+    .article-nav a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); text-decoration: none; transition: color 0.3s; }
+    .article-nav a:hover { color: var(--soft-black); }
+
+    .article-header { max-width: 800px; margin: 0 auto; padding: 4rem 3rem 2rem; }
+    .article-header .category { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin-bottom: 1.25rem; }
+    .article-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.15; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 1.25rem; }
+    .article-header .dek { font-family: 'Lora', serif; font-style: italic; font-size: 1.15rem; color: var(--warm-gray); line-height: 1.6; margin-bottom: 2rem; }
+    .article-meta { display: flex; gap: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--tan); }
+    .article-meta span { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+
+    .article-hero { max-width: 900px; margin: 2rem auto; padding: 0 3rem; }
+    .article-hero img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 4px; filter: saturate(0.85) contrast(1.05); }
+
+    .article-body { max-width: 680px; margin: 0 auto; padding: 2rem 3rem 4rem; }
+    .article-body p { font-family: 'Lora', serif; font-size: 1.05rem; line-height: 1.85; color: var(--charcoal); margin-bottom: 1.75rem; }
+    .article-body p:first-of-type::first-letter { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; float: left; line-height: 1; padding-right: 0.5rem; padding-top: 0.15rem; color: var(--soft-black); }
+    .article-body h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--soft-black); margin-top: 2.5rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+
+    .pullquote { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; line-height: 1.4; color: var(--forest); text-align: center; padding: 2.5rem 2rem; margin: 2.5rem 0; border-top: 2px solid var(--tan); border-bottom: 2px solid var(--tan); letter-spacing: -0.02em; }
+
+    /* Metrics row */
+    .metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2.5rem 0; }
+    .metric-box { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; text-align: center; }
+    .metric-box .val { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; color: var(--soft-black); margin-bottom: 0.25rem; }
+    .metric-box .label { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+
+    /* Data table */
+    .data-table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.85rem; }
+    .data-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-align: left; padding: 0.75rem 0.5rem; border-bottom: 2px solid var(--tan); }
+    .data-table td { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--charcoal); padding: 0.65rem 0.5rem; border-bottom: 1px solid var(--tan); }
+    .data-table td:first-child { font-weight: 400; }
+
+    .takeaway { background: var(--forest-dark); border-radius: 6px; padding: 2rem; margin: 2.5rem 0; color: var(--cream); }
+    .takeaway .takeaway-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest-light); margin-bottom: 1rem; }
+    .takeaway p { font-family: 'Sora', sans-serif !important; font-size: 0.9rem !important; font-weight: 300; line-height: 1.7 !important; color: var(--sand) !important; }
+
+    .article-footer { max-width: 680px; margin: 0 auto; padding: 0 3rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--tan); padding-top: 2rem; }
+    .article-footer a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-decoration: none; }
+    .article-footer a:hover { color: var(--soft-black); }
+
+    .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--forest); z-index: 100; transition: width 0.1s linear; }
+
+    @media (max-width: 768px) {
+      .article-nav, .article-header, .article-hero, .article-body, .article-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .article-meta { flex-direction: column; gap: 0.5rem; }
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progress"></div>
+
+  <div class="article-nav">
+    <a href="index.html">&larr; Back to portfolio</a>
+    <a href="index.html#work">All work</a>
+  </div>
+
+  <header class="article-header">
+    <div class="category">Digital Marketing &middot; SEO &middot; A/B Testing</div>
+    <h1>BuffBites: Driving Traffic to a Student Meal Platform</h1>
+    <p class="dek">How a team of marketing students built a recipe website from scratch and drove 3,816 page views through organic search, Facebook Groups, and Instagram A/B testing.</p>
+    <div class="article-meta">
+      <span>MKTG 3700: Digital Marketing</span>
+      <span>Fall 2024</span>
+      <span>8 min read</span>
+    </div>
+  </header>
+
+  <div class="article-hero">
+    <img src="img/work/buffbites-hero.jpg" alt="Healthy meal prep">
+  </div>
+
+  <article class="article-body">
+    <p>BuffBites was built to solve a real problem: college students need budget-friendly, healthy meal ideas but don't have the time or money to figure it out. We created a full recipe website with six categories — Easy Meals, Breakfast, High Protein, Lunchbox, Plant-Based, and Smoothie Bowls — each with individual recipe pages featuring budget breakdowns, nutrition facts, and step-by-step instructions.</p>
+
+    <p>The project wasn't just about building a site. It was a driving-traffic assignment. We needed to generate measurable traffic through real marketing tactics, track everything through Google Analytics, and iterate based on data. What we learned about SEO, content quality, and audience behavior changed how I think about digital marketing.</p>
+
+    <div class="metrics-row">
+      <div class="metric-box">
+        <div class="val">3,816</div>
+        <div class="label">Page Views</div>
+      </div>
+      <div class="metric-box">
+        <div class="val">6.6</div>
+        <div class="label">Avg. Google Position</div>
+      </div>
+      <div class="metric-box">
+        <div class="val">10m 27s</div>
+        <div class="label">Avg. Session</div>
+      </div>
+      <div class="metric-box">
+        <div class="val">9.6%</div>
+        <div class="label">Avg. CTR</div>
+      </div>
+    </div>
+
+    <h2>The SEO Strategy That Worked</h2>
+
+    <p>We focused on long-tail keywords from the start. Every recipe file name, image alt text, and page title was optimized for search indexing. An example: instead of "oatmeal.jpg" we used "BuffBites-Caramelized-Banana-Oatmeal-Recipe." This seems small but compounded across dozens of recipe pages, it made a real difference.</p>
+
+    <p>Within the first month, organic search was showing promise — 227 page views with an average engagement time of 7 minutes and 43 seconds. By the end of the traffic-driving period, our average Google search position was 6.6 with a 9.6% CTR. For a student-built site with no paid search budget, that's a strong result.</p>
+
+    <div class="pullquote">84% of total traffic came from direct visits — a signal of content quality and repeat viewership that outperformed every paid tactic.</div>
+
+    <h2>Facebook Groups: The Surprise Winner</h2>
+
+    <p>Facebook isn't the first platform you'd pick for reaching college students. But the engagement inside meal-prep Facebook Groups was remarkably high. We posted in communities like Meal Prepping Recipes and Ideas for Beginners (85,000+ members) and Cheap Dump Meal Ideas (287,000 followers), driving 154 new users to the site — more than any other social tactic.</p>
+
+    <p>The key insight: these groups have 10+ posts daily and highly engaged members actively seeking content. The friction was admin approval — some groups rejected or delayed our posts. But the ones that approved us delivered immediate results.</p>
+
+    <h2>A/B Testing: Affordability Beats Convenience</h2>
+
+    <p>We ran an A/B test on Instagram Reels comparing two ad copy approaches. Ad 1 emphasized affordability ("Fuel Up Without Breaking the Bank!") while Ad 2 focused on convenience ("Stress-Free Meals for Busy Days!"). The affordability message won decisively: higher CTR (1.22% vs 0.67%), more link clicks (34 vs 24), and a lower bounce rate (58% vs 84%).</p>
+
+    <p>This changed our entire content strategy. We added per-serving prices to every recipe card on the homepage, and shifted all social copy to lead with cost. For our audience, price isn't just a feature — it's the primary decision driver.</p>
+
+    <h2>Traffic Quality Over Volume</h2>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th>Page Views</th>
+          <th>Avg. Engagement</th>
+          <th>Sessions/User</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Direct</td><td>3,214</td><td>10m 27s</td><td>1.4</td></tr>
+        <tr><td>Google Organic</td><td>301</td><td>4m 27s</td><td>2.64</td></tr>
+        <tr><td>Instagram Reels</td><td>124</td><td>4s</td><td>0.31</td></tr>
+        <tr><td>Facebook (Mobile)</td><td>83</td><td>1s</td><td>0.28</td></tr>
+        <tr><td>Facebook (Desktop)</td><td>68</td><td>3s</td><td>0.72</td></tr>
+        <tr><td>Facebook Groups</td><td>22</td><td>50s</td><td>1.0</td></tr>
+      </tbody>
+    </table>
+
+    <p>The data told a clear story: direct traffic and organic search produced deeply engaged users, while social media drove awareness but not retention. Boulder users averaged 22 minutes and 31 seconds per session — and out-of-network cities like Tempe, AZ and Greeley, CO showed similarly strong engagement times above 20 minutes.</p>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Key Takeaway</div>
+      <p>Highly engaged, intentional visits are far more valuable than high-volume, low-quality traffic. BuffBites proved that quality content, disciplined SEO, and audience-specific messaging can outperform paid acquisition — even on a zero-dollar budget. The biggest lesson: lead with what your audience cares about most. For budget-conscious students, that's price. Everything else is secondary.</p>
+    </div>
+  </article>
+
+  <div class="article-footer">
+    <a href="index.html#work">&larr; Back to work</a>
+    <a href="work-beach-security.html">Next project &rarr;</a>
+  </div>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / docHeight) * 100;
+      document.getElementById('progress').style.width = `${progress}%`;
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+{
+  "date": "2026-03-07",
+  "generated_at": "2026-03-07T07:00:00-07:00",
+  "sections": {
+    "markets": {
+      "content": "Markets got hit hard Friday. The S&P dropped 1.33% and the Nasdaq fell 1.59% — the primary driver is the Middle East war. Oil is at $92/barrel (Brent) after surging ~30% in a week as the Strait of Hormuz is effectively shut down. That's ~20% of global oil and LNG supply choked off. Gas at the pump is already up to $3.32/gal nationally and analysts say $3.50 is coming fast. Rising energy costs are reigniting inflation fears and kicking rate-cut bets down the road. Safe-haven plays (gold, silver) caught a bid. Your energy-adjacent names (UUUU, NLR, XLU) are worth watching in this environment — this is exactly the macro scenario that moves them.",
+      "ticker": [
+        { "symbol": "S&P 500", "price": "6,740", "change": "-1.33%" },
+        { "symbol": "Nasdaq", "price": "22,387", "change": "-1.59%" },
+        { "symbol": "BTC", "price": "$68,274", "change": "-2.1%" },
+        { "symbol": "ETH", "price": "$2,080", "change": "-1.8%" },
+        { "symbol": "OIL (WTI)", "price": "$90.12", "change": "+12.2%" },
+        { "symbol": "GOLD", "price": "Rising", "change": "↑" }
+      ],
+      "cards": [
+        { "name": "S&P 500", "value": "6,740", "change": "-1.33%" },
+        { "name": "Nasdaq", "value": "22,387", "change": "-1.59%" },
+        { "name": "WTI Crude", "value": "$90.12", "change": "+12.2%" },
+        { "name": "Bitcoin", "value": "$68,274", "change": "-2.1%" }
+      ],
+      "stories": [
+        {
+          "headline": "Oil surges past $90 as Middle East war disrupts global supply",
+          "source_url": "https://www.foxbusiness.com/energy/gas-prices-surge-iran-conflict-rattles-global-oil-markets-pushing-us-crude-90",
+          "source_name": "Fox Business",
+          "image_url": "https://a57.foxnews.com/static.foxbusiness.com/foxbusiness.com/content/uploads/2023/08/0/0/gas1.jpg?ve=1&tl=1",
+          "summary": "WTI crude breached $90/barrel for the first time since 2023. Brent hit $92, up 30% on the week. Strait of Hormuz disruptions are preventing tankers from loading in Iraq, Kuwait, and Saudi Arabia."
+        },
+        {
+          "headline": "Oil prices surge to highest since 2023 as Middle East war rages",
+          "source_url": "https://www.channelnewsasia.com/world/oil-prices-rise-middle-east-war-iran-5977921",
+          "source_name": "CNA",
+          "image_url": "https://dam.mediacorp.sg/image/upload/s--vX25RKMS--/c_fill,g_auto,h_676,w_1200/fl_relative,g_south_east,l_mediacorp:cna:watermark:2023-11:afp_watermark_14112023,w_0.1/f_auto,q_auto/v1/mediacorp/cna/image/2026/03/07/000_a2aq363.jpg?itok=5_U9OOpv",
+          "summary": "Stocks fell globally on Friday as rising energy costs reignited inflation fears, dimming prospects for near-term Fed rate cuts."
+        }
+      ]
+    },
+    "world": {
+      "content": "The Middle East is the only story that matters right now. Everything else is downstream of this.",
+      "stories": [
+        {
+          "headline": "US-Israel war with Iran enters Day 8 — over 1,200 dead, Strait of Hormuz effectively closed",
+          "source_url": "https://www.thehindu.com/news/international/iran-israel-us-war-live-west-asia-conflict-march-7-2026-trump-middle-east-crisis-oil-prices-air-strikes-drone-attacks-lebanon-strikes-gulf-region/article70714560.ece",
+          "source_name": "The Hindu",
+          "image_url": "https://th-i.thgim.com/public/incoming/uoezlt/article70715155.ece/alternates/LANDSCAPE_1200/2026-03-07T065058Z_1052961584_RC2IZJADFYA1_RTRMADP_3_IRAN-CRISIS-LEBANON.JPG",
+          "summary": "Coordinated US and Israeli strikes have killed 1,230+ in Iran, 200+ in Lebanon. Iran is retaliating with ballistic missiles against Israel and Gulf states. Trump approved a new $151M arms sale to Israel and said he won't negotiate without Iran's 'unconditional surrender.' The US claims 3,000+ targets struck in the first week. 'March for Peace' protests are scheduled across the US today."
+        },
+        {
+          "headline": "Oil at $92 — energy shock threatens global inflation recovery",
+          "source_url": "https://www.channelnewsasia.com/world/oil-prices-rise-middle-east-war-iran-5977921",
+          "source_name": "CNA",
+          "image_url": "https://dam.mediacorp.sg/image/upload/s--vX25RKMS--/c_fill,g_auto,h_676,w_1200/fl_relative,g_south_east,l_mediacorp:cna:watermark:2023-11:afp_watermark_14112023,w_0.1/f_auto,q_auto/v1/mediacorp/cna/image/2026/03/07/000_a2aq363.jpg?itok=5_U9OOpv",
+          "summary": "A 10% rise in crude adds ~30bps to inflation and shaves 15bps off GDP growth. Central banks may have to delay rate cuts. Analysts estimate traders are paying a $14/barrel war premium right now."
+        },
+        {
+          "headline": "Nepal election: RSP heading for landslide victory",
+          "source_url": "https://www.bssnews.net/international/366522",
+          "source_name": "BSS News",
+          "image_url": null,
+          "summary": "Nepal's Rastriya Swatantra Party (RSP) is leading significantly in election results, signaling a major political shift in the Himalayan nation."
+        }
+      ]
+    },
+    "sports": {
+      "content": "Tatum is back and looked real. 15/12/7 in 27 minutes — not a full-throttle effort, but the reads were clean, the movement looked fluid, and the Celtics won by 20. That's everything you needed to see. Watch the next 3-4 games to see how the burst develops as the minutes restriction comes off.",
+      "scores": [
+        { "winner": "Celtics", "loser": "Mavericks", "score": "120 — 100" },
+        { "winner": "Lakers", "loser": "Pacers", "score": "128 — 117" },
+        { "winner": "Suns", "loser": "Pelicans", "score": "118 — 116" }
+      ],
+      "upcoming": [
+        "NBA: OKC Thunder vs. Golden State Warriors — tonight",
+        "NBA: Detroit Pistons vs. Brooklyn Nets — tonight",
+        "World Baseball Classic: Taiwan vs. Cuba"
+      ],
+      "stories": [
+        {
+          "headline": "Tatum returns — 15/12/7 in 27 min, Celtics rout Mavs 120-100",
+          "source_url": "https://www.abs-cbn.com/sports/basketball/2026/3/7/nba-tatum-s-emotional-return-sparks-celtics-over-mavs-1135",
+          "source_name": "ABS-CBN Sports",
+          "image_url": "https://od2-image-api.abs-cbn.com/prod/20260307030324/da45faadb5b1cfb91827fb4362c205effb8c5def8719aae43c528b30959d553a.jpg?w=1200&h=800",
+          "summary": "Jayson Tatum's season debut came less than 10 months after a torn right Achilles. Jaylen Brown added 24. Cooper Flagg had 16 for the Mavs. JT was on a minutes restriction — the real test starts next week."
+        },
+        {
+          "headline": "Luka drops 44 in 3 quarters as Lakers crush Indiana",
+          "source_url": "https://www.ctinsider.com/sports/article/luka-doncic-scores-44-points-in-3-quarters-to-21960972.php",
+          "source_name": "CT Insider",
+          "image_url": null,
+          "summary": "Doncic hit 7 threes, grabbed 9 boards, and sat out the fourth. Lakers win 128-117."
+        }
+      ]
+    },
+    "entertainment": {
+      "content": "March is a big month for film. Three movies worth knowing about.",
+      "stories": [
+        {
+          "headline": "Project Hail Mary — Ryan Gosling's sci-fi epic drops March 20",
+          "source_url": "https://en.wikipedia.org/wiki/Project_Hail_Mary_(film)",
+          "source_name": "Amazon MGM Studios",
+          "image_url": "https://upload.wikimedia.org/wikipedia/en/3/3b/Project_Hail_Mary_poster.jpg",
+          "category": "Film",
+          "summary": "Directed by Phil Lord and Christopher Miller. Gosling plays astronaut Ryland Grace on a solo mission to save Earth. Based on Andy Weir's novel — same guy who wrote The Martian. Two weeks out."
+        },
+        {
+          "headline": "Peaky Blinders: The Immortal Man — Cillian Murphy back as Tommy Shelby",
+          "source_url": "https://www.nssmag.com/en/lifestyle/44448/best-movies-tv-releases-march-2026",
+          "source_name": "NSS Magazine",
+          "image_url": null,
+          "category": "Film",
+          "summary": "The theatrical film continuation of the BBC series. Murphy reprises his role during WWII. One of the most anticipated March releases globally."
+        },
+        {
+          "headline": "Pixar's 'Hoppers' out now — girl transfers consciousness into a robotic beaver",
+          "source_url": "https://fictionhorizon.com/the-most-anticipated-movies-of-march-2026/",
+          "source_name": "Fiction Horizon",
+          "image_url": null,
+          "category": "Film",
+          "summary": "Released March 6. Pixar exploring consciousness and animal connection. Early reviews are strong."
+        }
+      ]
+    },
+    "marketing": {
+      "content": "AI is eating the ad industry from the inside out — and the brands that don't adapt operationally are already behind.",
+      "stories": [
+        {
+          "headline": "Meta launches Manus AI inside Ads Manager — automated campaign planning is here",
+          "source_url": "https://seafoammedia.com/march-2026-marketing-news-trends-insights/",
+          "source_name": "Seafoam Media",
+          "image_url": "https://seafoammedia.com/wp-content/uploads/2026/03/march-26-768x432.png",
+          "summary": "Meta's Manus AI agent handles campaign planning and competitor analysis directly in Ads Manager. Google is rolling out AI-optimized non-skippable YouTube CTV ads. OpenAI has partnered with Criteo to serve ads inside ChatGPT. GEO (Generative Engine Optimization) is becoming a real discipline as half of US consumers now use TikTok as a search engine."
+        },
+        {
+          "headline": "Netflix + Amazon partner on commerce signals for performance ad targeting",
+          "source_url": "https://www.bluethirst.co.uk/blog/march-2026-top-digital-marketing-news/",
+          "source_name": "Bluethirst",
+          "image_url": "https://www.bluethirst.co.uk/wp-content/uploads/2026/02/Make-Your-Marketing-Work.png",
+          "summary": "Netflix is leveraging Amazon's 'trillions' of commerce signals via a new Conversion API, transforming streaming from a brand-awareness play into a measurable performance channel. This is a major shift for entertainment marketing."
+        }
+      ]
+    },
+    "rabbit_hole": {
+      "title": "Play-Doh Was a Wallpaper Cleaner (And Wrigley Started Selling Soap)",
+      "content": "In the 1930s, a soap company called Kutol Products invented a pliable putty to clean soot off wallpaper. It worked well — until coal heating declined after WWII and nobody needed their wallpaper cleaned anymore. The company was heading toward bankruptcy when a nursery school teacher suggested repurposing the compound as a children's toy. They added colors, renamed it Play-Doh, and launched in 1956. It became one of the most iconic toys in American history.\n\nThis is not a unique story. Wrigley's chewing gum was originally a free premium thrown in with baking powder — customers cared more about the gum than the actual product, so Wrigley pivoted the entire company. Nokia started as a Finnish paper mill in 1865. Samsung began as a trading company selling dried fish and noodles in 1938. The company you think of as a phone company or electronics giant started by shipping groceries.\n\nThe pattern: the most valuable thing a company builds is often the byproduct of what they were actually trying to do. Play-Doh wasn't an invention — it was a pivot from failure. The skill isn't just building something; it's recognizing when the accidental output is worth more than the original plan. In a world where everyone is building AI tools and features, this is worth sitting with: what are you accidentally making?",
+      "source_url": "https://trainual.com/manual/famous-companies-that-got-their-start-from-unintentional-tactics",
+      "image_url": "https://cdn.prod.website-files.com/61aa482275701e722856da7b/636a75e302fc5d4917c34a0f_AccientalBrands_V1-01.avif"
+    }
+  }
+}

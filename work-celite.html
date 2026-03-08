@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C-Elite: Go-to-Market Plan — Zubin Shourie</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root { --cream: #F4F1EB; --warm-white: #FAF8F5; --tan: #E5DDD0; --sand: #D4C9B8; --charcoal: #2A2A2A; --soft-black: #1A1A1A; --forest: #3D5A47; --forest-light: #4A6B55; --forest-dark: #2E4536; --warm-gray: #8C8578; --faded-coral: #D4A08F; }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Sora', -apple-system, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+
+    .article-nav { padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; }
+    .article-nav a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); text-decoration: none; transition: color 0.3s; }
+    .article-nav a:hover { color: var(--soft-black); }
+
+    .article-header { max-width: 800px; margin: 0 auto; padding: 4rem 3rem 2rem; }
+    .article-header .category { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin-bottom: 1.25rem; }
+    .article-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.15; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 1.25rem; }
+    .article-header .dek { font-family: 'Lora', serif; font-style: italic; font-size: 1.15rem; color: var(--warm-gray); line-height: 1.6; margin-bottom: 2rem; }
+    .article-meta { display: flex; gap: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--tan); }
+    .article-meta span { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+
+    .article-hero { max-width: 900px; margin: 2rem auto; padding: 0 3rem; }
+    .article-hero img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 4px; filter: saturate(0.85) contrast(1.05); }
+
+    .article-body { max-width: 680px; margin: 0 auto; padding: 2rem 3rem 4rem; }
+    .article-body p { font-family: 'Lora', serif; font-size: 1.05rem; line-height: 1.85; color: var(--charcoal); margin-bottom: 1.75rem; }
+    .article-body p:first-of-type::first-letter { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; float: left; line-height: 1; padding-right: 0.5rem; padding-top: 0.15rem; color: var(--soft-black); }
+    .article-body h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--soft-black); margin-top: 2.5rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+
+    .pullquote { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; line-height: 1.4; color: var(--forest); text-align: center; padding: 2.5rem 2rem; margin: 2.5rem 0; border-top: 2px solid var(--tan); border-bottom: 2px solid var(--tan); letter-spacing: -0.02em; }
+
+    .takeaway { background: var(--forest-dark); border-radius: 6px; padding: 2rem; margin: 2.5rem 0; color: var(--cream); }
+    .takeaway .takeaway-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest-light); margin-bottom: 1rem; }
+    .takeaway p { font-family: 'Sora', sans-serif !important; font-size: 0.9rem !important; font-weight: 300; line-height: 1.7 !important; color: var(--sand) !important; }
+
+    .article-footer { max-width: 680px; margin: 0 auto; padding: 0 3rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--tan); padding-top: 2rem; }
+    .article-footer a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-decoration: none; }
+    .article-footer a:hover { color: var(--soft-black); }
+
+    .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--forest); z-index: 100; transition: width 0.1s linear; }
+
+    @media (max-width: 768px) {
+      .article-nav, .article-header, .article-hero, .article-body, .article-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .article-meta { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progress"></div>
+
+  <div class="article-nav">
+    <a href="index.html">&larr; Back to portfolio</a>
+    <a href="index.html#work">All work</a>
+  </div>
+
+  <header class="article-header">
+    <div class="category">Go-to-Market &middot; Brand Positioning</div>
+    <h1>C-Elite: Go-to-Market Plan for a Creativity Supplement</h1>
+    <p class="dek">A full go-to-market strategy positioning a hypothetical creativity-enhancing supplement as a luxury D2C brand for high-achieving creative professionals.</p>
+    <div class="article-meta">
+      <span>Marketing Strategy</span>
+      <span>Spring 2026</span>
+      <span>5 min read</span>
+    </div>
+  </header>
+
+  <div class="article-hero">
+    <img src="img/work/celite-hero.jpg" alt="Product launch strategy">
+  </div>
+
+  <article class="article-body">
+    <p>C-Elite is a hypothetical product: a single pill that induces one hour of elite-level creativity with no side effects, safe to use every 24 hours. The exercise was to build a complete go-to-market strategy — positioning, pricing, distribution, competitive analysis, and visual identity — for a product that doesn't exist but demands real strategic thinking.</p>
+
+    <p>The challenge wasn't the product concept. It was the positioning. How do you market something that sounds impossible? The answer: you don't sell the pill. You sell the performance it enables.</p>
+
+    <h2>Target Market: Creative Professionals Under Pressure</h2>
+
+    <p>We considered two segments — high-achieving students and creative professionals — and chose the latter. Creative professionals face high-stakes deadlines and constant pressure to innovate. According to industry research, 95% of creative teams now track productivity metrics. The product's efficacy increases with the user's baseline intelligence, making it particularly valuable for top-tier professionals who already operate at a high level.</p>
+
+    <div class="pullquote">For creative professionals, C-Elite is the ultimate creativity-enhancing supplement that safely delivers one hour of unparalleled genius, enabling breakthrough ideas under pressure.</div>
+
+    <h2>Pricing: $500–$600 Per Pill</h2>
+
+    <p>The pricing strategy was deliberately aggressive. At $500–$600 per pill (with a $250 production cost), C-Elite positions itself as an ultra-premium product. The justification rested on two pillars: premium positioning that reflects exclusivity and unparalleled benefits, and scarcity marketing driven by limited supply of essential ingredients. The tagline: "Only for the elite few who value peak performance."</p>
+
+    <p>This isn't a mass-market play. It's luxury positioning for a product where the value proposition — one hour of genius-level output — can be worth thousands of dollars to the right user.</p>
+
+    <h2>Distribution: D2C and Exclusive Events</h2>
+
+    <p>The distribution strategy avoided traditional retail entirely. The primary channel was a premium e-commerce website with luxury branding, personalized shopping, and subscription options for high-frequency users. The secondary channel was exclusive launch events — limited-time pop-up experiences in New York, Los Angeles, and London that reinforce the premium brand positioning.</p>
+
+    <h2>Competitive Landscape</h2>
+
+    <p>Direct competitors included nootropic supplements like Alpha Brain and Mind Lab Pro, plus energy drinks like Red Bull and Monster. Indirect competitors included mindfulness practices. All alternatives share common limitations: temporary focus without genuine creativity enhancement, side effects like jitteriness or energy crashes, and no scientifically proven creativity boost. C-Elite's differentiator is immediate, safe, time-boxed creative enhancement — a category that doesn't currently exist.</p>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Strategic Takeaway</div>
+      <p>The C-Elite exercise forced sharp decisions about positioning in a crowded wellness space. The core insight: when your product is genuinely differentiated, pricing should reflect the value of the outcome — not the cost of the input. A $500 pill sounds absurd until you frame it against a $50,000 creative campaign deadline. Luxury positioning, scarcity marketing, and D2C distribution create a self-reinforcing brand ecosystem where exclusivity drives demand rather than limiting it.</p>
+    </div>
+  </article>
+
+  <div class="article-footer">
+    <a href="work-beach-security.html">&larr; Previous project</a>
+    <a href="work-sales-playbook.html">Next project &rarr;</a>
+  </div>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / docHeight) * 100;
+      document.getElementById('progress').style.width = `${progress}%`;
+    });
+  </script>
+
+</body>
+</html>

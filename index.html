@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zubin Shourie</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --cream: #F4F1EB;
+      --warm-white: #FAF8F5;
+      --tan: #E5DDD0;
+      --sand: #D4C9B8;
+      --charcoal: #2A2A2A;
+      --soft-black: #1A1A1A;
+      --forest: #3D5A47;
+      --forest-light: #4A6B55;
+      --forest-dark: #2E4536;
+      --warm-gray: #8C8578;
+      --mid-gray: #6B655D;
+      --light-gray: #B5AFA6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Sora', -apple-system, sans-serif;
+      background-color: var(--cream);
+      color: var(--charcoal);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============ NAV ============ */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(244, 241, 235, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(229, 221, 208, 0.5);
+    }
+
+    .nav-logo {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--soft-black);
+      text-decoration: none;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--warm-gray);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active { color: var(--soft-black); }
+
+    /* ============ HERO ============ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 3rem;
+      padding-top: 5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--forest);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 7.5vw, 6rem);
+      font-weight: 400;
+      line-height: 1.05;
+      color: var(--soft-black);
+      letter-spacing: -0.02em;
+      max-width: 850px;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--forest);
+    }
+
+    .hero-sub {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--warm-gray);
+      max-width: 480px;
+      line-height: 1.75;
+      margin-bottom: 3rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--forest);
+      text-decoration: none;
+      padding: 1rem 0;
+      border-bottom: 1.5px solid var(--forest);
+      transition: gap 0.3s ease;
+    }
+
+    .hero-cta:hover { gap: 1.25rem; }
+    .hero-cta .arrow { transition: transform 0.3s ease; }
+    .hero-cta:hover .arrow { transform: translateX(4px); }
+
+    /* ============ DIVIDER ============ */
+    .divider { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
+    .divider hr { border: none; border-top: 1px solid var(--tan); }
+
+    /* ============ ABOUT ============ */
+    .about-strip {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 6rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-strip .label {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--forest);
+      position: sticky;
+      top: 8rem;
+    }
+
+    .about-strip .content { max-width: 560px; }
+
+    .about-strip .content p {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--charcoal);
+      margin-bottom: 1.5rem;
+    }
+
+    .about-strip .content p strong { font-weight: 500; }
+
+    /* ============ WORK GRID ============ */
+    .work-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 6rem 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.75rem;
+      font-weight: 400;
+      color: var(--soft-black);
+      letter-spacing: -0.02em;
+    }
+
+    .section-header a {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--forest);
+      text-decoration: none;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+
+    .work-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .work-card .card-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+    }
+
+    .work-card .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      filter: saturate(0.85) contrast(1.05);
+    }
+
+    .work-card:hover .card-image img { transform: scale(1.03); }
+
+    .work-card .card-info { padding: 1.25rem 0; }
+
+    .work-card .card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--forest);
+      margin-bottom: 0.5rem;
+    }
+
+    .work-card .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--soft-black);
+      margin-bottom: 0.4rem;
+    }
+
+    .work-card .card-desc {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: var(--warm-gray);
+      line-height: 1.6;
+    }
+
+    /* ============ FEATURED STRIP ============ */
+    .featured-strip {
+      background: var(--forest-dark);
+      color: var(--cream);
+      padding: 6rem 3rem;
+      margin: 4rem 0;
+    }
+
+    .featured-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .featured-strip .label {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--sand);
+      margin-bottom: 1.5rem;
+    }
+
+    .featured-strip h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    .featured-strip p {
+      font-family: 'Sora', sans-serif;
+      font-weight: 300;
+      font-size: 0.9rem;
+      color: var(--sand);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .featured-strip .cta {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--cream);
+      text-decoration: none;
+      border-bottom: 1px solid var(--cream);
+      padding-bottom: 0.25rem;
+    }
+
+    .featured-image {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.8) contrast(1.1);
+    }
+
+    /* ============ PHOTOGRAPHY ============ */
+    .photo-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 6rem 3rem;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 4rem;
+    }
+
+    .photo-grid .photo {
+      aspect-ratio: 1;
+      border-radius: 2px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .photo-grid .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease, filter 0.5s ease;
+      filter: saturate(0.8) contrast(1.05);
+    }
+
+    .photo-grid .photo:hover img {
+      transform: scale(1.04);
+      filter: saturate(1) contrast(1.05);
+    }
+
+    .photo-grid .photo.tall {
+      grid-row: span 2;
+      aspect-ratio: auto;
+    }
+
+    /* Photo mood group labels */
+    .photo-group-label {
+      grid-column: 1 / -1;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--light-gray);
+      padding: 1rem 0 0.25rem;
+      border-top: 1px solid var(--tan);
+      margin-top: 0.5rem;
+    }
+
+    .photo-group-label:first-child {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    /* ============ CONTACT ============ */
+    .contact-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 8rem 3rem;
+      text-align: center;
+    }
+
+    .contact-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 400;
+      color: var(--soft-black);
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-section p {
+      font-family: 'Sora', sans-serif;
+      font-weight: 300;
+      font-size: 0.9rem;
+      color: var(--warm-gray);
+      max-width: 440px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+
+    .contact-links a {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--forest);
+      text-decoration: none;
+      padding-bottom: 0.25rem;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    .contact-links a:hover { border-bottom-color: var(--forest); }
+
+    /* ============ FOOTER ============ */
+    footer {
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--tan);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    footer span {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--light-gray);
+    }
+
+    /* ============ MOBILE ============ */
+    @media (max-width: 768px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .hero { padding: 0 1.5rem; padding-top: 5rem; }
+      .about-strip { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 1.5rem; }
+      .about-strip .label { position: static; }
+      .work-section { padding: 4rem 1.5rem; }
+      .work-grid { grid-template-columns: 1fr; }
+      .featured-inner { grid-template-columns: 1fr; }
+      .featured-strip { padding: 4rem 1.5rem; }
+      .photo-section { padding: 4rem 1.5rem; }
+      .photo-grid { grid-template-columns: 1fr 1fr; }
+      .contact-section { padding: 4rem 1.5rem; }
+      .divider { padding: 0 1.5rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; gap: 0.5rem; }
+    }
+
+    /* ============ FADE IN ============ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">Zubin Shourie</a>
+    <ul class="nav-links">
+      <li><a href="#work" class="active">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#photos">Photos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-eyebrow">Marketing &middot; Strategy &middot; Creative</p>
+    <h1>Building brands that <em>move</em> people.</h1>
+    <p class="hero-sub">Marketing strategist, visual storyteller, and builder based in Boulder, CO. I think about how brands earn attention and keep it.</p>
+    <a href="#work" class="hero-cta">
+      See selected work <span class="arrow">&rarr;</span>
+    </a>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <section class="about-strip" id="about">
+    <div class="label">About</div>
+    <div class="content">
+      <p>I'm a senior at the <strong>University of Colorado Boulder</strong>, studying marketing at the Leeds School of Business. My focus is on brand strategy, consumer behavior, and the intersection of culture and commerce.</p>
+      <p>I've worked across real estate marketing, media, and publishing. I'm drawn to how brands in sports, music, and entertainment build lasting relationships with their audiences.</p>
+      <p>Outside of work, I shoot on a <strong>Fujifilm X-T5</strong>, travel with purpose, and build things with AI tools. Currently exploring how autonomous agents can augment creative and strategic work.</p>
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <section class="work-section" id="work">
+    <div class="section-header">
+      <h2>Selected Work</h2>
+      <a href="#">View all &rarr;</a>
+    </div>
+    <div class="work-grid">
+      <a href="#" class="work-card fade-in">
+        <div class="card-image">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop&q=80" alt="Beach at golden hour">
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Brand Strategy</div>
+          <div class="card-title">Innovation Project: Beach Security</div>
+          <div class="card-desc">Product ideation sprint targeting active beachgoers in the $50B smart safety market.</div>
+        </div>
+      </a>
+      <a href="#" class="work-card fade-in">
+        <div class="card-image">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&q=80" alt="Data dashboard">
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Marketing Analytics</div>
+          <div class="card-title">Campaign Performance Dashboard</div>
+          <div class="card-desc">Real-time analytics visualization built with AI-powered data pipelines.</div>
+        </div>
+      </a>
+      <a href="dashboard.html" class="work-card fade-in">
+        <div class="card-image">
+          <img src="https://images.unsplash.com/photo-1504711434969-e33886168d0c?w=800&h=600&fit=crop&q=80" alt="Morning newspaper and coffee">
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Intelligence Platform</div>
+          <div class="card-title">The Daily Brief</div>
+          <div class="card-desc">AI agent that aggregates finance, news, sports, and culture into a daily editorial brief.</div>
+        </div>
+      </a>
+      <a href="#" class="work-card fade-in">
+        <div class="card-image">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&q=80" alt="Brand analytics">
+        </div>
+        <div class="card-info">
+          <div class="card-tag">Content Strategy</div>
+          <div class="card-title">Brand Sentiment Tracker</div>
+          <div class="card-desc">Automated monitoring and scoring of brand mentions across social platforms.</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="featured-strip">
+    <div class="featured-inner">
+      <div>
+        <div class="label">Featured Project</div>
+        <h3>The Daily Brief</h3>
+        <p>A personal intelligence platform that uses AI agents to aggregate and synthesize news across finance, politics, sports, and culture. Published daily to a custom-built editorial interface.</p>
+        <a href="dashboard.html" class="cta">View the dashboard &rarr;</a>
+      </div>
+      <div class="featured-image">
+        <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?w=600&h=800&fit=crop&q=80" alt="Newspaper stack">
+      </div>
+    </div>
+  </section>
+
+  <section class="photo-section" id="photos">
+    <div class="section-header">
+      <h2>Photography</h2>
+      <a href="#">View gallery &rarr;</a>
+    </div>
+    <div class="photo-grid">
+
+      <!-- ── Morocco & Desert (warm earth, burnt orange, sienna) ── -->
+      <div class="photo-group-label">Morocco &amp; The Sahara</div>
+
+      <div class="photo tall">
+        <!-- Lone figure walking desert dunes at sunset — cinematic silhouette -->
+        <img src="img/photos/desert-silhouette.jpg" alt="Desert dunes at sunset">
+      </div>
+      <div class="photo">
+        <!-- Camel caravan crossing Saharan dunes at golden hour -->
+        <img src="img/photos/camel-caravan.jpg" alt="Camel caravan, Sahara">
+      </div>
+      <div class="photo">
+        <!-- Silhouetted couple walking through arched tunnel, Montserrat -->
+        <img src="img/photos/tunnel-couple.jpg" alt="Montserrat tunnel">
+      </div>
+      <div class="photo">
+        <!-- Terracotta rooftops and Montserrat peaks at golden hour -->
+        <img src="img/photos/montserrat-rooftops.jpg" alt="Montserrat rooftops">
+      </div>
+      <div class="photo">
+        <!-- Artisan working traditional loom, Morocco -->
+        <img src="img/photos/artisan-loom.jpg" alt="Moroccan artisan at loom">
+      </div>
+
+      <!-- ── Europe & Architecture (amber, golden, warm) ── -->
+      <div class="photo-group-label">Europe</div>
+
+      <div class="photo">
+        <!-- Colosseum exterior, Rome — honey-gold sandstone, teal sky -->
+        <img src="img/photos/colosseum.jpg" alt="Colosseum, Rome">
+      </div>
+      <div class="photo tall">
+        <!-- Museum sculptures dramatically lit — almost painterly -->
+        <img src="img/photos/museum-sculptures.jpg" alt="Classical sculptures, Rome">
+      </div>
+      <div class="photo">
+        <!-- Gelato cart beneath Roman stone pines — charming summer scene -->
+        <img src="img/photos/gelato-cart-rome.jpg" alt="Gelato cart, Rome">
+      </div>
+
+      <!-- ── New York (film grain, amber, city energy) ── -->
+      <div class="photo-group-label">New York</div>
+
+      <div class="photo">
+        <!-- SoHo street corner at dusk — moody film grain -->
+        <img src="img/photos/soho-dusk.jpg" alt="SoHo at dusk, New York">
+      </div>
+      <div class="photo">
+        <!-- PARK sign over street mural, NYC — retro analog -->
+        <img src="img/photos/park-mural-nyc.jpg" alt="Street mural, New York">
+      </div>
+
+      <!-- ── Colorado & The West (greens, dramatic golden light) ── -->
+      <div class="photo-group-label">Colorado</div>
+
+      <div class="photo">
+        <!-- Flatirons sunset with dramatic orange-teal sky -->
+        <img src="img/photos/flatirons-sunset.jpg" alt="Flatirons at sunset, Boulder">
+      </div>
+      <div class="photo">
+        <!-- Silhouetted Flatirons against blazing backlit sky -->
+        <img src="img/photos/flatirons-silhouette.jpg" alt="Flatirons silhouette, Boulder">
+      </div>
+
+      <!-- ── Iceland (cool steel, cinematic, raw) ── -->
+      <div class="photo-group-label">Iceland</div>
+
+      <div class="photo tall">
+        <!-- Black sand beach at golden sunset, Reynisdrangar sea stacks -->
+        <img src="img/photos/iceland-beach.jpg" alt="Black sand beach, Iceland">
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <section class="contact-section" id="contact">
+    <h2>Let's connect.</h2>
+    <p>Currently looking for opportunities in marketing, brand partnerships, and creative strategy in New York, LA, or Denver.</p>
+    <div class="contact-links">
+      <a href="mailto:zubin.shourie@icloud.com">Email</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Resume</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; 2026 Zubin Shourie</span>
+    <span>Built from scratch</span>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        if (scrollY >= section.offsetTop - 200) current = section.getAttribute('id');
+      });
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
