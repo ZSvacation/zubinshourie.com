@@ -448,103 +448,57 @@
 
     /* ============ PHOTOGRAPHY ============ */
     .photo-section {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 6rem 3rem;
     }
 
     .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-auto-flow: dense;
-      gap: 0.75rem;
       margin-top: 4rem;
     }
 
-    .photo-grid .photo {
-      aspect-ratio: 1;
-      border-radius: 2px;
-      overflow: hidden;
-      cursor: pointer;
-      position: relative;
-      background: var(--tan);
-    }
-
-    .photo-grid .photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease, filter 0.5s ease;
-    }
-
-    .photo-grid .photo:hover img {
-      transform: scale(1.04);
-    }
-
-    .photo-grid .photo.tall {
-      grid-row: span 2;
-      aspect-ratio: auto;
-    }
-
-    .photo-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--tan);
-    }
-
-    .photo-placeholder span {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--warm-gray);
-      text-align: center;
-      padding: 1rem;
+    .photo-group {
+      margin-bottom: 3.5rem;
     }
 
     .photo-group-label {
-      grid-column: 1 / -1;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.55rem;
       text-transform: uppercase;
       letter-spacing: 0.18em;
       color: var(--light-gray);
-      padding: 1rem 0 0.25rem;
+      padding: 1rem 0 1rem;
       border-top: 1px solid var(--tan);
-      margin-top: 0.5rem;
+      margin-bottom: 0.25rem;
     }
 
-    .photo-group-label:first-child {
+    .photo-group:first-child .photo-group-label {
       border-top: none;
       padding-top: 0;
-      margin-top: 0;
     }
 
-    .photo-note {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 2rem;
+    .photo-columns {
+      columns: 3;
+      column-gap: 0.75rem;
     }
 
-    .photo-note p {
-      font-family: 'Sora', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 300;
-      color: var(--warm-gray);
-      font-style: italic;
+    .photo-grid .photo {
+      break-inside: avoid;
+      margin-bottom: 0.75rem;
+      border-radius: 2px;
+      overflow: hidden;
+      cursor: pointer;
     }
 
-    .photo-note span {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.55rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--light-gray);
+    .photo-grid .photo img {
+      width: 100%;
+      height: auto;
       display: block;
-      margin-top: 0.5rem;
+      transition: transform 0.5s ease;
+    }
+
+    .photo-grid .photo:hover img {
+      transform: scale(1.04);
     }
 
     /* ============ CONTACT ============ */
@@ -643,7 +597,7 @@
       .featured-strip { padding: 4rem 1.5rem; }
       .featured-image { display: none; }
       .photo-section { padding: 4rem 1.5rem; }
-      .photo-grid { grid-template-columns: 1fr 1fr; }
+      .photo-columns { columns: 2; }
       .contact-section { padding: 4rem 1.5rem; }
       .divider { padding: 0 1.5rem; }
       footer { padding: 2rem 1.5rem; flex-direction: column; gap: 0.5rem; }
@@ -826,91 +780,106 @@
     </div>
     <div class="photo-grid">
 
-      <div class="photo-group-label">Morocco &amp; The Sahara</div>
-
-      <div class="photo tall">
-        <img src="img/photos/camel-caravan.jpg" alt="Camel caravan, Sahara Desert" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/desert-silhouette.jpg" alt="Sand dunes at sunset, Sahara" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/artisan-loom.jpg" alt="Moroccan artisan at loom" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/sahara-camp.jpg" alt="Berber camp with flags, Sahara" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/morocco-canyon.jpg" alt="Red canyon walls, Morocco" loading="lazy">
-      </div>
-
-      <div class="photo-group-label">Europe</div>
-
-      <div class="photo tall">
-        <img src="img/photos/gelato-cart-rome.jpg" alt="Gelato cart under Roman pines, Rome" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/colosseum.jpg" alt="Colosseum, Rome" loading="lazy">
-      </div>
-      <div class="photo tall">
-        <img src="img/photos/venice-canal.jpg" alt="Grand Canal, Venice" loading="lazy">
-      </div>
-      <div class="photo tall">
-        <img src="img/photos/montserrat-monastery.jpg" alt="Montserrat monastery from above, Spain" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/st-peters-rome.jpg" alt="St. Peter's dome through pines, Rome" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/tunnel-couple.jpg" alt="Tunnel silhouettes, Montserrat" loading="lazy">
+      <div class="photo-group">
+        <div class="photo-group-label">Morocco &amp; The Sahara</div>
+        <div class="photo-columns">
+          <div class="photo">
+            <img src="img/photos/camel-caravan.jpg" alt="Camel caravan, Sahara Desert" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/desert-silhouette.jpg" alt="Sand dunes at sunset, Sahara" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/artisan-loom.jpg" alt="Moroccan artisan at loom" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/sahara-camp.jpg" alt="Berber camp with flags, Sahara" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/morocco-canyon.jpg" alt="Red canyon walls, Morocco" loading="lazy">
+          </div>
+        </div>
       </div>
 
-      <div class="photo-group-label">New York</div>
-
-      <div class="photo">
-        <img src="img/photos/soho-dusk.jpg" alt="SoHo at dusk, New York" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/nyc-sunset.jpg" alt="Park sign at angle, NYC" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/nyc-bar.jpg" alt="Neon-lit bar, NYC" loading="lazy">
-      </div>
-
-      <div class="photo-group-label">Colorado</div>
-
-      <div class="photo tall">
-        <img src="img/photos/moped-path.jpg" alt="Moped on tree-lined path, Boulder" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/ski-lift-colorado.jpg" alt="Ski lift through pines, Colorado" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/flatirons-sunset.jpg" alt="Flatirons at golden hour, Boulder" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/boulder-hillside.jpg" alt="Hillside at sunset, Boulder" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/golden-vista-colorado.jpg" alt="Golden hour mountain vista, Colorado" loading="lazy">
+      <div class="photo-group">
+        <div class="photo-group-label">Europe</div>
+        <div class="photo-columns">
+          <div class="photo">
+            <img src="img/photos/gelato-cart-rome.jpg" alt="Gelato cart under Roman pines, Rome" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/colosseum.jpg" alt="Colosseum, Rome" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/venice-canal.jpg" alt="Grand Canal, Venice" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/montserrat-monastery.jpg" alt="Montserrat monastery from above, Spain" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/st-peters-rome.jpg" alt="St. Peter's dome through pines, Rome" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/tunnel-couple.jpg" alt="Tunnel silhouettes, Montserrat" loading="lazy">
+          </div>
+        </div>
       </div>
 
-      <div class="photo-group-label">Iceland</div>
+      <div class="photo-group">
+        <div class="photo-group-label">New York</div>
+        <div class="photo-columns">
+          <div class="photo">
+            <img src="img/photos/soho-dusk.jpg" alt="SoHo at dusk, New York" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/nyc-sunset.jpg" alt="Park sign at angle, NYC" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/nyc-bar.jpg" alt="Neon-lit bar, NYC" loading="lazy">
+          </div>
+        </div>
+      </div>
 
-      <div class="photo tall">
-        <img src="img/photos/iceland-beach.jpg" alt="Black sand beach, Iceland" loading="lazy">
+      <div class="photo-group">
+        <div class="photo-group-label">Colorado</div>
+        <div class="photo-columns">
+          <div class="photo">
+            <img src="img/photos/moped-path.jpg" alt="Moped on tree-lined path, Boulder" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/ski-lift-colorado.jpg" alt="Ski lift through pines, Colorado" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/flatirons-sunset.jpg" alt="Flatirons at golden hour, Boulder" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/boulder-hillside.jpg" alt="Hillside at sunset, Boulder" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/golden-vista-colorado.jpg" alt="Golden hour mountain vista, Colorado" loading="lazy">
+          </div>
+        </div>
       </div>
-      <div class="photo">
-        <img src="img/photos/iceland-horses.jpg" alt="Icelandic horses" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/ice-cave.jpg" alt="Ice cave tunnel, Iceland" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/ravens-ice.jpg" alt="Ravens on glacier, Iceland" loading="lazy">
-      </div>
-      <div class="photo">
-        <img src="img/photos/iceland-coast.jpg" alt="Coastal landscape, Iceland" loading="lazy">
+
+      <div class="photo-group">
+        <div class="photo-group-label">Iceland</div>
+        <div class="photo-columns">
+          <div class="photo">
+            <img src="img/photos/iceland-beach.jpg" alt="Black sand beach, Iceland" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/iceland-horses.jpg" alt="Icelandic horses" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/ice-cave.jpg" alt="Ice cave tunnel, Iceland" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/ravens-ice.jpg" alt="Ravens on glacier, Iceland" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/iceland-coast.jpg" alt="Coastal landscape, Iceland" loading="lazy">
+          </div>
+        </div>
       </div>
 
     </div>
