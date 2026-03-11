@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Franchise Debt — Zubin Shourie</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --cream: #F4F1EB; --warm-white: #FAF8F5; --tan: #E5DDD0; --sand: #D4C9B8;
+      --charcoal: #2A2A2A; --soft-black: #1A1A1A; --forest: #3D5A47;
+      --forest-light: #4A6B55; --forest-dark: #2E4536; --warm-gray: #8C8578;
+      --navy: #0a1628; --navy-mid: #1a3a5a; --gold: #b8922a;
+      --sport-green: #1a3a28; --sport-accent: #2d6a4f;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Sora', -apple-system, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+
+    .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--forest); z-index: 100; transition: width 0.1s linear; }
+
+    .article-nav { padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; }
+    .article-nav a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); text-decoration: none; transition: color 0.3s; }
+    .article-nav a:hover { color: var(--soft-black); }
+
+    .article-header { max-width: 800px; margin: 0 auto; padding: 4rem 3rem 2rem; }
+    .article-header .category { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin-bottom: 1.25rem; }
+    .article-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.15; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 1.25rem; }
+    .article-header .dek { font-family: 'Lora', serif; font-style: italic; font-size: 1.15rem; color: var(--warm-gray); line-height: 1.6; margin-bottom: 2rem; }
+    .article-meta { display: flex; gap: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--tan); flex-wrap: wrap; }
+    .article-meta span { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+
+    .article-hero { max-width: 900px; margin: 2rem auto; padding: 0 3rem; }
+    .hero-visual { width: 100%; aspect-ratio: 16/7; border-radius: 4px; background: var(--sport-green); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.85rem; }
+    .hero-visual .hero-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: #4a8a60; }
+    .hero-visual .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 3.5vw, 2.75rem); color: #c8e8d0; letter-spacing: -0.02em; line-height: 1; text-align: center; }
+    .hero-visual .hero-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: #2a5a3a; margin-top: 0.25rem; }
+
+    .article-body { max-width: 680px; margin: 0 auto; padding: 2rem 3rem 4rem; }
+    .article-body p { font-family: 'Lora', serif; font-size: 1.05rem; line-height: 1.85; color: var(--charcoal); margin-bottom: 1.75rem; }
+    .article-body p:first-of-type::first-letter { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; float: left; line-height: 1; padding-right: 0.5rem; padding-top: 0.15rem; color: var(--soft-black); }
+    .article-body h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.65rem; color: var(--soft-black); margin-top: 2.75rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+    .article-body h3 { font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--forest); margin-top: 2rem; margin-bottom: 0.75rem; }
+    .article-body ul { margin: 0 0 1.75rem 1.25rem; }
+    .article-body ul li { font-family: 'Lora', serif; font-size: 1rem; line-height: 1.75; color: var(--charcoal); margin-bottom: 0.5rem; }
+    .article-body ul li strong { font-weight: 600; color: var(--soft-black); }
+
+    .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2.5rem 0; }
+    .metric-box { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; text-align: center; }
+    .metric-box .val { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; color: var(--soft-black); margin-bottom: 0.25rem; }
+    .metric-box .label { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+
+    .pullquote { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; line-height: 1.4; color: var(--forest); text-align: center; padding: 2.5rem 2rem; margin: 2.5rem 0; border-top: 2px solid var(--tan); border-bottom: 2px solid var(--tan); letter-spacing: -0.02em; }
+
+    .comp-table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.85rem; }
+    .comp-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-align: left; padding: 0.75rem 0.5rem; border-bottom: 2px solid var(--tan); }
+    .comp-table td { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--charcoal); padding: 0.65rem 0.5rem; border-bottom: 1px solid var(--tan); vertical-align: top; }
+    .comp-table td:first-child { font-weight: 500; }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .tag-up { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; background: #e8f4ec; color: var(--forest); padding: 0.2rem 0.5rem; border-radius: 3px; }
+    .tag-mid { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; background: #f4f0e4; color: #8a7040; padding: 0.2rem 0.5rem; border-radius: 3px; }
+    .tag-down { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; background: #f4e8e8; color: #8a3030; padding: 0.2rem 0.5rem; border-radius: 3px; }
+
+    .risk-table { width: 100%; border-collapse: collapse; margin: 2rem 0; }
+    .risk-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-align: left; padding: 0.75rem 0.75rem; border-bottom: 2px solid var(--tan); }
+    .risk-table td { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--charcoal); padding: 0.75rem 0.75rem; border-bottom: 1px solid var(--tan); vertical-align: top; line-height: 1.5; }
+    .risk-table td:first-child { font-weight: 500; color: var(--soft-black); }
+    .risk-table tr:last-child td { border-bottom: none; }
+
+    .takeaway { background: var(--sport-green); border-radius: 6px; padding: 2rem; margin: 2.5rem 0; }
+    .takeaway .takeaway-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: #4a8a60; margin-bottom: 1rem; }
+    .takeaway p { font-family: 'Sora', sans-serif !important; font-size: 0.9rem !important; font-weight: 300; line-height: 1.7 !important; color: var(--sand) !important; margin-bottom: 0 !important; }
+
+    .thesis-block { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 6px; padding: 1.5rem; margin-bottom: 1rem; }
+    .thesis-block .num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--tan); line-height: 1; margin-bottom: 0.5rem; }
+    .thesis-block .point { font-family: 'Sora', sans-serif; font-size: 0.875rem; font-weight: 600; color: var(--soft-black); margin-bottom: 0.4rem; }
+    .thesis-block .support { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.6; }
+
+    .context-note { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--warm-gray); background: var(--warm-white); border: 1px solid var(--tan); border-left: 3px solid var(--forest); border-radius: 0 4px 4px 0; padding: 1rem 1.25rem; margin: 2rem 0; line-height: 1.6; }
+    .context-note strong { color: var(--charcoal); }
+
+    .placeholder { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #aaa; background: #f5f5f0; border: 1px dashed #ccc; border-radius: 4px; padding: 1.5rem; margin: 1.5rem 0; text-align: center; letter-spacing: 0.05em; }
+
+    @media (max-width: 640px) {
+      .article-nav, .article-header, .article-hero, .article-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .metrics-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<nav class="article-nav">
+  <a href="index.html">← Zubin Shourie</a>
+  <a href="index.html#work">All Projects</a>
+</nav>
+
+<header class="article-header">
+  <div class="category">Investment Analysis &middot; Alternative Assets &middot; Sports &amp; Media</div>
+  <h1>Sports Franchise Debt:<br>A Private Credit Opportunity for UHNW Investors</h1>
+  <p class="dek"><!-- YOUR DEK: 1–2 sentences capturing your core argument. Write this last. --></p>
+  <div class="article-meta">
+    <span>Asset Class — Private Credit</span>
+    <span>Client Tier — UHNW ($25M+)</span>
+    <span>March 2026</span>
+  </div>
+</header>
+
+<div class="article-hero">
+  <div class="hero-visual">
+    <div class="hero-label">Private Credit</div>
+    <div class="hero-title">Sports Franchise Debt</div>
+    <div class="hero-sub">UHNW Opportunity Evaluation</div>
+  </div>
+</div>
+
+<div class="article-body">
+
+  <div class="context-note">
+    <strong>Context:</strong> This is an independent investment analysis built using the same evaluation framework applied at boutique RIAs serving UHNW clients. It is not financial advice. All figures sourced from public filings, fund disclosures, and market data as of Q1 2026.
+  </div>
+
+  <!-- ── METRICS ROW ── -->
+  <div class="metrics-row">
+    <div class="metric-box">
+      <div class="val"><!-- e.g. 8–12% --></div>
+      <div class="label">Target Net IRR</div>
+    </div>
+    <div class="metric-box">
+      <div class="val"><!-- e.g. $7.65B --></div>
+      <div class="label">Avg NFL Franchise Value</div>
+    </div>
+    <div class="metric-box">
+      <div class="val"><!-- e.g. 5–7yr --></div>
+      <div class="label">Typical Hold Period</div>
+    </div>
+  </div>
+
+  <!-- ── EXECUTIVE SUMMARY ── -->
+  <h2>Executive Summary</h2>
+  <div class="placeholder">[ YOUR TAKE — 2–3 sentences: What is the opportunity, what is your conclusion, and why does it belong (or not) in a UHNW portfolio right now? ]</div>
+
+  <!-- ── MARKET CONTEXT ── -->
+  <h2>Market Context</h2>
+  <p><!-- Set the scene: franchise valuations, appreciation trajectory, what's driving it. Use the research doc — but write in your own voice. --></p>
+  <p><!-- Media rights as the engine. What's changed in the last 5 years. What the NBA deal signals. --></p>
+
+  <!-- ── INVESTMENT THESIS ── -->
+  <h2>The Thesis</h2>
+
+  <div class="thesis-block">
+    <div class="num">01</div>
+    <div class="point"><!-- Thesis point 1 title --></div>
+    <div class="support"><!-- 1–2 sentences of support --></div>
+  </div>
+
+  <div class="thesis-block">
+    <div class="num">02</div>
+    <div class="point"><!-- Thesis point 2 title --></div>
+    <div class="support"><!-- 1–2 sentences of support --></div>
+  </div>
+
+  <div class="thesis-block">
+    <div class="num">03</div>
+    <div class="point"><!-- Thesis point 3 title --></div>
+    <div class="support"><!-- 1–2 sentences of support --></div>
+  </div>
+
+  <div class="thesis-block">
+    <div class="num">04</div>
+    <div class="point"><!-- Thesis point 4 title --></div>
+    <div class="support"><!-- 1–2 sentences of support --></div>
+  </div>
+
+  <!-- ── PULLQUOTE ── -->
+  <div class="pullquote">
+    <!-- Your sharpest line. Something you actually believe. Write this after the memo is done. -->
+  </div>
+
+  <!-- ── RISK ASSESSMENT ── -->
+  <h2>Risk Assessment</h2>
+  <table class="risk-table">
+    <thead>
+      <tr>
+        <th>Risk</th>
+        <th>Detail</th>
+        <th>Severity</th>
+        <th>Mitigation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>League leverage caps</td>
+        <td>NFL caps debt at $1.2B per team; NBA at $475M. Hard ceiling on LTV potential.</td>
+        <td><span class="tag-mid">Medium</span></td>
+        <td><!-- Your view --></td>
+      </tr>
+      <tr>
+        <td>Valuation concentration</td>
+        <td>54–70% of franchise revenue tied to media deals. Single risk factor dominates.</td>
+        <td><span class="tag-down">High</span></td>
+        <td><!-- Your view --></td>
+      </tr>
+      <tr>
+        <td>Media rights renewal</td>
+        <td>NFL early renegotiation signaled 2026+. MLB cycle expires 2028. Uncertainty in out-years.</td>
+        <td><span class="tag-mid">Medium</span></td>
+        <td><!-- Your view --></td>
+      </tr>
+      <tr>
+        <td>Liquidity / exit</td>
+        <td>5–15 franchise sales/yr across all leagues. No secondary market. Minority stakes nearly illiquid.</td>
+        <td><span class="tag-down">High</span></td>
+        <td><!-- Your view --></td>
+      </tr>
+      <tr>
+        <td>Valuation multiples</td>
+        <td>3x multiple expansion since 2013. Debt underwritten against potentially peak valuations.</td>
+        <td><span class="tag-mid">Medium</span></td>
+        <td><!-- Your view --></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── PORTFOLIO FIT ── -->
+  <h2>Portfolio Fit for UHNW Clients</h2>
+  <p><!-- Who specifically can do this? What AUM threshold makes sense? What does it replace or complement in a portfolio? --></p>
+  <p><!-- Liquidity tolerance discussion. What kind of UHNW client is this right for — and who should sit this out? --></p>
+
+  <!-- ── COMPARABLE MANAGERS ── -->
+  <h2>Who's Doing This</h2>
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Manager</th>
+        <th>Strategy</th>
+        <th>Notable Deals</th>
+        <th>Min. Check</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Sixth Street</td>
+        <td>Sports equity &amp; credit; franchise stakes and structured lending</td>
+        <td>Celtics ($1B), Giants (10% stake), Bay FC</td>
+        <td>$5M+</td>
+      </tr>
+      <tr>
+        <td>Ares Management</td>
+        <td>Sports &amp; entertainment credit fund; ~$2B target</td>
+        <td>Eagle Football, SME Opportunities vehicle</td>
+        <td>$1M+</td>
+      </tr>
+      <tr>
+        <td>Blue Owl / Owl Rock</td>
+        <td>GP Strategic Capital; $307B AUM; sports exposure via fund stakes</td>
+        <td>Arctos acquisition (KKR)</td>
+        <td>$250K+</td>
+      </tr>
+      <tr>
+        <td>Arctos Sports Partners</td>
+        <td>Minority equity stakes in major sports franchises</td>
+        <td>MLB, NBA, NHL portfolio</td>
+        <td>$2M+</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── RECOMMENDATION ── -->
+  <h2>Recommendation</h2>
+  <div class="takeaway">
+    <div class="takeaway-label">Bottom Line</div>
+    <p><!-- YOUR CALL. Conditional yes, no, or wait — and the specific reason. Don't hedge. This is the most important paragraph in the memo. --></p>
+  </div>
+
+  <!-- ── THE MEDIA ANGLE ── -->
+  <h2>Why This Looks Different From the Inside</h2>
+  <p><!-- This is the Option C section — your actual angle. Sports fandom, media fragmentation, the cultural value of franchises, how you think about what makes a brand durable vs. a bubble. This is where your background earns you something. --></p>
+
+  <!-- ── RELATED OPPORTUNITIES (brief) ── -->
+  <h2>Adjacent Opportunities Worth Watching</h2>
+  <p><!-- 2–3 sentences each on: Live Events / Experiential, Luxury Brand Equity, Music Royalties. Show you've thought about the landscape, not just one idea. --></p>
+
+  <!-- ── HOW I BUILT THIS ── -->
+  <h2>How I Built This</h2>
+  <div class="context-note">
+    <!-- Brief: what sources you used, what framework you applied, what you'd do with more time/access. Honest, not defensive. -->
+  </div>
+
+</div>
+
+<script>
+  const bar = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = pct + '%';
+  });
+</script>
+
+</body>
+</html>
