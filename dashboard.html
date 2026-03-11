@@ -85,7 +85,7 @@
     .rabbit-hole { background: var(--forest-dark); border-radius: 6px; padding: 2.5rem; color: var(--cream); }
     .rh-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest-light); margin-bottom: 1.25rem; }
     .rh-image { width: 100%; aspect-ratio: 16/7; overflow: hidden; border-radius: 4px; margin-bottom: 1.5rem; background: var(--forest); display: flex; align-items: center; justify-content: center; }
-    .rh-image img { width: 100%; height: 100%; object-fit: contain; padding: 2rem; background: #E63131; }
+    .rh-image img { width: auto; max-height: 180px; object-fit: contain; }
     .rabbit-hole h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; line-height: 1.25; margin-bottom: 1rem; letter-spacing: -0.02em; }
     .rabbit-hole p { font-size: 0.9rem; font-weight: 300; line-height: 1.8; color: var(--sand); margin-bottom: 1.5rem; }
     .rabbit-hole .read-full { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest-light); text-decoration: none; border-bottom: 1px solid var(--faded-coral); padding-bottom: 0.2rem; }
@@ -285,8 +285,9 @@
       <div class="section-label">Culture &amp; Entertainment</div>
       <div class="ent-grid">
         <a href="brief-oscars-2026.html" class="ent-card">
-          <div class="ent-image" style="background: #1a1a1a; display: flex; align-items: center; justify-content: center;">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/OscarStatue.jpg/440px-OscarStatue.jpg" alt="Oscar statuette" loading="lazy" style="width: auto; height: 100%; object-fit: contain;">
+          <div class="ent-image" style="background: #0d0d0d; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;">
+            <div style="font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: #c9a84c; line-height: 1;">✦</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: #c9a84c;">Oscars 2026</div>
           </div>
           <div class="ent-type">Awards &middot; March 15</div>
           <h4>The 2026 Oscars Are Four Days Away</h4>
@@ -317,8 +318,8 @@
       <p class="market-note">Two stories defining the industry right now: the digital buying calendar is shifting earlier than ever, and AI is eating organic search traffic at a pace most brands haven't accounted for. Both are shaping where entry-level marketing talent actually has leverage.</p>
       <div class="mkt-stories">
         <div class="mkt-item">
-          <div class="mkt-img" style="background: var(--soft-black); display: flex; align-items: center; justify-content: center; padding: 0.75rem;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/IAB_logo.svg/640px-IAB_logo.svg.png" alt="IAB logo" loading="lazy" style="width: 100%; height: auto; object-fit: contain; filter: invert(1);">
+          <div class="mkt-img" style="background: var(--soft-black); display: flex; align-items: center; justify-content: center;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: #fff; letter-spacing: 0.1em;">IAB</span>
           </div>
           <div class="mkt-text">
             <div class="story-source">IAB &middot; Ad Age</div>
@@ -344,7 +345,7 @@
       <div class="rabbit-hole">
         <div class="rh-label">Today's Rabbit Hole</div>
         <div class="rh-image">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Coca-Cola_can_2020.png/800px-Coca-Cola_can_2020.png" alt="Coca-Cola can" loading="lazy" style="max-height: 200px; width: auto; display: block; margin: 0 auto;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/1280px-Coca-Cola_logo.svg.png" alt="Coca-Cola logo" loading="lazy">
         </div>
         <h3>Coca-Cola's AI Christmas Ad Was a Perfect Case Study in What Not to Do</h3>
         <p>Last year, Coca-Cola ran a holiday campaign using AI-generated video to remake its iconic "Holidays Are Coming" truck spot &mdash; and the internet responded with one word: soulless. The backlash wasn't just aesthetic. People weren't upset because it was AI. They were upset because it was obviously AI, and Coke used it on the one brand touchpoint that requires the most care: the moment of the year when the brand is supposed to feel warm, human, and timeless. That's the worst possible place to cut corners on craft.</p>
