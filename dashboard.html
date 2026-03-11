@@ -3,38 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Daily Brief &mdash; Saturday, March 7, 2026</title>
+  <title>The Daily Brief &mdash; Wednesday, March 11, 2026</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
-
     :root {
-      --cream: #F4F1EB;
-      --warm-white: #FAF8F5;
-      --tan: #E5DDD0;
-      --sand: #D4C9B8;
-      --charcoal: #2A2A2A;
-      --soft-black: #1A1A1A;
-      --forest: #3D5A47;
-      --forest-light: #4A6B55;
-      --forest-dark: #2E4536;
-      --warm-gray: #8C8578;
-      --faded-coral: #D4A08F;
-      --market-green: #4A6B55;
-      --market-red: #B8524D;
+      --cream: #F4F1EB; --warm-white: #FAF8F5; --tan: #E5DDD0; --sand: #D4C9B8;
+      --charcoal: #2A2A2A; --soft-black: #1A1A1A; --forest: #3D5A47;
+      --forest-light: #4A6B55; --forest-dark: #2E4536; --warm-gray: #8C8578;
+      --faded-coral: #D4A08F; --market-green: #4A6B55; --market-red: #B8524D;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Sora', -apple-system, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
-
     .dash-nav { padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--tan); max-width: 1000px; margin: 0 auto; }
     .dash-nav .back { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); text-decoration: none; }
     .dash-nav .date { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); }
-
     .brief-header { max-width: 1000px; margin: 0 auto; padding: 4rem 3rem 3rem; border-bottom: 2px solid var(--soft-black); }
     .brief-header .masthead { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 0.5rem; }
     .brief-header .edition { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
     .brief-header .greeting { font-family: 'Lora', serif; font-style: italic; font-size: 1.1rem; color: var(--warm-gray); margin-top: 1.5rem; }
-
     .ticker { max-width: 1000px; margin: 0 auto; padding: 1.25rem 3rem; display: flex; gap: 2.5rem; border-bottom: 1px solid var(--tan); overflow-x: auto; }
     .ticker-item { display: flex; flex-direction: column; min-width: fit-content; }
     .ticker-item .symbol { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; color: var(--charcoal); }
@@ -42,18 +28,15 @@
     .ticker-item .change { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; }
     .ticker-item .change.up { color: var(--market-green); }
     .ticker-item .change.down { color: var(--market-red); }
-
     .brief-content { max-width: 1000px; margin: 0 auto; padding: 0 3rem; }
     .brief-section { padding: 2.5rem 0; border-bottom: 1px solid var(--tan); }
     .brief-section:last-child { border-bottom: none; }
-
     .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--tan); }
-
     .stories-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.5rem; }
     .story-lead { border-right: 1px solid var(--tan); padding-right: 2.5rem; }
-    .story-lead-img { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 3px; margin-bottom: 1rem; }
-    .story-lead-img img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.85) contrast(1.05); }
+    .story-lead-img { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 3px; margin-bottom: 1rem; background: var(--tan); }
+    .story-lead-img img { width: 100%; height: 100%; object-fit: cover; }
     .story-lead h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; line-height: 1.2; color: var(--soft-black); margin-bottom: 1rem; letter-spacing: -0.02em; }
     .story-lead p { font-size: 0.95rem; font-weight: 300; line-height: 1.7; color: var(--charcoal); margin-bottom: 1rem; }
     .story-lead .read-more { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); text-decoration: none; }
@@ -63,7 +46,6 @@
     .story-small .source { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); margin-bottom: 0.4rem; }
     .story-small h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; line-height: 1.3; color: var(--soft-black); margin-bottom: 0.4rem; letter-spacing: -0.01em; }
     .story-small p { font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.5; }
-
     .markets-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
     .market-card { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; }
     .market-card .name { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); margin-bottom: 0.5rem; }
@@ -79,7 +61,6 @@
     .story-headline a { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--soft-black); text-decoration: none; line-height: 1.3; }
     .story-headline a:hover { color: var(--forest); }
     .story-summary { font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.5; margin-top: 0.25rem; }
-
     .scores-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
     .score-card { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; }
     .score-card .teams { font-size: 0.9rem; color: var(--charcoal); }
@@ -89,35 +70,28 @@
     .upcoming { margin-top: 1rem; }
     .upcoming-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); margin-bottom: 0.75rem; }
     .upcoming-item { font-size: 0.85rem; font-weight: 300; color: var(--charcoal); padding: 0.5rem 0; border-bottom: 1px solid rgba(212,197,173,0.5); }
-
     .ent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
     .ent-card { text-decoration: none; color: inherit; }
-    .ent-card .ent-image { width: 100%; aspect-ratio: 16/10; background: var(--tan); border-radius: 3px; margin-bottom: 0.75rem; overflow: hidden; position: relative; }
-    .ent-card .ent-image img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.85) contrast(1.05); }
+    .ent-card .ent-image { width: 100%; aspect-ratio: 16/10; background: var(--tan); border-radius: 3px; margin-bottom: 0.75rem; overflow: hidden; }
+    .ent-card .ent-image img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
     .ent-card .ent-type { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--forest); margin-bottom: 0.35rem; }
     .ent-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--soft-black); line-height: 1.3; }
-
+    .ent-card p { font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.5; margin-top: 0.35rem; }
     .mkt-stories { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1rem; }
     .mkt-item { display: flex; gap: 1.25rem; align-items: flex-start; }
-    .mkt-img { width: 120px; flex-shrink: 0; aspect-ratio: 16/9; overflow: hidden; border-radius: 3px; }
-    .mkt-img img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.85) contrast(1.05); }
+    .mkt-img { width: 120px; flex-shrink: 0; aspect-ratio: 16/9; overflow: hidden; border-radius: 3px; background: var(--tan); }
+    .mkt-img img { width: 100%; height: 100%; object-fit: cover; }
     .mkt-text { flex: 1; }
-
     .rabbit-hole { background: var(--forest-dark); border-radius: 6px; padding: 2.5rem; color: var(--cream); }
     .rh-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest-light); margin-bottom: 1.25rem; }
-    .rh-image { width: 100%; aspect-ratio: 16/7; overflow: hidden; border-radius: 4px; margin-bottom: 1.5rem; }
-    .rh-image img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.7) contrast(1.1); }
+    .rh-image { width: 100%; aspect-ratio: 16/7; overflow: hidden; border-radius: 4px; margin-bottom: 1.5rem; background: var(--forest); display: flex; align-items: center; justify-content: center; }
+    .rh-image img { width: 100%; height: 100%; object-fit: contain; padding: 2rem; background: #E63131; }
     .rabbit-hole h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; line-height: 1.25; margin-bottom: 1rem; letter-spacing: -0.02em; }
     .rabbit-hole p { font-size: 0.9rem; font-weight: 300; line-height: 1.8; color: var(--sand); margin-bottom: 1.5rem; }
     .rabbit-hole .read-full { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest-light); text-decoration: none; border-bottom: 1px solid var(--faded-coral); padding-bottom: 0.2rem; }
-
-    .img-placeholder { width: 100%; height: 100%; background: var(--tan); display: flex; align-items: center; justify-content: center; }
-    .img-placeholder span { font-family: 'JetBrains Mono', monospace; font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); text-align: center; padding: 1rem; }
-
     .brief-footer { max-width: 1000px; margin: 0 auto; padding: 2rem 3rem; text-align: center; border-top: 2px solid var(--soft-black); }
     .brief-footer p { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
     .brief-footer a { color: var(--warm-gray); }
-
     @media (max-width: 768px) {
       .dash-nav, .brief-header, .brief-content, .brief-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
       .brief-header .masthead { font-size: 2.5rem; }
@@ -126,209 +100,238 @@
       .markets-row { grid-template-columns: repeat(2, 1fr); }
       .scores-row { grid-template-columns: 1fr; }
       .ent-grid { grid-template-columns: 1fr; }
-      .ticker { padding: 1rem 1.5rem; }
     }
   </style>
 </head>
 <body>
-
   <div class="dash-nav">
     <a href="index.html" class="back">&larr; Back to site</a>
-    <span class="date">Saturday, March 7, 2026</span>
+    <span class="date">Wednesday, March 11, 2026</span>
   </div>
-
   <header class="brief-header">
     <div class="masthead">The Daily Brief</div>
-    <div class="edition">Morning Edition &middot; Saturday, March 7, 2026</div>
+    <div class="edition">Morning Edition &middot; Wednesday, March 11, 2026</div>
     <p class="greeting">Good morning. Here's what matters today.</p>
   </header>
 
+  <!-- TICKER -->
   <div class="ticker">
     <div class="ticker-item">
-      <span class="symbol">S&P 500</span>
-      <span class="price">6,740</span>
-      <span class="change down">-1.33%</span>
+      <span class="symbol">S&amp;P 500</span>
+      <span class="price">6,769</span>
+      <span class="change down">&#9660; 0.27%</span>
     </div>
     <div class="ticker-item">
       <span class="symbol">Nasdaq</span>
-      <span class="price">22,387</span>
-      <span class="change down">-1.59%</span>
+      <span class="price">24,934</span>
+      <span class="change down">&#9660; 0.19%</span>
     </div>
     <div class="ticker-item">
       <span class="symbol">BTC</span>
-      <span class="price">$68,274</span>
-      <span class="change down">-2.10%</span>
+      <span class="price">$69,370</span>
+      <span class="change down">&#9660; 1.61%</span>
     </div>
     <div class="ticker-item">
-      <span class="symbol">ETH</span>
-      <span class="price">$2,080</span>
-      <span class="change down">-1.80%</span>
+      <span class="symbol">WTI Crude</span>
+      <span class="price">$95.40</span>
+      <span class="change down">&#9660; 2.10%</span>
     </div>
     <div class="ticker-item">
-      <span class="symbol">OIL (WTI)</span>
-      <span class="price">$90.12</span>
-      <span class="change up">+12.20%</span>
+      <span class="symbol">Gold</span>
+      <span class="price">$5,184</span>
+      <span class="change down">&#9660; 1.09%</span>
     </div>
     <div class="ticker-item">
-      <span class="symbol">GOLD</span>
-      <span class="price">Rising</span>
-      <span class="change neutral">↑</span>
+      <span class="symbol">10-YR</span>
+      <span class="price">4.189%</span>
+      <span class="change up">&#9650; 1.28%</span>
     </div>
   </div>
 
   <div class="brief-content">
 
+    <!-- TOP STORIES -->
     <div class="brief-section">
       <div class="section-label">Top Stories</div>
-      
-    <div class="stories-grid">
-      
-      <div class="story-lead">
-        <div class="story-lead-img"><img src="https://th-i.thgim.com/public/incoming/uoezlt/article70715155.ece/alternates/LANDSCAPE_1200/2026-03-07T065058Z_1052961584_RC2IZJADFYA1_RTRMADP_3_IRAN-CRISIS-LEBANON.JPG" alt="US-Israel war with Iran enters Day 8 — over 1,200 dead, Strait of Hormuz effectively closed" loading="lazy"></div>
-        <h3>US-Israel war with Iran enters Day 8 — over 1,200 dead, Strait of Hormuz effectively closed</h3>
-        <p>Coordinated US and Israeli strikes have killed 1,230+ in Iran, 200+ in Lebanon. Iran is retaliating with ballistic missiles against Israel and Gulf states. Trump approved a new $151M arms sale to Israel and said he won't negotiate without Iran's 'unconditional surrender.' The US claims 3,000+ targets struck in the first week. 'March for Peace' protests are scheduled across the US today.</p>
-        <a href="https://www.thehindu.com/news/international/iran-israel-us-war-live-west-asia-conflict-march-7-2026-trump-middle-east-crisis-oil-prices-air-strikes-drone-attacks-lebanon-strikes-gulf-region/article70714560.ece" target="_blank" class="read-more">Read more →</a>
+      <div class="stories-grid">
+        <div class="story-lead">
+          <div class="story-lead-img">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/USS_Gerald_R._Ford_%28CVN-78%29_Goodwin.jpg/1280px-USS_Gerald_R._Ford_%28CVN-78%29_Goodwin.jpg" alt="U.S. Navy aircraft carrier" loading="lazy">
+          </div>
+          <h3>Iran Launches &ldquo;Most Intense Operation Yet&rdquo; as War Enters Day 12</h3>
+          <p>Iran's military executed what it called its heaviest strike operation since the start of the U.S.-Israel war, targeting Israeli cities and Gulf nation infrastructure overnight into Wednesday. Defense Secretary Hegseth responded by describing Tuesday as "the most intense day of strikes inside Iran," hitting Tehran's Mehrabad airport and military installations. Gulf states &mdash; Kuwait, Qatar, Saudi Arabia, and the UAE &mdash; each reported intercepting missiles and drones in the last 24 hours.</p>
+          <p>Seven American troops have been killed and 140 injured according to the Pentagon, as Congressional Democrats demand public hearings on the war's objectives. Analysts warn the conflict is edging toward direct Russian and Chinese involvement, with both nations having openly backed Iran. Trump has hinted the war could end soon; military advisors say that's premature.</p>
+          <a href="https://www.cnn.com/2026/03/11/middleeast/us-israel-iran-middle-east-war-what-we-know-intl-hnk" target="_blank" class="read-more">Read more &rarr;</a>
+        </div>
+        <div class="story-sidebar">
+          <a href="https://www.espn.com/nba/story/_/id/48168997/bam-adebayo-scores-83-second-most-points-nba-history" target="_blank" class="story-small">
+            <div class="source">ESPN &middot; NBA</div>
+            <h4>Bam Adebayo Scores 83 Points &mdash; Second Most in NBA History</h4>
+            <p>Adebayo went for 83 in Miami's 150-129 win over Washington, surpassing Kobe Bryant's 81 and trailing only Wilt Chamberlain's 100. He shot 36-for-43 from the line &mdash; new NBA records for free throws made and attempted in a game. His previous season high was 32 points.</p>
+          </a>
+          <a href="https://sports.yahoo.com/articles/nba-final-score-lakers-120-053340887.html" target="_blank" class="story-small">
+            <div class="source">Yahoo Sports &middot; NBA</div>
+            <h4>Lakers 120, Timberwolves 106 &mdash; Doncic Triple-Double Without LeBron</h4>
+            <p>Luka Doncic posted 31/11/11 for his seventh triple-double of the season. Austin Reaves added 31, erupting in the second half. LeBron James sat out again with left foot arthritis and a hip contusion. Lakers look fine without him right now.</p>
+          </a>
+        </div>
       </div>
-      <div class="story-sidebar">
-        <a href="https://www.channelnewsasia.com/world/oil-prices-rise-middle-east-war-iran-5977921" target="_blank" class="story-small">
-          <div class="source">CNA</div>
-          <h4>Oil at $92 — energy shock threatens global inflation recovery</h4>
-          <p>A 10% rise in crude adds ~30bps to inflation and shaves 15bps off GDP growth. Central banks may have to delay rate cuts. Analysts estimate traders are paying a $14/barrel war premium right now.</p>
-        </a>
-        <a href="https://www.bssnews.net/international/366522" target="_blank" class="story-small">
-          <div class="source">BSS News</div>
-          <h4>Nepal election: RSP heading for landslide victory</h4>
-          <p>Nepal's Rastriya Swatantra Party (RSP) is leading significantly in election results, signaling a major political shift in the Himalayan nation.</p>
-        </a>
-      </div>
-    </div>
     </div>
 
+    <!-- MARKETS -->
     <div class="brief-section">
       <div class="section-label">Markets</div>
-      
-    <div class="markets-row">
+      <div class="markets-row">
         <div class="market-card">
-          <div class="name">S&P 500</div>
-          <div class="value">6,740</div>
-          <div class="delta down">-1.33%</div>
+          <div class="name">S&amp;P 500</div>
+          <div class="value">6,769</div>
+          <div class="delta down">&#9660; 0.27% (futs)</div>
         </div>
         <div class="market-card">
           <div class="name">Nasdaq</div>
-          <div class="value">22,387</div>
-          <div class="delta down">-1.59%</div>
+          <div class="value">24,934</div>
+          <div class="delta down">&#9660; 0.19% (futs)</div>
         </div>
         <div class="market-card">
           <div class="name">WTI Crude</div>
-          <div class="value">$90.12</div>
-          <div class="delta up">+12.20%</div>
+          <div class="value">$95.40</div>
+          <div class="delta down">&#9660; off $120 high</div>
         </div>
         <div class="market-card">
           <div class="name">Bitcoin</div>
-          <div class="value">$68,274</div>
-          <div class="delta down">-2.10%</div>
+          <div class="value">$69,370</div>
+          <div class="delta down">&#9660; 1.61%</div>
         </div>
-    </div>
-    <p class="market-note">Markets got hit hard Friday. The S&P dropped 1.33% and the Nasdaq fell 1.59% — the primary driver is the Middle East war. Oil is at $92/barrel (Brent) after surging ~30% in a week as the Strait of Hormuz is effectively shut down. That's ~20% of global oil and LNG supply choked off. Gas at the pump is already up to $3.32/gal nationally and analysts say $3.50 is coming fast. Rising energy costs are reigniting inflation fears and kicking rate-cut bets down the road. Safe-haven plays (gold, silver) caught a bid. Your energy-adjacent names (UUUU, NLR, XLU) are worth watching in this environment — this is exactly the macro scenario that moves them.</p>
-    <div class="market-stories">
+      </div>
+      <p class="market-note">Markets remain in reactive mode as Iran war headlines drive volatility. Oil spiked near $120 at the height of Strait of Hormuz closure fears before pulling back to ~$95 as allied nations signaled emergency reserve releases and Trump hinted at a quick resolution &mdash; only for the White House to walk it back. Energy stocks led losses. The one clean bright spot: chip stocks caught a bid off strong TSMC sales data, with Nvidia up 1.2%, Micron up 3.5%, Intel up 2.6%. VIX sits at 25.69 &mdash; elevated but not panicked. This morning's CPI came in line with expectations, which removes at least one variable from a messy tape. The Iran conflict, not macro data, is running markets right now.</p>
+      <div class="market-stories">
         <div class="market-story">
-          <div class="story-source">Fox Business</div>
-          <div class="story-headline"><a href="https://www.foxbusiness.com/energy/gas-prices-surge-iran-conflict-rattles-global-oil-markets-pushing-us-crude-90" target="_blank">Oil surges past $90 as Middle East war disrupts global supply</a></div>
-          <div class="story-summary">WTI crude breached $90/barrel for the first time since 2023. Brent hit $92, up 30% on the week. Strait of Hormuz disruptions are preventing tankers from loading in Iraq, Kuwait, and Saudi Arabia.</div>
+          <div class="story-source">Yahoo Finance</div>
+          <div class="story-headline"><a href="https://finance.yahoo.com/news/live/stock-market-today-dow-sp-500-nasdaq-futures-waver-amid-fresh-inflation-data-continued-iran-fallout-231325252.html" target="_blank">Dow, S&amp;P 500, Nasdaq Futures Waver Amid Inflation Data and Iran Fallout</a></div>
+          <div class="story-summary">Futures slipped Wednesday morning as investors processed a CPI reading that matched expectations and watched overnight escalations from Tehran. Nine of 11 S&amp;P 500 sectors closed lower Tuesday, with energy dragging and tech providing partial cover from chip strength.</div>
         </div>
         <div class="market-story">
-          <div class="story-source">CNA</div>
-          <div class="story-headline"><a href="https://www.channelnewsasia.com/world/oil-prices-rise-middle-east-war-iran-5977921" target="_blank">Oil prices surge to highest since 2023 as Middle East war rages</a></div>
-          <div class="story-summary">Stocks fell globally on Friday as rising energy costs reignited inflation fears, dimming prospects for near-term Fed rate cuts.</div>
-        </div></div>
-    
+          <div class="story-source">CoinDesk</div>
+          <div class="story-headline"><a href="https://www.coindesk.com/markets/2026/03/09/bitcoin-rises-to-usd69-000-stocks-reverse-big-early-losses-as-crude-oil-sinks-back-below-usd100" target="_blank">Bitcoin Recovers to $69K as Crude Oil Retreats from $120</a></div>
+          <div class="story-summary">BTC bounced from a sharp dip to $66K as oil pulled back. Crypto's correlation to macro risk remains high this cycle &mdash; when oil spikes on war fears, risk assets sell off in tandem. The recovery to $69K suggests traders see current levels as a defensible floor given the geopolitical uncertainty still in play.</div>
+        </div>
+      </div>
     </div>
 
+    <!-- SPORTS -->
     <div class="brief-section">
       <div class="section-label">Sports</div>
-      
-    <div class="scores-row">
+      <div class="scores-row">
         <div class="score-card">
+          <div class="teams"><strong>Miami Heat</strong> vs. Washington Wizards</div>
           <div>
-            <div class="teams"><strong>Celtics</strong> vs Mavericks</div>
-            <div class="status">Final</div>
+            <div class="result">150 &ndash; 129</div>
+            <div class="status">Final &middot; Bam: 83 pts</div>
           </div>
-          <div class="result">120 — 100</div>
         </div>
         <div class="score-card">
+          <div class="teams"><strong>San Antonio Spurs</strong> vs. Boston Celtics</div>
           <div>
-            <div class="teams"><strong>Lakers</strong> vs Pacers</div>
-            <div class="status">Final</div>
+            <div class="result">125 &ndash; 116</div>
+            <div class="status">Final &middot; Wemby: 39/11</div>
           </div>
-          <div class="result">128 — 117</div>
         </div>
         <div class="score-card">
+          <div class="teams"><strong>Los Angeles Lakers</strong> vs. Minnesota Timberwolves</div>
           <div>
-            <div class="teams"><strong>Suns</strong> vs Pelicans</div>
-            <div class="status">Final</div>
+            <div class="result">120 &ndash; 106</div>
+            <div class="status">Final &middot; Luka: 31/11/11</div>
           </div>
-          <div class="result">118 — 116</div>
         </div>
-    </div><div class="upcoming"><div class="upcoming-label">Coming Up</div><div class="upcoming-item">NBA: OKC Thunder vs. Golden State Warriors — tonight</div><div class="upcoming-item">NBA: Detroit Pistons vs. Brooklyn Nets — tonight</div><div class="upcoming-item">World Baseball Classic: Taiwan vs. Cuba</div></div><p class="market-note" style="margin-top:1rem">Tatum is back and looked real. 15/12/7 in 27 minutes — not a full-throttle effort, but the reads were clean, the movement looked fluid, and the Celtics won by 20. That's everything you needed to see. Watch the next 3-4 games to see how the burst develops as the minutes restriction comes off.</p>
+        <div class="score-card">
+          <div class="teams"><strong>Utah Jazz</strong> vs. Golden State Warriors</div>
+          <div>
+            <div class="result">119 &ndash; 116</div>
+            <div class="status">Final &middot; Warriors: 32-32</div>
+          </div>
+        </div>
+      </div>
+      <div class="upcoming">
+        <div class="upcoming-label">Coming Up Tonight</div>
+        <div class="upcoming-item">NBA Wednesday slate &mdash; multiple games across the league</div>
+        <div class="upcoming-item">NHL midweek games continue</div>
+        <div class="upcoming-item">College basketball conference tournaments building toward March Madness</div>
+      </div>
+      <p class="market-note" style="margin-top:1rem">The only story from last night is Bam Adebayo scoring 83 points &mdash; only Wilt Chamberlain has done more in a single NBA game. Adebayo is a 16-point-per-game center. The Wizards fouled him 43 times, which obviously helped, but you still have to make 36 free throws and score 31 in the first quarter alone. It's one of the most surreal individual performances in league history. Meanwhile, the Lakers handled business without LeBron: Doncic ran the offense and Reaves went off in the second half. Wembanyama continues to look like the most dominant player in the West &mdash; 15 wins in his last 16 games with the Spurs.</p>
     </div>
 
+    <!-- CULTURE & ENTERTAINMENT -->
     <div class="brief-section">
       <div class="section-label">Culture &amp; Entertainment</div>
       <div class="ent-grid">
-        <a href="https://en.wikipedia.org/wiki/Project_Hail_Mary_(film)" target="_blank" class="ent-card">
-          <div class="ent-image"><img src="https://upload.wikimedia.org/wikipedia/en/3/3b/Project_Hail_Mary_poster.jpg" alt="Project Hail Mary — Ryan Gosling's sci-fi epic drops March 20" loading="lazy" style="object-position: top center;"></div>
-          <div class="ent-type">Film</div>
-          <h4>Project Hail Mary — Ryan Gosling's sci-fi epic drops March 20</h4>
+        <a href="https://editorial.rottentomatoes.com/article/the-most-anticipated-movies-of-2026/" target="_blank" class="ent-card">
+          <div class="ent-image" style="background: #1a1a1a; display: flex; align-items: center; justify-content: center;">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/OscarStatue.jpg/440px-OscarStatue.jpg" alt="Oscar statuette" loading="lazy" style="width: auto; height: 100%; object-fit: contain;">
+          </div>
+          <div class="ent-type">Awards &middot; March 15</div>
+          <h4>The 2026 Oscars Are Four Days Away</h4>
+          <p>Conan O'Brien hosts. Michael B. Jordan is the surprise Best Actor frontrunner after his Actor Awards win over Chalamet and DiCaprio. Best Picture is a wide-open race between <em>Sinners</em>, <em>One Battle After Another</em>, and <em>Marty Supreme</em>.</p>
         </a>
-        <a href="https://www.nssmag.com/en/lifestyle/44448/best-movies-tv-releases-march-2026" target="_blank" class="ent-card">
-          <div class="ent-image"><img src="https://occ-0-8407-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABRsOQfvvyFAkWn1wcrTKh8GFXO5FP8GjkFz4OJyGn4UEXqzrRiYWPbaIO5DllfPdKVJqgK2J.jpg" alt="Peaky Blinders: The Immortal Man" loading="lazy"></div>
-          <div class="ent-type">Film</div>
-          <h4>Peaky Blinders: The Immortal Man — Cillian Murphy back as Tommy Shelby</h4>
+        <a href="https://www.movieinsider.com/movies/march/2026" target="_blank" class="ent-card">
+          <div class="ent-image" style="background: #0a1628; display: flex; align-items: center; justify-content: center;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Ryan_Gosling_by_Gage_Skidmore.jpg/640px-Ryan_Gosling_by_Gage_Skidmore.jpg" alt="Ryan Gosling" loading="lazy">
+          </div>
+          <div class="ent-type">Film &middot; March 20</div>
+          <h4>Project Hail Mary Opens in 9 Days</h4>
+          <p>Ryan Gosling stars as Ryland Grace &mdash; an astronaut with no memory who wakes up alone on a spacecraft mid-mission to save Earth. Directed by Phil Lord and Christopher Miller. Early buzz is strong.</p>
         </a>
-        <a href="https://fictionhorizon.com/the-most-anticipated-movies-of-march-2026/" target="_blank" class="ent-card">
-          <div class="ent-image"><img src="https://lumiere-a.akamaihd.net/v1/images/p_hoppers_1289_v2_27db3d0b.jpeg" alt="Pixar Hoppers" loading="lazy"></div>
-          <div class="ent-type">Film</div>
-          <h4>Pixar's 'Hoppers' out now — girl transfers consciousness into a robotic beaver</h4>
-        </a></div>
+        <a href="https://www.wionews.com/photos/new-ott-releases-this-week-march-9-15-2026-one-piece-scarpetta-virgin-river-7-new-movies-and-tv-shows-coming-on-netflix-prime-video-and-more-1772943963027" target="_blank" class="ent-card">
+          <div class="ent-image" style="background: #000; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/One_Piece_Logo.svg/1280px-One_Piece_Logo.svg.png" alt="One Piece" loading="lazy" style="width: 100%; height: auto; object-fit: contain;">
+          </div>
+          <div class="ent-type">Streaming &middot; Now</div>
+          <h4>One Piece Season 2 + HBO's New Murder Mystery</h4>
+          <p>Netflix drops live-action One Piece Season 2 and Nicole Kidman's <em>Scarpetta</em> this week. On HBO: a new dark comedy starring Jason Bateman, David Harbour, and Linda Cardellini as a love triangle where someone ends up dead.</p>
+        </a>
+      </div>
     </div>
 
+    <!-- MARKETING & CAREER -->
     <div class="brief-section">
       <div class="section-label">Marketing &amp; Career</div>
-      
-    <p class="market-note">AI is eating the ad industry from the inside out — and the brands that don't adapt operationally are already behind.</p>
-    <div class="mkt-stories">
-      <div class="mkt-item">
-        <div class="mkt-img"><img src="https://seafoammedia.com/wp-content/uploads/2026/03/march-26-768x432.png" alt="Meta launches Manus AI inside Ads Manager — automated campaign planning is here" loading="lazy"></div>
-        <div class="mkt-text">
-          <div class="story-source">Seafoam Media</div>
-          <div class="story-headline"><a href="https://seafoammedia.com/march-2026-marketing-news-trends-insights/" target="_blank">Meta launches Manus AI inside Ads Manager — automated campaign planning is here</a></div>
-          <div class="story-summary">Meta's Manus AI agent handles campaign planning and competitor analysis directly in Ads Manager. Google is rolling out AI-optimized non-skippable YouTube CTV ads. OpenAI has partnered with Criteo to serve ads inside ChatGPT. GEO (Generative Engine Optimization) is becoming a real discipline as half of US consumers now use TikTok as a search engine.</div>
+      <p class="market-note">Two stories defining the industry right now: the digital buying calendar is shifting earlier than ever, and AI is eating organic search traffic at a pace most brands haven't accounted for. Both are shaping where entry-level marketing talent actually has leverage.</p>
+      <div class="mkt-stories">
+        <div class="mkt-item">
+          <div class="mkt-img" style="background: var(--soft-black); display: flex; align-items: center; justify-content: center; padding: 0.75rem;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/IAB_logo.svg/640px-IAB_logo.svg.png" alt="IAB logo" loading="lazy" style="width: 100%; height: auto; object-fit: contain; filter: invert(1);">
+          </div>
+          <div class="mkt-text">
+            <div class="story-source">IAB &middot; Ad Age</div>
+            <div class="story-headline"><a href="https://seafoammedia.com/march-2026-marketing-news-trends-insights/" target="_blank">IAB Moves NewFronts to March 23&ndash;26 in New York &mdash; Earliest Ever</a></div>
+            <div class="story-summary">The digital video upfront marketplace is now a full month earlier than its traditional April/May slot. The reason: digital buying cycles have fully decoupled from the broadcast TV calendar. For anyone entering media planning or brand partnerships, this is the signal that the old May/June selling season is dead. The action &mdash; and the relationships &mdash; are forming earlier, faster, and with far more streaming and CTV inventory in the room.</div>
+          </div>
+        </div>
+        <div class="mkt-item">
+          <div class="mkt-img" style="background: var(--cream); display: flex; align-items: center; justify-content: center; padding: 0.75rem;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/800px-Google_2015_logo.svg.png" alt="Google logo" loading="lazy" style="width: 100%; height: auto; object-fit: contain;">
+          </div>
+          <div class="mkt-text">
+            <div class="story-source">Marketing Dive</div>
+            <div class="story-headline"><a href="https://www.marketingdive.com/news/marketing-trends-outlook-2026/810740/" target="_blank">Google AI Overviews Up 58% Year-Over-Year &mdash; Zero-Click Is the New Normal</a></div>
+            <div class="story-summary">New research shows AI-generated summaries now appear on the majority of search queries, with click-through rates declining sharply in education, finance, and B2B. For brand marketers, this isn't just an SEO problem &mdash; it's a fundamental question about where to invest to reach people who will never visit your site. Owned media, social, and video are looking more essential by the month.</div>
+          </div>
         </div>
       </div>
-      <div class="mkt-item">
-        <div class="mkt-img"><img src="https://www.bluethirst.co.uk/wp-content/uploads/2026/02/Make-Your-Marketing-Work.png" alt="Netflix + Amazon partner on commerce signals for performance ad targeting" loading="lazy"></div>
-        <div class="mkt-text">
-          <div class="story-source">Bluethirst</div>
-          <div class="story-headline"><a href="https://www.bluethirst.co.uk/blog/march-2026-top-digital-marketing-news/" target="_blank">Netflix + Amazon partner on commerce signals for performance ad targeting</a></div>
-          <div class="story-summary">Netflix is leveraging Amazon's 'trillions' of commerce signals via a new Conversion API, transforming streaming from a brand-awareness play into a measurable performance channel. This is a major shift for entertainment marketing.</div>
-        </div>
-      </div>
-    </div>
     </div>
 
+    <!-- RABBIT HOLE -->
     <div class="brief-section">
-      
-    <div class="rabbit-hole">
-      <div class="rh-label">Today's Rabbit Hole</div>
-      <div class="rh-image"><img src="https://cdn.prod.website-files.com/61aa482275701e722856da7b/636a75e302fc5d4917c34a0f_AccientalBrands_V1-01.avif" alt="Play-Doh Was a Wallpaper Cleaner (And Wrigley Started Selling Soap)" loading="lazy"></div>
-      <h3>Play-Doh Was a Wallpaper Cleaner (And Wrigley Started Selling Soap)</h3>
-      <p>In the 1930s, a soap company called Kutol Products invented a pliable putty to clean soot off wallpaper. It worked well — until coal heating declined after WWII and nobody needed their wallpaper cleaned anymore. The company was heading toward bankruptcy when a nursery school teacher suggested repurposing the compound as a children's toy. They added colors, renamed it Play-Doh, and launched in 1956. It became one of the most iconic toys in American history.
-
-This is not a unique story. Wrigley's chewing gum was originally a free premium thrown in with baking powder — customers cared more about the gum than the actual product, so Wrigley pivoted the entire company. Nokia started as a Finnish paper mill in 1865. Samsung began as a trading company selling dried fish and noodles in 1938. The company you think of as a phone company or electronics giant started by shipping groceries.
-
-The pattern: the most valuable thing a company builds is often the byproduct of what they were actually trying to do. Play-Doh wasn't an invention — it was a pivot from failure. The skill isn't just building something; it's recognizing when the accidental output is worth more than the original plan. In a world where everyone is building AI tools and features, this is worth sitting with: what are you accidentally making?</p>
-      <a href="https://trainual.com/manual/famous-companies-that-got-their-start-from-unintentional-tactics" target="_blank" class="read-full">Read the full story →</a>
-    </div>
+      <div class="rabbit-hole">
+        <div class="rh-label">Today's Rabbit Hole</div>
+        <div class="rh-image">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/1280px-Coca-Cola_logo.svg.png" alt="Coca-Cola logo" loading="lazy">
+        </div>
+        <h3>Coca-Cola's AI Christmas Ad Was a Perfect Case Study in What Not to Do</h3>
+        <p>Last year, Coca-Cola ran a holiday campaign using AI-generated video to remake its iconic "Holidays Are Coming" truck spot &mdash; and the internet responded with one word: soulless. The backlash wasn't just aesthetic. People weren't upset because it was AI. They were upset because it was obviously AI, and Coke used it on the one brand touchpoint that requires the most care: the moment of the year when the brand is supposed to feel warm, human, and timeless. That's the worst possible place to cut corners on craft.</p>
+        <p>The strategic lesson is clear once you see it, but a lot of brand teams are still missing it. AI is an execution tool, not a brand tool. You can use AI to generate product descriptions, optimize ad targeting, scale localized creative, or generate hundreds of CTA variants. That's what it's built for. Where it consistently fails is in the moments that require what brand strategists call "brand truth" &mdash; the emotional territory a brand has spent decades earning the right to occupy. For Coca-Cola, that territory is warmth, togetherness, and nostalgia. You cannot outsource that to a diffusion model and expect it to land. The pixels are wrong, the lighting is uncanny, and audiences feel it even when they can't articulate why.</p>
+        <p>The real danger isn't that AI will produce obviously bad advertising. It's that it'll produce efficient, technically competent, invisible advertising &mdash; and invisible is death for a brand at Coke's scale. Merriam-Webster's 2025 word of the year was "slop," a perfect descriptor for the flood of AI-generated content that looks and sounds interchangeable. In a world of slop, distinctiveness becomes the rarest thing a brand can hold. The brands that win this decade won't be the ones that adopted AI earliest. They'll be the ones that were most disciplined about where they chose not to use it &mdash; and that instinct is what separates a brand strategist from a production manager.</p>
+        <a href="https://heavy.com/sports/nba/miami-heat/bam-adebayo-83-point-nba-reaction/" target="_blank" class="read-full">More on brand authenticity in the AI era &rarr;</a>
+      </div>
     </div>
 
   </div>
@@ -336,6 +339,5 @@ The pattern: the most valuable thing a company builds is often the byproduct of 
   <div class="brief-footer">
     <p>Updated 7:00 AM, March 11 &middot; <a href="index.html">Back to site</a></p>
   </div>
-
 </body>
 </html>

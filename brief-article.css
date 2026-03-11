@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --cream: #F4F1EB;
+  --warm-white: #FAF8F5;
+  --tan: #E5DDD0;
+  --sand: #D4C9B8;
+  --charcoal: #2A2A2A;
+  --soft-black: #1A1A1A;
+  --forest: #3D5A47;
+  --forest-light: #4A6B55;
+  --forest-dark: #2E4536;
+  --warm-gray: #8C8578;
+  --faded-coral: #D4A08F;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Sora', -apple-system, sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  -webkit-font-smoothing: antialiased;
+}
+
+.article-nav {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--tan);
+}
+
+.article-nav a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--warm-gray);
+  text-decoration: none;
+}
+
+.article-nav a:hover { color: var(--forest); }
+
+.article-nav .section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--forest);
+  background: rgba(61,90,71,0.08);
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+}
+
+.article-wrap {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 3rem 2rem 6rem;
+}
+
+.article-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--warm-gray);
+  margin-bottom: 1rem;
+}
+
+.article-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1.15;
+  color: var(--soft-black);
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+.article-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--warm-gray);
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--tan);
+}
+
+/* Hero image — natural dimensions, max width */
+.article-hero {
+  margin-bottom: 2.5rem;
+}
+
+.article-hero img {
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+  display: block;
+}
+
+.article-hero figcaption {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--warm-gray);
+  margin-top: 0.6rem;
+}
+
+/* Body copy */
+.article-body p {
+  font-family: 'Lora', serif;
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--charcoal);
+  margin-bottom: 1.5rem;
+}
+
+.article-body p:first-child::first-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.5rem;
+  font-weight: 600;
+  line-height: 0.85;
+  float: left;
+  margin-right: 0.1em;
+  margin-top: 0.05em;
+  color: var(--soft-black);
+}
+
+.article-body h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: var(--soft-black);
+  margin: 2.5rem 0 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.article-body .pullquote {
+  border-left: 3px solid var(--forest);
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  margin: 2rem 0;
+}
+
+.article-body .pullquote p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--soft-black);
+  margin: 0;
+}
+
+.article-body .pullquote p::first-letter { all: unset; }
+
+/* Source link */
+.article-source-link {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--tan);
+}
+
+.article-source-link p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--warm-gray);
+  margin-bottom: 0.4rem;
+}
+
+.article-source-link a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: var(--forest);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(61,90,71,0.3);
+  padding-bottom: 0.1rem;
+}
+
+.article-source-link a:hover { border-color: var(--forest); }
+
+@media (max-width: 640px) {
+  .article-wrap { padding: 2rem 1.25rem 4rem; }
+  .article-nav { padding: 1.25rem; }
+}
