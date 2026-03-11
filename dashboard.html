@@ -21,7 +21,7 @@
     .brief-header .masthead { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 0.5rem; }
     .brief-header .edition { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
     .brief-header .greeting { font-family: 'Lora', serif; font-style: italic; font-size: 1.1rem; color: var(--warm-gray); margin-top: 1.5rem; }
-    .ticker { max-width: 1000px; margin: 0 auto; padding: 1.25rem 3rem; display: flex; gap: 2.5rem; border-bottom: 1px solid var(--tan); overflow-x: auto; }
+    .ticker { max-width: 100%; padding: 1.25rem 3rem; display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--tan); flex-wrap: wrap; }
     .ticker-item { display: flex; flex-direction: column; min-width: fit-content; }
     .ticker-item .symbol { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; color: var(--charcoal); }
     .ticker-item .price { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--charcoal); }
@@ -146,6 +146,26 @@
       <span class="price">4.189%</span>
       <span class="change up">&#9650; 1.28%</span>
     </div>
+    <div class="ticker-item">
+      <span class="symbol">Silver</span>
+      <span class="price">$38.72</span>
+      <span class="change up">&#9650; 2.14%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">NVDA</span>
+      <span class="price">$948.20</span>
+      <span class="change up">&#9650; 1.20%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">MU</span>
+      <span class="price">$128.55</span>
+      <span class="change up">&#9650; 3.50%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">INTC</span>
+      <span class="price">$42.30</span>
+      <span class="change up">&#9650; 2.60%</span>
+    </div>
   </div>
 
   <div class="brief-content">
@@ -264,7 +284,7 @@
     <div class="brief-section">
       <div class="section-label">Culture &amp; Entertainment</div>
       <div class="ent-grid">
-        <a href="https://editorial.rottentomatoes.com/article/the-most-anticipated-movies-of-2026/" target="_blank" class="ent-card">
+        <a href="brief-oscars-2026.html" class="ent-card">
           <div class="ent-image" style="background: #1a1a1a; display: flex; align-items: center; justify-content: center;">
             <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/OscarStatue.jpg/440px-OscarStatue.jpg" alt="Oscar statuette" loading="lazy" style="width: auto; height: 100%; object-fit: contain;">
           </div>
@@ -272,7 +292,7 @@
           <h4>The 2026 Oscars Are Four Days Away</h4>
           <p>Conan O'Brien hosts. Michael B. Jordan is the surprise Best Actor frontrunner after his Actor Awards win over Chalamet and DiCaprio. Best Picture is a wide-open race between <em>Sinners</em>, <em>One Battle After Another</em>, and <em>Marty Supreme</em>.</p>
         </a>
-        <a href="https://www.movieinsider.com/movies/march/2026" target="_blank" class="ent-card">
+        <a href="brief-project-hail-mary.html" class="ent-card">
           <div class="ent-image" style="background: #0a1628; display: flex; align-items: center; justify-content: center;">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Ryan_Gosling_by_Gage_Skidmore.jpg/640px-Ryan_Gosling_by_Gage_Skidmore.jpg" alt="Ryan Gosling" loading="lazy">
           </div>
@@ -280,7 +300,7 @@
           <h4>Project Hail Mary Opens in 9 Days</h4>
           <p>Ryan Gosling stars as Ryland Grace &mdash; an astronaut with no memory who wakes up alone on a spacecraft mid-mission to save Earth. Directed by Phil Lord and Christopher Miller. Early buzz is strong.</p>
         </a>
-        <a href="https://www.wionews.com/photos/new-ott-releases-this-week-march-9-15-2026-one-piece-scarpetta-virgin-river-7-new-movies-and-tv-shows-coming-on-netflix-prime-video-and-more-1772943963027" target="_blank" class="ent-card">
+        <a href="brief-streaming-march.html" class="ent-card">
           <div class="ent-image" style="background: #000; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/One_Piece_Logo.svg/1280px-One_Piece_Logo.svg.png" alt="One Piece" loading="lazy" style="width: 100%; height: auto; object-fit: contain;">
           </div>
@@ -302,7 +322,7 @@
           </div>
           <div class="mkt-text">
             <div class="story-source">IAB &middot; Ad Age</div>
-            <div class="story-headline"><a href="https://seafoammedia.com/march-2026-marketing-news-trends-insights/" target="_blank">IAB Moves NewFronts to March 23&ndash;26 in New York &mdash; Earliest Ever</a></div>
+            <div class="story-headline"><a href="https://www.iab.com/events/iab-newfronts-2026/" target="_blank">IAB Moves NewFronts to March 23&ndash;26 in New York &mdash; Earliest Ever</a></div>
             <div class="story-summary">The digital video upfront marketplace is now a full month earlier than its traditional April/May slot. The reason: digital buying cycles have fully decoupled from the broadcast TV calendar. For anyone entering media planning or brand partnerships, this is the signal that the old May/June selling season is dead. The action &mdash; and the relationships &mdash; are forming earlier, faster, and with far more streaming and CTV inventory in the room.</div>
           </div>
         </div>
@@ -324,13 +344,13 @@
       <div class="rabbit-hole">
         <div class="rh-label">Today's Rabbit Hole</div>
         <div class="rh-image">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/1280px-Coca-Cola_logo.svg.png" alt="Coca-Cola logo" loading="lazy">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Coca-Cola_can_2020.png/800px-Coca-Cola_can_2020.png" alt="Coca-Cola can" loading="lazy" style="max-height: 200px; width: auto; display: block; margin: 0 auto;">
         </div>
         <h3>Coca-Cola's AI Christmas Ad Was a Perfect Case Study in What Not to Do</h3>
         <p>Last year, Coca-Cola ran a holiday campaign using AI-generated video to remake its iconic "Holidays Are Coming" truck spot &mdash; and the internet responded with one word: soulless. The backlash wasn't just aesthetic. People weren't upset because it was AI. They were upset because it was obviously AI, and Coke used it on the one brand touchpoint that requires the most care: the moment of the year when the brand is supposed to feel warm, human, and timeless. That's the worst possible place to cut corners on craft.</p>
         <p>The strategic lesson is clear once you see it, but a lot of brand teams are still missing it. AI is an execution tool, not a brand tool. You can use AI to generate product descriptions, optimize ad targeting, scale localized creative, or generate hundreds of CTA variants. That's what it's built for. Where it consistently fails is in the moments that require what brand strategists call "brand truth" &mdash; the emotional territory a brand has spent decades earning the right to occupy. For Coca-Cola, that territory is warmth, togetherness, and nostalgia. You cannot outsource that to a diffusion model and expect it to land. The pixels are wrong, the lighting is uncanny, and audiences feel it even when they can't articulate why.</p>
         <p>The real danger isn't that AI will produce obviously bad advertising. It's that it'll produce efficient, technically competent, invisible advertising &mdash; and invisible is death for a brand at Coke's scale. Merriam-Webster's 2025 word of the year was "slop," a perfect descriptor for the flood of AI-generated content that looks and sounds interchangeable. In a world of slop, distinctiveness becomes the rarest thing a brand can hold. The brands that win this decade won't be the ones that adopted AI earliest. They'll be the ones that were most disciplined about where they chose not to use it &mdash; and that instinct is what separates a brand strategist from a production manager.</p>
-        <a href="https://heavy.com/sports/nba/miami-heat/bam-adebayo-83-point-nba-reaction/" target="_blank" class="read-full">More on brand authenticity in the AI era &rarr;</a>
+        <a href="brief-coke-ai.html" class="read-full">More on brand authenticity in the AI era &rarr;</a>
       </div>
     </div>
 

@@ -478,13 +478,13 @@
     }
 
     .photo-columns {
-      columns: 3;
-      column-gap: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      align-items: start;
     }
 
     .photo-grid .photo {
-      break-inside: avoid;
-      margin-bottom: 0.75rem;
       border-radius: 2px;
       overflow: hidden;
       cursor: pointer;
@@ -597,7 +597,7 @@
       .featured-strip { padding: 4rem 1.5rem; }
       .featured-image { display: none; }
       .photo-section { padding: 4rem 1.5rem; }
-      .photo-columns { columns: 2; }
+      .photo-columns { grid-template-columns: repeat(2, 1fr); }
       .contact-section { padding: 4rem 1.5rem; }
       .divider { padding: 0 1.5rem; }
       footer { padding: 2rem 1.5rem; flex-direction: column; gap: 0.5rem; }
@@ -822,6 +822,9 @@
           <div class="photo">
             <img src="img/photos/tunnel-couple.jpg" alt="Tunnel silhouettes, Montserrat" loading="lazy">
           </div>
+          <div class="photo">
+            <img src="img/photos/montserrat-rooftops.jpg" alt="Rooftops and mountains, Montserrat" loading="lazy">
+          </div>
         </div>
       </div>
 
@@ -836,6 +839,9 @@
           </div>
           <div class="photo">
             <img src="img/photos/nyc-bar.jpg" alt="Neon-lit bar, NYC" loading="lazy">
+          </div>
+          <div class="photo">
+            <img src="img/photos/museum-sculptures.jpg" alt="Sculptures, New York" loading="lazy">
           </div>
         </div>
       </div>
