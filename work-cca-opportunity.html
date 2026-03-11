@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Infrastructure Private Credit — Zubin Shourie</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --cream: #F4F1EB; --warm-white: #FAF8F5; --tan: #E5DDD0; --sand: #D4C9B8;
+      --charcoal: #2A2A2A; --soft-black: #1A1A1A; --forest: #3D5A47;
+      --forest-light: #4A6B55; --forest-dark: #2E4536; --warm-gray: #8C8578;
+      --navy: #0d1b2a; --navy-mid: #1a3a5a; --gold: #b8922a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Sora', -apple-system, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+
+    .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--forest); z-index: 100; transition: width 0.1s linear; }
+
+    .article-nav { padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; }
+    .article-nav a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); text-decoration: none; transition: color 0.3s; }
+    .article-nav a:hover { color: var(--soft-black); }
+
+    .article-header { max-width: 800px; margin: 0 auto; padding: 4rem 3rem 2rem; }
+    .article-header .category { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin-bottom: 1.25rem; }
+    .article-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.15; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 1.25rem; }
+    .article-header .dek { font-family: 'Lora', serif; font-style: italic; font-size: 1.15rem; color: var(--warm-gray); line-height: 1.6; margin-bottom: 2rem; }
+    .article-meta { display: flex; gap: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--tan); flex-wrap: wrap; }
+    .article-meta span { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+
+    .article-hero { max-width: 900px; margin: 2rem auto; padding: 0 3rem; }
+    .hero-visual { width: 100%; aspect-ratio: 16/7; border-radius: 4px; background: var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem; }
+    .hero-visual .hero-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: #3a6a9a; }
+    .hero-visual .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 3vw, 2.5rem); color: #b8d4f0; letter-spacing: -0.02em; line-height: 1; text-align: center; }
+    .hero-visual .hero-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: #2a5a7a; margin-top: 0.25rem; }
+
+    .article-body { max-width: 680px; margin: 0 auto; padding: 2rem 3rem 4rem; }
+    .article-body p { font-family: 'Lora', serif; font-size: 1.05rem; line-height: 1.85; color: var(--charcoal); margin-bottom: 1.75rem; }
+    .article-body p:first-of-type::first-letter { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; float: left; line-height: 1; padding-right: 0.5rem; padding-top: 0.15rem; color: var(--soft-black); }
+    .article-body h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.65rem; color: var(--soft-black); margin-top: 2.75rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+    .article-body h3 { font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--forest); margin-top: 2rem; margin-bottom: 0.75rem; }
+    .article-body ul { margin: 0 0 1.75rem 1.25rem; }
+    .article-body ul li { font-family: 'Lora', serif; font-size: 1rem; line-height: 1.75; color: var(--charcoal); margin-bottom: 0.5rem; }
+    .article-body ul li strong { font-weight: 600; color: var(--soft-black); }
+
+    .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2.5rem 0; }
+    .metric-box { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; text-align: center; }
+    .metric-box .val { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; color: var(--soft-black); margin-bottom: 0.25rem; }
+    .metric-box .label { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+
+    .pullquote { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; line-height: 1.4; color: var(--forest); text-align: center; padding: 2.5rem 2rem; margin: 2.5rem 0; border-top: 2px solid var(--tan); border-bottom: 2px solid var(--tan); letter-spacing: -0.02em; }
+
+    .comp-table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.85rem; }
+    .comp-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-align: left; padding: 0.75rem 0.5rem; border-bottom: 2px solid var(--tan); }
+    .comp-table td { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--charcoal); padding: 0.65rem 0.5rem; border-bottom: 1px solid var(--tan); vertical-align: top; }
+    .comp-table td:first-child { font-weight: 500; }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .tag-up { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; background: #e8f4ec; color: var(--forest); padding: 0.2rem 0.5rem; border-radius: 3px; }
+    .tag-mid { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; background: #f4f0e4; color: #8a7040; padding: 0.2rem 0.5rem; border-radius: 3px; }
+    .tag-down { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; background: #f4e8e8; color: #8a3030; padding: 0.2rem 0.5rem; border-radius: 3px; }
+
+    .risk-table { width: 100%; border-collapse: collapse; margin: 2rem 0; }
+    .risk-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-align: left; padding: 0.75rem 0.75rem; border-bottom: 2px solid var(--tan); }
+    .risk-table td { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--charcoal); padding: 0.75rem 0.75rem; border-bottom: 1px solid var(--tan); vertical-align: top; line-height: 1.5; }
+    .risk-table td:first-child { font-weight: 500; color: var(--soft-black); }
+    .risk-table tr:last-child td { border-bottom: none; }
+
+    .takeaway { background: var(--forest-dark); border-radius: 6px; padding: 2rem; margin: 2.5rem 0; }
+    .takeaway .takeaway-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest-light); margin-bottom: 1rem; }
+    .takeaway p { font-family: 'Sora', sans-serif !important; font-size: 0.9rem !important; font-weight: 300; line-height: 1.7 !important; color: var(--sand) !important; margin-bottom: 0 !important; }
+
+    .thesis-block { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 6px; padding: 1.5rem; margin-bottom: 1rem; }
+    .thesis-block .num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--tan); line-height: 1; margin-bottom: 0.5rem; }
+    .thesis-block .point { font-family: 'Sora', sans-serif; font-size: 0.875rem; font-weight: 600; color: var(--soft-black); margin-bottom: 0.4rem; }
+    .thesis-block .support { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.6; }
+
+    .context-note { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--warm-gray); background: var(--warm-white); border: 1px solid var(--tan); border-left: 3px solid var(--forest); border-radius: 0 4px 4px 0; padding: 1rem 1.25rem; margin: 2rem 0; line-height: 1.6; }
+    .context-note strong { color: var(--charcoal); }
+
+    .article-footer { max-width: 680px; margin: 0 auto; padding: 2rem 3rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--tan); }
+    .article-footer a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-decoration: none; }
+    .article-footer a:hover { color: var(--soft-black); }
+
+    @media (max-width: 768px) {
+      .article-nav, .article-header, .article-hero, .article-body, .article-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+      .article-header h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<nav class="article-nav">
+  <a href="index.html">&larr; Back</a>
+  <a href="index.html#work">All Work</a>
+</nav>
+
+<header class="article-header">
+  <div class="category">Investment Analysis &middot; Alternative Assets &middot; UHNW</div>
+  <h1>AI Infrastructure Private Credit: An Investment Opportunity Evaluation</h1>
+  <p class="dek">Evaluating private lending to data center operators as a portfolio allocation for ultra-high-net-worth clients &mdash; the analytical framework wealth managers use to source, vet, and present alternative investments.</p>
+  <div class="article-meta">
+    <span>Asset Class &mdash; Private Credit</span>
+    <span>Target Return &mdash; 10&ndash;13% Net IRR</span>
+    <span>Client Tier &mdash; UHNW ($25M+)</span>
+    <span>March 2026</span>
+  </div>
+</header>
+
+<div class="article-hero">
+  <div class="hero-visual">
+    <div class="hero-label">Private Credit &middot; Alternatives</div>
+    <div class="hero-title">AI Infrastructure</div>
+    <div class="hero-sub">Investment Opportunity Evaluation</div>
+  </div>
+</div>
+
+<div class="article-body">
+
+  <div class="context-note">
+    <strong>Context:</strong> This evaluation was prepared as a demonstration of the investment analysis process used at boutique wealth advisory firms serving UHNW clients. The framework mirrors the approach taken when sourcing and vetting alternative investment opportunities &mdash; from initial screening through client-ready presentation.
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric-box">
+      <div class="val">10&ndash;13%</div>
+      <div class="label">Target Net IRR</div>
+    </div>
+    <div class="metric-box">
+      <div class="val">$1T+</div>
+      <div class="label">AI Infra Capex (2024&ndash;30)</div>
+    </div>
+    <div class="metric-box">
+      <div class="val">3&ndash;5yr</div>
+      <div class="label">Typical Hold Period</div>
+    </div>
+  </div>
+
+  <h2>Executive Summary</h2>
+
+  <p>The buildout of AI computing infrastructure represents one of the most capital-intensive investment cycles in modern history. Microsoft, Google, Amazon, and Meta have collectively committed over $300 billion in AI-related capex for 2025 alone &mdash; and third-party data center operators are struggling to keep pace with demand. This imbalance between supply and demand has created a compelling entry point for private credit: senior secured loans to data center developers and operators at historically wide spreads, backed by long-term contracts with investment-grade tenants.</p>
+
+  <p>For UHNW portfolios, this opportunity offers something increasingly rare: attractive risk-adjusted returns that are structurally uncorrelated to public markets, with predictable cash flows from creditworthy counterparties. The case for allocation is strong. The question is which managers and structures are worth the illiquidity premium &mdash; and that is precisely what this analysis addresses.</p>
+
+  <h2>Market Context</h2>
+
+  <h3>The AI Infrastructure Build-Out</h3>
+  <p>The shift to AI-native computing requires fundamentally different infrastructure than traditional cloud workloads. Training large language models demands dense GPU compute clusters with enormous power loads, specialized cooling, and low-latency networking. Existing hyperscaler data centers were not designed for this. The result is a multi-year construction cycle that is overwhelmingly funded by private capital.</p>
+
+  <p>The numbers are staggering in scale: Microsoft alone committed $80 billion to AI data centers in 2025. Google announced $75 billion. Meta guided to $60&ndash;65 billion. And these figures represent only the hyperscalers &mdash; a parallel buildout is underway among independent colocation operators (Equinix, Digital Realty), dedicated AI infrastructure companies (CoreWeave, Lambda Labs), and new entrants backed by sovereign wealth funds.</p>
+
+  <h3>The Private Credit Gap</h3>
+  <p>Traditional financing channels &mdash; bank loans and investment-grade bonds &mdash; cannot move fast enough or flex enough to meet the idiosyncratic needs of these deals. Construction timelines are compressed. Power interconnection requirements vary by site. Tenant credit profiles differ dramatically. Private credit, with its ability to move quickly and structure bespoke solutions, has stepped into this gap at scale. Direct lenders are writing senior secured loans against long-term leases (often 10&ndash;15 years) from investment-grade hyperscalers at spreads of 300&ndash;500 basis points over SOFR &mdash; significantly wider than comparable syndicated credit.</p>
+
+  <h2>Investment Thesis</h2>
+
+  <div class="thesis-block">
+    <div class="num">01</div>
+    <div class="point">Structural demand with constrained supply</div>
+    <div class="support">AI compute demand is doubling roughly every 18 months. New data center capacity takes 3&ndash;5 years to bring online at scale due to power permitting, equipment lead times, and construction. This supply/demand imbalance is structural, not cyclical, and supports borrower leverage to pay premium rates for private capital that can move quickly.</div>
+  </div>
+
+  <div class="thesis-block">
+    <div class="num">02</div>
+    <div class="point">Senior secured loans backed by investment-grade leases</div>
+    <div class="support">The typical deal structure involves a first-lien loan secured by a data center asset whose revenue is underpinned by a long-term lease from Microsoft, Google, or Amazon. These tenants carry investment-grade ratings (AAA/AA). The credit risk on the underlying cash flows is effectively sovereign-adjacent. Private credit earns the spread for complexity and illiquidity, not for taking credit risk on the tenant.</div>
+  </div>
+
+  <div class="thesis-block">
+    <div class="num">03</div>
+    <div class="point">Low correlation to public market volatility</div>
+    <div class="support">Private credit to data center operators has virtually no beta to equity markets. Returns are driven by contractual cash flows, not public sentiment. For UHNW portfolios that are already heavily exposed to public equities (often 50&ndash;70% of liquid wealth), this is a meaningful diversifier. The Sharpe ratio profile of senior secured private credit historically exceeds that of high-yield bonds at comparable nominal returns.</div>
+  </div>
+
+  <div class="thesis-block">
+    <div class="num">04</div>
+    <div class="point">Manager selection matters more than the asset class bet</div>
+    <div class="support">Not all private credit managers have AI infrastructure origination networks or the technical underwriting capability to evaluate power agreements, cooling specs, and tenant credit. Selecting a manager with proprietary deal flow &mdash; through hyperscaler relationships, engineering expertise, or developer networks &mdash; is the key alpha driver. This is where rigorous due diligence separates the top-quartile from the median.</div>
+  </div>
+
+  <div class="pullquote">&ldquo;The question isn&rsquo;t whether AI infrastructure needs capital &mdash; it clearly does. The question is whether the structure of the deal adequately compensates for the complexity and illiquidity.&rdquo;</div>
+
+  <h2>Risk Assessment</h2>
+
+  <table class="risk-table">
+    <thead>
+      <tr>
+        <th>Risk Factor</th>
+        <th>Severity</th>
+        <th>Mitigant</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Hyperscaler demand reversal</td>
+        <td><span class="tag-mid">Medium</span></td>
+        <td>Long-term lease commitments (10&ndash;15yr) pre-date loan origination; tenant credit is investment-grade regardless of AI spending cycles. Demand reversal hurts equity, not senior debt.</td>
+      </tr>
+      <tr>
+        <td>Power and permitting risk</td>
+        <td><span class="tag-down">High</span></td>
+        <td>Evaluate lenders who underwrite only post-interconnection-agreement assets. Construction-stage loans (pre-power) carry significantly higher risk and require higher spreads to compensate.</td>
+      </tr>
+      <tr>
+        <td>Technology obsolescence</td>
+        <td><span class="tag-mid">Medium</span></td>
+        <td>Senior secured lenders have short to mid-length holds (3&ndash;5yr). Facility upgrades are tenant obligation in most leases. Debt is typically repaid before technology risk materializes.</td>
+      </tr>
+      <tr>
+        <td>Illiquidity</td>
+        <td><span class="tag-mid">Medium</span></td>
+        <td>For UHNW clients with $25M+ in assets, a 10&ndash;15% alternatives allocation in illiquid private credit is appropriate and well within liquidity management norms.</td>
+      </tr>
+      <tr>
+        <td>Rate sensitivity</td>
+        <td><span class="tag-up">Low</span></td>
+        <td>Most private credit loans are floating-rate (SOFR + spread), meaning the income stream increases as rates rise. Rising rate environments are broadly positive for direct lenders.</td>
+      </tr>
+      <tr>
+        <td>Manager concentration / key-person</td>
+        <td><span class="tag-mid">Medium</span></td>
+        <td>Diversify across 2&ndash;3 managers with complementary origination strategies. Review key-person provisions in fund documents before committing capital.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Portfolio Fit for UHNW Clients</h2>
+
+  <p>A well-constructed UHNW portfolio ($50M+) typically allocates 20&ndash;35% to alternatives. Within that bucket, private credit has grown rapidly because it delivers bond-like income with equity-adjacent returns, while maintaining low correlation to public markets. AI infrastructure private credit sits at the attractive end of the risk-return spectrum within this category: it is not venture capital, not distressed debt, and not illiquid real estate. It is structured lending to essential infrastructure backed by the largest, most creditworthy companies in the world.</p>
+
+  <p>For clients in wealth preservation mode, the senior secured structure protects principal. For clients in growth mode, the 10&ndash;13% net return profile competes favorably with mid-market private equity while requiring a shorter hold period and less equity risk. The asset class is also well-suited to clients with concentrated equity positions who want to reduce correlated risk without sacrificing return.</p>
+
+  <h2>Comparable Managers</h2>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Manager</th>
+        <th>Strategy Focus</th>
+        <th>Target Return</th>
+        <th>Min. Commit</th>
+        <th>Fit Assessment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Blue Owl Technology Finance</td>
+        <td>Senior secured tech credit, strong AI infra pipeline</td>
+        <td>11&ndash;13% net</td>
+        <td>$1M</td>
+        <td><span class="tag-up">Strong</span></td>
+      </tr>
+      <tr>
+        <td>Ares Credit</td>
+        <td>Diversified direct lending, infrastructure credit growing</td>
+        <td>10&ndash;12% net</td>
+        <td>$5M</td>
+        <td><span class="tag-up">Strong</span></td>
+      </tr>
+      <tr>
+        <td>Blackstone Credit (BCRED)</td>
+        <td>Broad direct lending, data center exposure</td>
+        <td>9&ndash;11% net</td>
+        <td>$2.5M</td>
+        <td><span class="tag-mid">Moderate</span></td>
+      </tr>
+      <tr>
+        <td>HPS Investment Partners</td>
+        <td>Opportunistic credit, specialist in complex structures</td>
+        <td>12&ndash;15% net</td>
+        <td>$5M</td>
+        <td><span class="tag-up">Strong</span></td>
+      </tr>
+      <tr>
+        <td>Apollo Credit</td>
+        <td>Large-scale direct lending, infrastructure emphasis</td>
+        <td>10&ndash;12% net</td>
+        <td>$5M</td>
+        <td><span class="tag-mid">Moderate</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Recommendation</h2>
+
+  <p>AI infrastructure private credit warrants a place in UHNW portfolios as a core alternatives allocation. The structural demand drivers are real, the deal structures are sound at the senior secured level, and the return profile &mdash; 10&ndash;13% net &mdash; is compelling relative to the risk being underwritten. The asset class is not without risks: power permitting, construction exposure, and manager selection are the material concerns.</p>
+
+  <p>Based on this evaluation, Blue Owl Technology Finance and HPS Investment Partners are the two managers most worth a deeper diligence conversation. Both have built proprietary AI infrastructure origination channels, both have demonstrated discipline on deal selection, and both offer minimum commitment thresholds appropriate for the $10&ndash;25M alternatives sleeve of a UHNW portfolio.</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">Key Takeaway</div>
+    <p>The best private credit opportunities in AI infrastructure aren&rsquo;t about betting on AI. They&rsquo;re about lending senior secured capital against long-term leases from Microsoft, Google, and Amazon &mdash; and getting paid 10&ndash;13% to do it. The AI story is the demand driver; the investment structure is the protection. For UHNW clients, the illiquidity premium is real, the diversification benefit is meaningful, and the risk is manageable. The key variable is manager selection, which is precisely the work a boutique RIA earns its fee on.</p>
+  </div>
+
+  <h2>How I Built This</h2>
+
+  <p>This evaluation mirrors the investment analysis process at a boutique RIA: identify a structural theme, map the opportunity to an investable asset class, build an analytical framework, stress-test the risks, identify the right managers, and package it in a format a sophisticated client can act on. The goal was to demonstrate not just familiarity with the asset class, but the ability to think through an opportunity the way a wealth advisor does &mdash; understanding both the investment and the client it&rsquo;s being matched to.</p>
+
+  <p>The research drew on public filings, manager fact sheets, industry reports from Preqin and PitchBook, and primary reporting from Institutional Investor and Private Debt Investor. The comparable manager analysis is based on publicly disclosed fund terms as of Q1 2026.</p>
+
+</div>
+
+<footer class="article-footer">
+  <a href="index.html">&larr; Back to Work</a>
+  <a href="index.html#contact">Get in Touch &rarr;</a>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const pct = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCA Internship Learning Guide — Zubin Shourie</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --bg: #0f0f0f; --surface: #161616; --surface-2: #1e1e1e;
+      --border: #252525; --border-light: #1e1e1e;
+      --text: #d4d0c8; --text-dim: #6a6660; --text-mid: #9a9690;
+      --cream: #e8e4dc; --gold: #b8922a; --gold-light: #d4a83a;
+      --forest: #3a6a4a; --forest-light: #4a8a5a; --blue: #3a6a9a;
+      --blue-light: #5a8aba;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh; }
+
+    /* SIDEBAR */
+    .sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; border-right: 1px solid var(--border); padding: 2rem 1.5rem; }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .sidebar-brand { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 0.5rem; }
+    .sidebar-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--cream); margin-bottom: 2rem; line-height: 1.3; }
+    .sidebar-section { margin-bottom: 1.5rem; }
+    .sidebar-section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-dim); margin-bottom: 0.625rem; }
+    .sidebar-link { display: block; font-size: 0.78rem; color: var(--text-mid); text-decoration: none; padding: 0.3rem 0; transition: color 0.2s; line-height: 1.4; }
+    .sidebar-link:hover { color: var(--cream); }
+    .sidebar-link.active { color: var(--gold-light); }
+
+    /* MAIN */
+    .main { flex: 1; max-width: 760px; padding: 3rem 3rem 5rem; }
+
+    /* HEADER */
+    .page-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+    .page-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 1rem; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3rem); color: var(--cream); letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem; }
+    .page-sub { font-family: 'Lora', serif; font-style: italic; font-size: 1.05rem; color: var(--text-mid); line-height: 1.7; }
+
+    /* MODULES */
+    .module { margin-bottom: 4rem; scroll-margin-top: 2rem; }
+    .module-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+    .module-num { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--border); line-height: 1; flex-shrink: 0; }
+    .module-info { flex: 1; }
+    .module-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--forest-light); margin-bottom: 0.3rem; }
+    .module-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--cream); letter-spacing: -0.02em; }
+
+    /* CONTENT */
+    .prose p { font-family: 'Lora', serif; font-size: 0.975rem; line-height: 1.85; color: var(--text); margin-bottom: 1.25rem; }
+    .prose h3 { font-family: 'Sora', sans-serif; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest-light); margin-top: 2rem; margin-bottom: 0.75rem; }
+    .prose ul { margin: 0.5rem 0 1.25rem 1.25rem; }
+    .prose ul li { font-family: 'Lora', serif; font-size: 0.95rem; line-height: 1.7; color: var(--text); margin-bottom: 0.4rem; }
+    .prose ul li strong { color: var(--cream); font-weight: 600; }
+
+    /* CONCEPT CARD */
+    .concept { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 0 5px 5px 0; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+    .concept-term { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 500; color: var(--gold-light); letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+    .concept-def { font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 300; color: var(--text); line-height: 1.6; }
+    .concept-example { font-family: 'Sora', sans-serif; font-size: 0.78rem; color: var(--text-mid); margin-top: 0.5rem; line-height: 1.5; font-style: italic; }
+
+    /* FORMULA */
+    .formula { background: var(--surface-2); border: 1px solid var(--border); border-radius: 5px; padding: 1rem 1.5rem; margin: 1.25rem 0; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--blue-light); text-align: center; }
+    .formula-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-dim); margin-bottom: 0.4rem; }
+
+    /* TABLE */
+    .data-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.82rem; }
+    .data-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); text-align: left; padding: 0.625rem 0.75rem; border-bottom: 1px solid var(--border); }
+    .data-table td { font-family: 'Sora', sans-serif; font-weight: 300; color: var(--text); padding: 0.625rem 0.75rem; border-bottom: 1px solid var(--border-light); vertical-align: top; line-height: 1.5; }
+    .data-table td:first-child { font-weight: 500; color: var(--cream); }
+    .data-table tr:last-child td { border-bottom: none; }
+
+    /* CALLOUT */
+    .callout { background: rgba(58,106,74,0.15); border: 1px solid rgba(74,138,90,0.3); border-radius: 5px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+    .callout-label { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--forest-light); margin-bottom: 0.5rem; }
+    .callout p { font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 300; color: var(--text); line-height: 1.65; margin: 0; }
+
+    /* QUIZ */
+    .quiz { background: var(--surface); border: 1px solid var(--border); border-radius: 5px; padding: 1.5rem; margin: 2rem 0; }
+    .quiz-label { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--blue-light); margin-bottom: 1rem; }
+    .quiz-q { font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--cream); margin-bottom: 0.75rem; line-height: 1.5; }
+    .quiz-a { font-family: 'Sora', sans-serif; font-size: 0.82rem; font-weight: 300; color: var(--text-mid); line-height: 1.6; padding: 0.75rem 1rem; background: var(--surface-2); border-radius: 4px; cursor: pointer; margin-bottom: 0.4rem; border: 1px solid var(--border); transition: border-color 0.2s; }
+    .quiz-a:hover { border-color: var(--blue); color: var(--text); }
+    .quiz-reveal { display: none; margin-top: 0.75rem; padding: 0.75rem 1rem; background: rgba(58,106,74,0.1); border: 1px solid rgba(74,138,90,0.2); border-radius: 4px; font-family: 'Sora', sans-serif; font-size: 0.82rem; color: var(--forest-light); line-height: 1.6; }
+    .quiz-reveal.show { display: block; }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { padding: 2rem 1.5rem 4rem; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-brand">CCA Prep</div>
+  <div class="sidebar-title">Internship Learning Guide</div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Modules</div>
+    <a href="#m1" class="sidebar-link">1 — UHNW Wealth Management</a>
+    <a href="#m2" class="sidebar-link">2 — Alternative Investments</a>
+    <a href="#m3" class="sidebar-link">3 — Evaluating Opportunities</a>
+    <a href="#m4" class="sidebar-link">4 — UHNW Client Communication</a>
+    <a href="#m5" class="sidebar-link">5 — How CCA Operates</a>
+    <a href="#m6" class="sidebar-link">6 — Marketing in Finance</a>
+    <a href="#m7" class="sidebar-link">7 — Terminology Glossary</a>
+  </div>
+</nav>
+
+<main class="main">
+
+  <div class="page-header">
+    <div class="page-label">Collaborative Capital Advisors &middot; Prep Guide</div>
+    <h1 class="page-title">Everything You Need to Know Before Day One</h1>
+    <p class="page-sub">A structured learning guide covering the full scope of what CCA does, the language they speak, and the analytical frameworks they use &mdash; so you can walk in ready to contribute from week one.</p>
+  </div>
+
+  <!-- MODULE 1 -->
+  <div class="module" id="m1">
+    <div class="module-header">
+      <div class="module-num">01</div>
+      <div class="module-info">
+        <div class="module-tag">Foundation</div>
+        <div class="module-title">Ultra-High-Net-Worth Wealth Management</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>CCA serves clients with $25M–$1B+ in investable assets. This is a fundamentally different world than retail banking or even high-net-worth advisory. Understanding what UHNW clients actually care about &mdash; and how wealth management at this level differs from what most people picture &mdash; is the foundation for everything else.</p>
+
+      <h3>The Wealth Tiers</h3>
+      <div class="concept">
+        <div class="concept-term">Mass Affluent</div>
+        <div class="concept-def">$100K–$1M in investable assets. Served by big banks, robo-advisors, retail brokerages. Cookie-cutter portfolios: 60/40 stocks and bonds.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">High Net Worth (HNW)</div>
+        <div class="concept-def">$1M–$10M. Regional wealth managers, some wirehouses (Merrill, Morgan Stanley). Begin getting access to alternatives. Still mostly public markets.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Very High Net Worth (VHNW)</div>
+        <div class="concept-def">$10M–$25M. Private banking divisions of large banks. More customized planning. First real access to institutional alternatives.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Ultra-High Net Worth (UHNW)</div>
+        <div class="concept-def">$25M and above. CCA's market. Family office-level services: tax optimization, estate planning, philanthropy, private investments. Portfolio construction is highly customized. Alternatives can be 30–50% of portfolio. Advisors are fiduciaries with deep personal relationships.</div>
+      </div>
+
+      <h3>What UHNW Clients Actually Care About</h3>
+      <p>At this wealth level, the priorities shift. Generating returns is still important, but so is preserving what you have, minimizing tax drag, transferring wealth to the next generation efficiently, and deploying capital in ways that align with values. The job of an advisor like CCA is to serve all of these simultaneously.</p>
+      <ul>
+        <li><strong>Capital preservation first:</strong> Losing $20M on a bad bet is more psychologically damaging than the same loss percentage at a lower level. Downside protection matters.</li>
+        <li><strong>Tax efficiency:</strong> At this income and wealth level, a bad tax structure can cost millions annually. Everything runs through a tax lens.</li>
+        <li><strong>Access to private markets:</strong> UHNW clients can qualify as "qualified purchasers" and access investment vehicles not available to retail investors.</li>
+        <li><strong>Estate and legacy planning:</strong> How do you transfer $100M+ to children or a foundation with minimal tax erosion? This is a major service of any UHNW advisor.</li>
+        <li><strong>Concierge-level service:</strong> Clients at this level expect their advisor to know everything about their financial life, proactively identify issues, and be available.</li>
+      </ul>
+
+      <h3>The Difference: RIA vs. Wirehouse vs. Family Office</h3>
+      <table class="data-table">
+        <thead><tr><th>Structure</th><th>Examples</th><th>How They're Paid</th><th>Fiduciary?</th></tr></thead>
+        <tbody>
+          <tr><td>Wirehouse</td><td>Merrill Lynch, Morgan Stanley, UBS</td><td>Commissions + AUM fees. Can sell proprietary products. Conflicts of interest are common.</td><td>No (suitability standard)</td></tr>
+          <tr><td>Registered Investment Advisor (RIA)</td><td>CCA, Hightower, Bessemer</td><td>AUM fee only (typically 0.5–1.0%). No commissions. Legally required to act in client's best interest.</td><td>Yes (fiduciary)</td></tr>
+          <tr><td>Single Family Office (SFO)</td><td>Private, for one family</td><td>Internal cost center; family covers all expenses. Total control but high overhead.</td><td>Yes</td></tr>
+          <tr><td>Multi-Family Office (MFO)</td><td>TAG Associates, Bessemer</td><td>AUM fee + service fees. Shared infrastructure, lower cost than SFO.</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <div class="callout-label">Why CCA Is Distinctive</div>
+        <p>CCA launched in 2025 as a tech-forward RIA specifically targeting financial industry executives and entrepreneurs. They combine the fiduciary structure of an RIA with access to private market deal flow typically reserved for institutional investors. The founding team has been responsible for $50B+ in alternative investments. This is not a typical wealth manager — it's closer to a boutique family office with an institutional investment team.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 2 -->
+  <div class="module" id="m2">
+    <div class="module-header">
+      <div class="module-num">02</div>
+      <div class="module-info">
+        <div class="module-tag">Core Knowledge</div>
+        <div class="module-title">Alternative Investments</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Alternatives are anything outside public stocks and bonds. For UHNW clients, they can represent 30–50% of total portfolio value. CCA's core differentiator is sourcing and evaluating private market alternatives. You need to be fluent in all of the major categories.</p>
+
+      <h3>Private Equity (PE)</h3>
+      <div class="concept">
+        <div class="concept-term">Buyouts</div>
+        <div class="concept-def">PE firm acquires a majority stake in a mature company using a combination of equity and debt (leveraged buyout). Goal: improve operations, increase earnings, exit at a higher multiple 4–7 years later. Largest category by capital. Think: KKR, Blackstone, Apollo.</div>
+        <div class="concept-example">Example: KKR buys a $500M manufacturing company with $200M equity and $300M debt. Over 5 years they cut costs, grow revenue, refinance the debt. Sell for $900M. Equity return is enormous because leverage amplified the gain.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Growth Equity</div>
+        <div class="concept-def">Minority or majority stake in a profitable, fast-growing company that doesn't need debt to function. Less leverage than buyouts, higher growth expectations. Think: General Atlantic, Insight Partners.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Venture Capital</div>
+        <div class="concept-def">Early-stage equity investing. High risk, high return. Most VC-backed companies fail; returns are driven by a few large wins. CCA clients may participate as LPs in VC funds or co-invest directly in startups.</div>
+      </div>
+
+      <h3>Private Credit</h3>
+      <p>Private credit is lending money to companies or asset owners outside of the public bond market. It has grown dramatically since 2010 as banks pulled back from certain loan categories post-financial crisis. For UHNW portfolios, it offers bond-like income with better yields.</p>
+      <div class="concept">
+        <div class="concept-term">Direct Lending</div>
+        <div class="concept-def">The most common form. A fund makes a senior secured loan directly to a middle-market company. Typical yield: SOFR + 4–6%. No bank intermediary. Borrower pays more for speed and flexibility; lender earns more spread. Think: Ares Capital, Blue Owl.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Mezzanine Debt</div>
+        <div class="concept-def">Subordinated debt sitting between senior secured loans and equity. Higher risk than direct lending, higher yield (12–18%). Often includes equity "kickers" (warrants) that give the lender upside if the company grows.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Distressed Debt</div>
+        <div class="concept-def">Buying bonds or loans of companies near or in bankruptcy at discounted prices. Highly complex; requires deep credit analysis and legal expertise. Opportunity-driven, not always available.</div>
+      </div>
+
+      <h3>Real Assets</h3>
+      <div class="concept">
+        <div class="concept-term">Private Real Estate</div>
+        <div class="concept-def">Direct ownership or fund-based investment in commercial properties (office, multifamily, industrial, retail). Returns come from rental income and appreciation. Illiquid but historically stable.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Infrastructure</div>
+        <div class="concept-def">Airports, toll roads, pipelines, data centers, renewable energy assets. Long-duration, inflation-linked cash flows. Very attractive for UHNW portfolios seeking predictable income over decades.</div>
+      </div>
+
+      <h3>Hedge Funds</h3>
+      <p>Pooled investment funds that use a wide range of strategies — long/short equity, macro trading, arbitrage, quantitative — with the goal of generating returns uncorrelated to the broader market. The fee structure (historically "2 and 20" — 2% management fee, 20% of profits) has come under pressure; many now charge 1.5 and 15. Access for UHNW clients through CCA means getting into funds that may be closed to new investors or have institutional-only minimums.</p>
+
+      <div class="callout">
+        <div class="callout-label">Why This Matters for Your Role</div>
+        <p>When CCA evaluates an investment opportunity, they're placing it into one of these categories and then applying the right analytical framework. Part of your job may be initial screening — understanding whether a deal is direct lending, growth equity, or real assets, what the risk profile is, and whether it fits the client base. You can't evaluate what you can't classify.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 3 -->
+  <div class="module" id="m3">
+    <div class="module-header">
+      <div class="module-num">03</div>
+      <div class="module-info">
+        <div class="module-tag">Core Skill</div>
+        <div class="module-title">Evaluating Investment Opportunities</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>This is the core analytical work at CCA. When they receive an investment opportunity, they need to determine quickly: is this worth our clients' capital? The framework below is what every serious alternative investment analyst uses.</p>
+
+      <h3>Step 1: Understand What It Is</h3>
+      <p>Before you can evaluate any investment, you need to be able to answer five questions in plain English: (1) What asset class is this? (2) Who is the manager and what is their track record? (3) What are the terms — return expectation, fees, minimum, lock-up? (4) What are the clients' funds being used for? (5) What is the exit mechanism?</p>
+
+      <h3>Step 2: Key Metrics You Need to Know</h3>
+      <div class="concept">
+        <div class="concept-term">IRR — Internal Rate of Return</div>
+        <div class="concept-def">The annualized return on invested capital, accounting for the timing of cash flows. The most common return metric in private markets.</div>
+        <div class="concept-example">If you invest $1M today and receive $1.8M in 5 years, the IRR is ~12.5%. If you invest the same and get $1.8M in 3 years, IRR is ~21.5%. Timing matters enormously.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">MOIC — Multiple on Invested Capital</div>
+        <div class="concept-def">Total cash returned divided by total cash invested. A 2.0x MOIC means you doubled your money. Doesn't account for time — a 2x in 2 years is very different from a 2x in 8 years.</div>
+        <div class="concept-example">MOIC is commonly used alongside IRR. A fund might report "2.5x MOIC, 28% IRR" — meaning they returned 2.5x and did it quickly.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">DPI — Distributed to Paid-In Capital</div>
+        <div class="concept-def">Cash actually returned to investors divided by capital invested. A DPI of 1.5x means investors have received 1.5x their money back in cash. Crucial distinction: unrealized portfolio value (TVPI) looks great until you actually sell.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Sharpe Ratio</div>
+        <div class="concept-def">Return per unit of risk (volatility). A higher Sharpe ratio means better risk-adjusted returns. Important for comparing alternatives to public market equivalents.</div>
+      </div>
+
+      <div class="formula">
+        <div class="formula-label">IRR Quick Check</div>
+        Rule of 72: Divide 72 by the annual return to estimate years to double money.<br>
+        10% IRR → ~7.2 years. 15% IRR → ~4.8 years. 20% IRR → ~3.6 years.
+      </div>
+
+      <h3>Step 3: Manager Due Diligence</h3>
+      <p>In private markets, manager selection accounts for more of the variation in returns than asset class selection. A top-quartile private equity manager returns 25%+ IRR. A bottom-quartile manager in the same strategy returns 5% or less. How do you evaluate a manager?</p>
+      <ul>
+        <li><strong>Track record:</strong> Net IRR and MOIC across multiple funds, over multiple market cycles. Is it consistent or was it one good fund?</li>
+        <li><strong>Team:</strong> Who are the investment professionals? Are they the same people who generated the historical returns? Key-person risk is real.</li>
+        <li><strong>Sourcing edge:</strong> How does this manager find deals? Proprietary networks, industry expertise, geography? If anyone can find the same deals, the edge disappears.</li>
+        <li><strong>Alignment:</strong> Is the manager's capital at risk alongside yours? GP co-investment (skin in the game) signals conviction.</li>
+        <li><strong>Terms:</strong> Management fee, carry rate, preferred return ("hurdle"), LP-friendly governance. 2-and-20 is the legacy standard; negotiate toward 1.5-and-15 where possible.</li>
+      </ul>
+
+      <h3>Step 4: Write the Investment Memo</h3>
+      <p>Every opportunity that advances past initial screening gets a written investment memo. The standard structure:</p>
+      <ul>
+        <li><strong>Executive Summary:</strong> One paragraph. What is it, what's the return, why now, what's the risk.</li>
+        <li><strong>Market Context:</strong> Why is this opportunity available? What macro or structural force creates it?</li>
+        <li><strong>Investment Thesis:</strong> 3–4 specific reasons to invest.</li>
+        <li><strong>Risk Assessment:</strong> What could go wrong? How likely? How bad?</li>
+        <li><strong>Manager/Sponsor Analysis:</strong> Who is running it and why should we trust them?</li>
+        <li><strong>Portfolio Fit:</strong> Which clients does this work for? Minimum investment? Liquidity constraints?</li>
+        <li><strong>Recommendation:</strong> Clear, direct. Invest / pass / watch list.</li>
+      </ul>
+
+      <div class="callout">
+        <div class="callout-label">The CCA Connection</div>
+        <p>Nathan Romano spent years at Atalaya Capital Management (alternative credit and private equity) and York Capital Management (multi-strategy hedge fund). He has evaluated thousands of investment opportunities at the institutional level. Walking in with fluency in investment memos, IRR vs. MOIC, and manager due diligence will signal immediately that you understand the work — not just the marketing.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 4 -->
+  <div class="module" id="m4">
+    <div class="module-header">
+      <div class="module-num">04</div>
+      <div class="module-info">
+        <div class="module-tag">Soft Skills</div>
+        <div class="module-title">UHNW Client Communication</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>At CCA, everything client-facing needs to communicate complexity with simplicity. UHNW clients are sophisticated, but they are not necessarily investment analysts. They're entrepreneurs, executives, and inheritors. Your job is to make the investment case clearly, acknowledge the risks honestly, and respect their time.</p>
+
+      <h3>The Communication Pyramid</h3>
+      <p>Always lead with the conclusion, then support it. UHNW clients do not want to read a lengthy analysis to find the answer on page 12. Put the recommendation in the first sentence, then explain why.</p>
+      <ul>
+        <li><strong>Lead with the "so what":</strong> "We are recommending a $2M allocation to the Blue Owl Technology Finance Fund. Here's why."</li>
+        <li><strong>Then the evidence:</strong> Return profile, structural protections, manager track record, portfolio fit.</li>
+        <li><strong>Then the risks:</strong> Be direct and honest. Clients trust advisors who tell them the downsides clearly.</li>
+        <li><strong>Then the decision:</strong> What do you need from them to proceed?</li>
+      </ul>
+
+      <h3>Language That Works (and Doesn't)</h3>
+      <table class="data-table">
+        <thead><tr><th>Avoid</th><th>Use Instead</th></tr></thead>
+        <tbody>
+          <tr><td>"It's complicated, but..."</td><td>"Here's the simple version:"</td></tr>
+          <tr><td>"Potential upside of 15%"</td><td>"Target net IRR is 13%. Here's what drives it."</td></tr>
+          <tr><td>"Low risk"</td><td>"The key risks are X and Y. Here's how they're mitigated."</td></tr>
+          <tr><td>"Everyone is doing this"</td><td>"Top-quartile managers in this category have averaged..."</td></tr>
+          <tr><td>"I think this is great"</td><td>"Based on the analysis, we recommend this for clients who..."</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Presentation of Investment Opportunities to Clients</h3>
+      <p>When CCA decides an opportunity is worth presenting to clients, the advisor prepares a one-page "opportunity brief" — a client-facing summary designed to convey the essential information without overwhelming. This is a marketing and communication skill as much as an analytical one: the same analysis that lives in a 15-page investment memo needs to translate to a clean, readable one-pager.</p>
+
+      <div class="callout">
+        <div class="callout-label">Your Likely Role Here</div>
+        <p>As a marketing intern, you may be asked to draft these one-pagers, create presentation materials for opportunities, or write client newsletter content about market themes. The skill is translating institutional analysis into language a CEO or entrepreneur can read in 3 minutes and act on. Practice this. Read investor letters from firms like Sequoia, Bridgewater, or Howard Marks at Oaktree — they're masters at communicating complex ideas clearly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 5 -->
+  <div class="module" id="m5">
+    <div class="module-header">
+      <div class="module-num">05</div>
+      <div class="module-info">
+        <div class="module-tag">Company Deep Dive</div>
+        <div class="module-title">How CCA Operates</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>CCA (Collaborative Capital Advisors) is an SEC-registered RIA that launched in 2025. Understanding their specific model and business mechanics will help you contribute more intelligently from day one.</p>
+
+      <h3>The Business Model</h3>
+      <div class="concept">
+        <div class="concept-term">Revenue Model</div>
+        <div class="concept-def">CCA earns money primarily through an AUM (assets under management) fee — typically 0.5–1.0% of client assets annually. On a $100M client relationship, that's $500K–$1M per year. They may also earn referral fees or co-investment economics on certain deal structures.</div>
+        <div class="concept-example">This is completely different from commission-based advisors. Because CCA earns only from AUM fees (not from selling products), their incentive is aligned with client performance — they make more money when clients make more money.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Custody Partners</div>
+        <div class="concept-def">CCA doesn't hold client money directly — it uses custodians (Charles Schwab and Goldman Sachs) to hold assets. This is standard RIA practice and provides a safety check: the custodian holds the assets, the RIA manages the strategy.</div>
+      </div>
+
+      <h3>The Investment Process at CCA</h3>
+      <ul>
+        <li><strong>Deal sourcing:</strong> Opportunities come through the founders' networks (Goldman, York Capital, Atalaya), inbound from sponsors, and proactive research on emerging themes.</li>
+        <li><strong>Initial screening:</strong> Quick filter — does this fit client profiles? Is the manager credible? Are terms competitive? If not, it gets rejected here.</li>
+        <li><strong>Due diligence:</strong> Investment memo, manager meetings, reference checks, legal review of fund documents.</li>
+        <li><strong>Investment committee review:</strong> Founding team reviews and approves or rejects. Creates an audit trail and ensures rigorous standards.</li>
+        <li><strong>Client matching:</strong> Which clients does this work for based on liquidity needs, risk tolerance, existing alternatives exposure, and tax situation?</li>
+        <li><strong>Presentation and execution:</strong> Opportunity brief prepared, client conversations held, subscriptions processed.</li>
+      </ul>
+
+      <h3>The Founding Team</h3>
+      <ul>
+        <li><strong>Nathan Romano (Co-CEO):</strong> Former President of Atalaya Capital (alternative credit, sold to Blue Owl), former President of York Capital (hedge fund). Goldman Sachs, Credit Suisse, Bear Stearns background. Wharton MBA. Responsible for $50B+ in alternatives over his career.</li>
+        <li><strong>Jonathan Bergman (Co-CEO):</strong> Former President of TAG Associates, a leading multi-family office. Deep expertise in UHNW family services, estate planning, and alternative allocation.</li>
+        <li><strong>Charles Friedberg (Co-Founder):</strong> Entrepreneur with investment management and fintech background.</li>
+      </ul>
+
+      <div class="callout">
+        <div class="callout-label">What This Means for You</div>
+        <p>Nathan Romano's background is in alternative credit and institutional investing. Jonathan Bergman's is in family office services. CCA is explicitly trying to combine both. Your role likely sits at this intersection: marketing the firm to potential clients and opportunities, and helping communicate those opportunities back to clients. Think of yourself as the translation layer between institutional investing complexity and UHNW client communication.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 6 -->
+  <div class="module" id="m6">
+    <div class="module-header">
+      <div class="module-num">06</div>
+      <div class="module-info">
+        <div class="module-tag">Your Domain</div>
+        <div class="module-title">Marketing in Financial Services</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Marketing for a registered investment advisor is heavily regulated. You can't say things like "guaranteed returns" or imply past performance predicts future results. Understanding the rules protects CCA from regulatory risk and you from making mistakes that could have serious consequences.</p>
+
+      <h3>The Regulatory Framework</h3>
+      <div class="concept">
+        <div class="concept-term">SEC Marketing Rule (Rule 206(4)-1)</div>
+        <div class="concept-def">Governs how RIAs can market themselves. Key rules: no materially misleading statements, no cherry-picked performance results (must show all relevant periods), testimonials and endorsements are allowed but require specific disclosures, hypothetical performance requires extensive disclosures.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Accredited Investor vs. Qualified Purchaser</div>
+        <div class="concept-def">Accredited investor: $1M+ net worth or $200K+ annual income. Can access most private fund opportunities. Qualified purchaser: $5M+ in investments. Can access a wider range of private funds (3(c)(7) funds), which are what most institutional-quality alternatives use. CCA's clients are largely QPs.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-term">Regulation D (Reg D)</div>
+        <div class="concept-def">Allows companies to raise money from accredited investors without registering with the SEC. Most private fund subscriptions are Reg D offerings. No general solicitation (you can't advertise a private fund opportunity publicly in most cases).</div>
+      </div>
+
+      <h3>What This Means in Practice</h3>
+      <ul>
+        <li><strong>Email campaigns about specific investment opportunities</strong> can only go to current clients or people who have initiated contact — not cold audiences.</li>
+        <li><strong>LinkedIn content</strong> about investment themes and market views is generally fine. Specific fund recommendations are not.</li>
+        <li><strong>Performance presentations</strong> must show all relevant periods, gross and net returns, and a disclosure about hypothetical performance if it's included.</li>
+        <li><strong>Testimonials</strong> from clients are allowed under the new Marketing Rule, but require specific disclosures about whether the client was compensated.</li>
+      </ul>
+
+      <h3>High-Leverage Marketing Activities for a Boutique RIA</h3>
+      <ul>
+        <li><strong>Thought leadership content:</strong> Market commentary, investment theme briefs, macroeconomic analysis. Builds credibility with potential clients and reinforces expertise with current ones.</li>
+        <li><strong>Client newsletters / quarterly letters:</strong> Regular communication about markets, portfolio positioning, and opportunities. The RIA version of an investor letter.</li>
+        <li><strong>Event marketing:</strong> UHNW clients are acquired through relationships. Invite-only dinners, advisory roundtables, and curated events with relevant speakers are how boutique firms grow.</li>
+        <li><strong>Referral network development:</strong> CPAs, estate attorneys, and investment bankers refer UHNW clients to advisors they trust. Building and nurturing this network is marketing.</li>
+        <li><strong>LinkedIn personal brand:</strong> At a firm this new, the founders' personal brands are the firm's brand. Content strategy that elevates Nathan Romano and team drives inbound leads.</li>
+      </ul>
+
+      <div class="callout">
+        <div class="callout-label">Your Core Contribution Area</div>
+        <p>A new RIA with a powerful founding team but limited staff needs marketing infrastructure built from scratch: content calendar, brand voice, client communication templates, event planning, opportunity brief templates, and digital presence optimization. This is exactly the kind of work that lets you demonstrate broad marketing skills while learning institutional finance. Own the communication layer — that's where you'll add the most value.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 7 -->
+  <div class="module" id="m7">
+    <div class="module-header">
+      <div class="module-num">07</div>
+      <div class="module-info">
+        <div class="module-tag">Reference</div>
+        <div class="module-title">Terminology Glossary</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>These are the terms you will hear in every meeting. Know them cold.</p>
+
+      <h3>Investment Returns</h3>
+      <div class="concept"><div class="concept-term">IRR</div><div class="concept-def">Internal rate of return. Annualized return on invested capital, accounting for timing of cash flows. Primary return metric in private markets.</div></div>
+      <div class="concept"><div class="concept-term">MOIC</div><div class="concept-def">Multiple on invested capital. Total cash returned ÷ cash invested. A 2.5x MOIC means $2.50 returned for every $1 invested.</div></div>
+      <div class="concept"><div class="concept-term">DPI</div><div class="concept-def">Distributed to paid-in capital. Cash actually returned to investors. Unrealized value doesn't count until it's realized.</div></div>
+      <div class="concept"><div class="concept-term">TVPI</div><div class="concept-def">Total value to paid-in capital. DPI + unrealized value. The total picture including paper gains.</div></div>
+      <div class="concept"><div class="concept-term">Alpha</div><div class="concept-def">Returns above a benchmark. "Generating alpha" means beating the market. "Pure alpha" is return not explained by market exposure.</div></div>
+      <div class="concept"><div class="concept-term">Beta</div><div class="concept-def">Sensitivity to market movements. Beta of 1 moves with the market. Beta of 0 is uncorrelated. Alternatives are chosen partly for low beta.</div></div>
+
+      <h3>Fund Structure</h3>
+      <div class="concept"><div class="concept-term">LP / GP</div><div class="concept-def">Limited partner (investor in the fund) and general partner (manager who runs the fund). LPs provide capital; GPs make investment decisions and earn management fees + carry.</div></div>
+      <div class="concept"><div class="concept-term">Carry (Carried Interest)</div><div class="concept-def">The GP's share of profits above the preferred return. Standard is 20%. If a fund returns $200M on $100M invested, and preferred return was met, the GP earns 20% of $100M gain = $20M.</div></div>
+      <div class="concept"><div class="concept-term">Preferred Return (Hurdle Rate)</div><div class="concept-def">The minimum return LPs must receive before the GP earns carry. Standard is 8%. Below 8% net IRR, the GP gets zero carry.</div></div>
+      <div class="concept"><div class="concept-term">Lock-up / J-Curve</div><div class="concept-def">Private funds have lock-up periods (capital is illiquid). The J-curve describes early negative returns (as fees are charged and capital deployed) that later become positive as exits occur.</div></div>
+      <div class="concept"><div class="concept-term">Vintage Year</div><div class="concept-def">The year a fund starts deploying capital. Important context for evaluating returns — a 2009 fund had a great entry point; a 2007 fund did not.</div></div>
+
+      <h3>Credit / Fixed Income</h3>
+      <div class="concept"><div class="concept-term">SOFR</div><div class="concept-def">Secured Overnight Financing Rate. The benchmark floating rate that replaced LIBOR. Private credit loans are typically priced as SOFR + spread (e.g., SOFR + 400bps = "S+400").</div></div>
+      <div class="concept"><div class="concept-term">Senior Secured / First Lien</div><div class="concept-def">The highest-priority debt. If a company defaults, first lien holders are paid back before everyone else. Lowest yield but best protection.</div></div>
+      <div class="concept"><div class="concept-term">Subordinated / Mezzanine</div><div class="concept-def">Debt that ranks below senior secured. Gets paid after first lien in a default. Higher yield to compensate for additional risk.</div></div>
+      <div class="concept"><div class="concept-term">BDC (Business Development Company)</div><div class="concept-def">Publicly traded vehicle that invests in private credit. Provides retail investors some access to direct lending. Examples: Ares Capital (ARCC), Blue Owl Capital (OBDC).</div></div>
+
+      <h3>Wealth Management</h3>
+      <div class="concept"><div class="concept-term">AUM</div><div class="concept-def">Assets under management. Total value of client assets the firm manages. CCA's revenue scales directly with AUM growth.</div></div>
+      <div class="concept"><div class="concept-term">Fiduciary</div><div class="concept-def">Legal obligation to act in the client's best interest. RIAs like CCA are fiduciaries. Wirehouses historically were not (suitability standard only).</div></div>
+      <div class="concept"><div class="concept-term">Qualified Purchaser (QP)</div><div class="concept-def">An individual with $5M+ in investments or an institution with $25M+. QPs can invest in a wider range of private funds than accredited investors alone.</div></div>
+      <div class="concept"><div class="concept-term">Estate Planning</div><div class="concept-def">Legal and financial structuring to transfer wealth to heirs with minimal tax impact. Includes trusts (revocable, irrevocable, GRATs), gifting strategies, and charitable vehicles.</div></div>
+      <div class="concept"><div class="concept-term">DAF (Donor-Advised Fund)</div><div class="concept-def">A charitable giving account. Client donates assets, gets an immediate tax deduction, and grants to charities over time. Popular among UHNW clients for philanthropic strategy.</div></div>
+      <div class="concept"><div class="concept-term">Family Office</div><div class="concept-def">A private wealth management firm serving one (SFO) or multiple (MFO) ultra-wealthy families. CCA provides family office-equivalent services as an RIA.</div></div>
+
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Highlight active sidebar link on scroll
+  const links = document.querySelectorAll('.sidebar-link');
+  const sections = document.querySelectorAll('.module');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    links.forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>
