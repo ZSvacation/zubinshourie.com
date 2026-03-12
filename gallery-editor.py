@@ -21,17 +21,20 @@ import os, sys, re, json, subprocess
 from pathlib import Path
 
 def _pip(pkg):
-    # Try --break-system-packages (Linux), fall back to --user (macOS)
-    for flags in [['--break-system-packages', '-q'], ['--user', '-q'], ['-q']]:
+    attempts = [
+        [sys.executable, '-m', 'pip', 'install', pkg, '--break-system-packages', '-q'],
+        [sys.executable, '-m', 'pip', 'install', pkg, '--user', '-q'],
+        [sys.executable, '-m', 'pip', 'install', pkg, '-q'],
+        ['pip3', 'install', pkg, '-q'],
+        ['pip3', 'install', pkg, '--user', '-q'],
+    ]
+    for cmd in attempts:
         try:
-            subprocess.check_call(
-                [sys.executable, '-m', 'pip', 'install', pkg] + flags,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-            )
+            subprocess.check_call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             return
-        except subprocess.CalledProcessError:
+        except (subprocess.CalledProcessError, FileNotFoundError):
             continue
-    raise RuntimeError(f"Could not install {pkg}. Try: pip3 install {pkg}")
+    raise RuntimeError(f"Could not auto-install {pkg}.\nPlease run: pip3 install {pkg}")
 
 try:
     from flask import Flask, request, jsonify, send_from_directory, Response
