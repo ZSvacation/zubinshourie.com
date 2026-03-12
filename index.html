@@ -500,23 +500,14 @@
       transform: scale(1.04);
     }
 
-    /* Photo size variants */
-    .photo-grid .photo.short img {
-      height: 200px;
-      object-fit: cover;
-    }
-    .photo-grid .photo.tall img {
-      height: 460px;
+    /* Photo height — controlled via --h CSS variable set inline by gallery editor */
+    .photo-grid .photo img {
+      height: var(--h, auto);
       object-fit: cover;
     }
     .photo-grid .photo.wide {
       column-span: all;
       break-inside: avoid;
-    }
-    .photo-grid .photo.wide img {
-      width: 100%;
-      height: 420px;
-      object-fit: cover;
     }
 
     /* ============ CONTACT ============ */
