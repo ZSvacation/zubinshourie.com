@@ -195,7 +195,8 @@ def api_delete():
 @app.route('/api/commit', methods=['POST'])
 def api_commit():
     try:
-        subprocess.run(['git', 'add', 'index.html'], cwd=BASE, capture_output=True)
+        # Stage index.html AND all photo files (new uploads + deletions)
+        subprocess.run(['git', 'add', 'index.html', 'img/photos/'], cwd=BASE, capture_output=True)
         r = subprocess.run(
             ['git', 'commit', '-m', 'Gallery update: reorder / add / remove / resize photos'],
             cwd=BASE, capture_output=True, text=True
