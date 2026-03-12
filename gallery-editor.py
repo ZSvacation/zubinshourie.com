@@ -21,10 +21,17 @@ import os, sys, re, json, subprocess
 from pathlib import Path
 
 def _pip(pkg):
-    subprocess.check_call(
-        [sys.executable, '-m', 'pip', 'install', pkg, '--break-system-packages', '-q'],
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-    )
+    # Try --break-system-packages (Linux), fall back to --user (macOS)
+    for flags in [['--break-system-packages', '-q'], ['--user', '-q'], ['-q']]:
+        try:
+            subprocess.check_call(
+                [sys.executable, '-m', 'pip', 'install', pkg] + flags,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+            return
+        except subprocess.CalledProcessError:
+            continue
+    raise RuntimeError(f"Could not install {pkg}. Try: pip3 install {pkg}")
 
 try:
     from flask import Flask, request, jsonify, send_from_directory, Response
