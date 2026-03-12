@@ -500,6 +500,22 @@
       transform: scale(1.04);
     }
 
+    /* Photo size variants */
+    .photo-grid .photo.wide {
+      column-span: all;
+      break-inside: avoid;
+    }
+    .photo-grid .photo.wide img {
+      width: 100%;
+      max-height: 55vh;
+      object-fit: cover;
+      height: auto;
+    }
+    .photo-grid .photo.tall img {
+      min-height: 360px;
+      object-fit: cover;
+    }
+
     /* ============ CONTACT ============ */
     .contact-section {
       max-width: 1200px;
