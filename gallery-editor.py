@@ -10,7 +10,7 @@ Usage:
 
 Features:
   - Drag to reorder photos within or across sections
-  - Click size badge to cycle: Normal → Wide (full-width) → Tall (extra height)
+  - Click size badge to cycle: Normal → Short (cropped short) → Tall (cropped tall) → Wide (full-width)
   - Upload new photos (auto-resized + EXIF-rotated)
   - Delete photos (from gallery only, or file too)
   - Save changes back to index.html
@@ -74,7 +74,7 @@ def parse_groups():
         photos = []
         for p in photo_re.finditer(m.group(2)):
             extra = p.group(1).strip()
-            size  = 'wide' if 'wide' in extra else ('tall' if 'tall' in extra else 'normal')
+            size  = 'wide' if 'wide' in extra else ('tall' if 'tall' in extra else ('short' if 'short' in extra else 'normal'))
             photos.append({'filename': p.group(2), 'alt': p.group(3), 'size': size})
         groups.append({'label': label, 'displayLabel': _decode(label), 'photos': photos})
     return groups
@@ -235,8 +235,9 @@ main{max-width:1120px;margin:0 auto;padding:1.75rem}
 .legend-item{display:flex;align-items:center;gap:.35rem;font-size:.68rem;color:#555}
 .sz-badge{display:inline-flex;align-items:center;justify-content:center;border-radius:3px;font-size:.56rem;font-weight:700;letter-spacing:.06em;padding:.15rem .45rem}
 .sz-normal{background:#1e1e1e;color:#555;border:1px solid #2a2a2a}
-.sz-wide{background:#1a2e1a;color:#5aaa7a;border:1px solid #1e401e}
+.sz-short{background:#2e1a2e;color:#aa5aaa;border:1px solid #401e40}
 .sz-tall{background:#1a1e2e;color:#5a7aaa;border:1px solid #1e2a40}
+.sz-wide{background:#1a2e1a;color:#5aaa7a;border:1px solid #1e401e}
 .section{margin-bottom:2.25rem}
 .sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.875rem;padding-bottom:.625rem;border-bottom:1px solid #1e1e1e}
 .sec-name{font-size:.88rem;font-weight:600;color:#fff}
@@ -255,8 +256,9 @@ input[type=file]{display:none}
 .sz-btn{display:inline-flex;align-items:center;justify-content:center;border-radius:3px;font-size:.56rem;font-weight:700;letter-spacing:.06em;padding:.15rem .45rem;cursor:pointer;border:none;flex-shrink:0;transition:opacity .12s}
 .sz-btn:hover{opacity:.7}
 .sz-btn.normal{background:#1e1e1e;color:#555;border:1px solid #2a2a2a}
-.sz-btn.wide{background:#1a2e1a;color:#5aaa7a;border:1px solid #1e401e}
+.sz-btn.short{background:#2e1a2e;color:#aa5aaa;border:1px solid #401e40}
 .sz-btn.tall{background:#1a1e2e;color:#5a7aaa;border:1px solid #1e2a40}
+.sz-btn.wide{background:#1a2e1a;color:#5aaa7a;border:1px solid #1e401e}
 .overlay-btns{position:absolute;top:0;left:0;right:0;display:flex;align-items:flex-start;justify-content:space-between;padding:.3rem;opacity:0;transition:opacity .15s}
 .card:hover .overlay-btns{opacity:1}
 .drag-handle{width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);border-radius:3px;cursor:grab;color:#666;font-size:.75rem;flex-shrink:0;user-select:none}
@@ -298,9 +300,10 @@ input[type=file]{display:none}
     <b>+ Add Photo</b> to upload &nbsp;&bull;&nbsp;
     <b>Save Changes</b> to write index.html
     <div class="legend">
-      <div class="legend-item"><span class="sz-badge sz-normal">NORMAL</span> natural size</div>
-      <div class="legend-item"><span class="sz-badge sz-wide">WIDE</span> spans full width of section</div>
-      <div class="legend-item"><span class="sz-badge sz-tall">TALL</span> extra height, portrait</div>
+      <div class="legend-item"><span class="sz-badge sz-normal">NORMAL</span> natural ratio</div>
+      <div class="legend-item"><span class="sz-badge sz-short">SHORT</span> cropped short ~200px</div>
+      <div class="legend-item"><span class="sz-badge sz-tall">TALL</span> cropped tall ~460px</div>
+      <div class="legend-item"><span class="sz-badge sz-wide">WIDE</span> full width ~420px</div>
     </div>
   </div>
   <div id="sections"></div>
@@ -318,7 +321,7 @@ input[type=file]{display:none}
 </div>
 <div class="toast" id="toast"></div>
 <script>
-var state=[];var pendingDel=null;var SIZE_CYCLE=['normal','wide','tall'];var SIZE_LABELS={normal:'NORMAL',wide:'WIDE',tall:'TALL'};
+var state=[];var pendingDel=null;var SIZE_CYCLE=['normal','short','tall','wide'];var SIZE_LABELS={normal:'NORMAL',short:'SHORT',tall:'TALL',wide:'WIDE'};
 async function load(){try{var r=await fetch('/api/state');state=await r.json();render();}catch(e){showToast('Failed to load: '+e.message,'err');}}
 function render(){var wrap=document.getElementById('sections');wrap.innerHTML='';state.forEach(function(g,gi){var sec=document.createElement('div');sec.className='section';sec.innerHTML='<div class="sec-hd"><div><span class="sec-name">'+g.displayLabel+'</span><span class="sec-ct" id="ct-'+gi+'">'+g.photos.length+' photos</span></div><div style="display:flex;align-items:center;gap:.5rem"><button class="btn btn-add" id="addbtn-'+gi+'">+ Add Photo</button><input type="file" id="up-'+gi+'" accept="image/*"></div></div><div class="pgrid" id="grid-'+gi+'"></div>';wrap.appendChild(sec);document.getElementById('addbtn-'+gi).addEventListener('click',function(){document.getElementById('up-'+gi).click();});document.getElementById('up-'+gi).addEventListener('change',function(e){handleUpload(e,gi);});renderGrid(gi);Sortable.create(document.getElementById('grid-'+gi),{group:'gallery',animation:140,ghostClass:'sortable-ghost',chosenClass:'sortable-chosen',handle:'.drag-handle',onEnd:syncState});});}
 function renderGrid(gi){var grid=document.getElementById('grid-'+gi);grid.innerHTML='';var photos=state[gi].photos;if(!photos.length){grid.innerHTML='<div class="empty">No photos</div>';return;}photos.forEach(function(p){var size=p.size||'normal';var card=document.createElement('div');card.className='card';card.dataset.fn=p.filename;card.innerHTML='<div class="overlay-btns"><div class="drag-handle" title="Drag">&#x2807;</div><button class="del-btn">&times;</button></div><div class="thumb"><img src="/img/photos/'+p.filename+'" loading="lazy" alt="'+p.alt+'"></div><div class="card-footer"><span class="card-name" title="'+p.filename+'">'+p.filename.replace(/\\.[^.]+$/,'')+'</span><button class="sz-btn '+size+'" title="Click to change size">'+SIZE_LABELS[size]+'</button></div>';card.querySelector('.del-btn').addEventListener('click',function(e){e.stopPropagation();openDeleteModal(p.filename);});card.querySelector('.sz-btn').addEventListener('click',function(e){e.stopPropagation();var btn=e.currentTarget;var cur=btn.className.replace('sz-btn','').trim();var next=SIZE_CYCLE[(SIZE_CYCLE.indexOf(cur)+1)%SIZE_CYCLE.length];syncState();var found=findPhoto(p.filename);if(found){found.size=next;}btn.className='sz-btn '+next;btn.textContent=SIZE_LABELS[next];showToast(p.filename.replace(/\\.[^.]+$/,'')+' \u2192 '+next,'info');});grid.appendChild(card);});}
