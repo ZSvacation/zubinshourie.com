@@ -3,42 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zubin Shourie | Personal Portfolio</title>
-  <meta name="description" content="Zubin Shourie's personal portfolio. University of Colorado Boulder, Leeds School of Business. View work, experience, and connect.">
-  <meta name="author" content="Zubin Shourie">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://zubinshourie.com">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Zubin Shourie | Personal Portfolio">
-  <meta property="og:description" content="Personal portfolio of Zubin Shourie.">
-  <meta property="og:url" content="https://zubinshourie.com">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Zubin Shourie">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Zubin Shourie | Personal Portfolio">
-  <meta name="twitter:description" content="Personal portfolio of Zubin Shourie.">
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Zubin Shourie",
-    "url": "https://zubinshourie.com",
-    "sameAs": [
-      "https://www.linkedin.com/in/zubinshourie/",
-      "https://www.instagram.com/z.ubi.n/"
-    ],
-    "jobTitle": "Marketing Professional",
-    "alumniOf": {
-      "@type": "CollegeOrUniversity",
-      "name": "University of Colorado Boulder"
-    }
-  }
-  </script>
+  <title>Zubin Shourie</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
 
@@ -483,66 +448,102 @@
 
     /* ============ PHOTOGRAPHY ============ */
     .photo-section {
-      max-width: 1400px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 6rem 3rem;
     }
 
     .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
       margin-top: 4rem;
     }
 
-    .photo-group {
-      margin-bottom: 3.5rem;
-    }
-
-    .photo-group-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.55rem;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--light-gray);
-      padding: 1rem 0 1rem;
-      border-top: 1px solid var(--tan);
-      margin-bottom: 0.25rem;
-    }
-
-    .photo-group:first-child .photo-group-label {
-      border-top: none;
-      padding-top: 0;
-    }
-
-    .photo-columns {
-      columns: 3;
-      column-gap: 0.75rem;
-    }
-
     .photo-grid .photo {
-      break-inside: avoid;
-      margin-bottom: 0.75rem;
+      aspect-ratio: 1;
       border-radius: 2px;
+      overflow: hidden;
       cursor: pointer;
+      position: relative;
+      background: var(--tan);
     }
 
     .photo-grid .photo img {
       width: 100%;
-      height: auto;
-      display: block;
-      transition: transform 0.5s ease;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease, filter 0.5s ease;
     }
 
     .photo-grid .photo:hover img {
       transform: scale(1.04);
     }
 
-    /* Photo height — controlled via --h CSS variable set inline by gallery editor */
-    .photo-grid .photo img {
-      height: var(--h, auto);
-      object-fit: cover;
+    .photo-grid .photo.tall {
+      grid-row: span 2;
+      aspect-ratio: auto;
     }
-    .photo-grid .photo.wide {
-      column-span: all;
-      break-inside: avoid;
+
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--tan);
+    }
+
+    .photo-placeholder span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--warm-gray);
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .photo-group-label {
+      grid-column: 1 / -1;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--light-gray);
+      padding: 1rem 0 0.25rem;
+      border-top: 1px solid var(--tan);
+      margin-top: 0.5rem;
+    }
+
+    .photo-group-label:first-child {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .photo-note {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .photo-note p {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: var(--warm-gray);
+      font-style: italic;
+    }
+
+    .photo-note span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--light-gray);
+      display: block;
+      margin-top: 0.5rem;
     }
 
     /* ============ CONTACT ============ */
@@ -641,7 +642,7 @@
       .featured-strip { padding: 4rem 1.5rem; }
       .featured-image { display: none; }
       .photo-section { padding: 4rem 1.5rem; }
-      .photo-columns { columns: 2; }
+      .photo-grid { grid-template-columns: 1fr 1fr; }
       .contact-section { padding: 4rem 1.5rem; }
       .divider { padding: 0 1.5rem; }
       footer { padding: 2rem 1.5rem; flex-direction: column; gap: 0.5rem; }
@@ -695,7 +696,7 @@
     <div class="content">
       <p>I'm a senior at the <strong>University of Colorado Boulder</strong>, studying marketing at the Leeds School of Business. My focus is on brand strategy, consumer behavior, and the intersection of culture and commerce.</p>
       <p>I've worked across real estate marketing, media and publishing, and political communications. I'm drawn to how brands in sports, music, and entertainment build lasting relationships with their audiences.</p>
-      <p>I played tennis and basketball in high school — both nurtured a strong competitive drive that carries into everything I do. Outside of work, I shoot on a <strong>Fujifilm X-T5</strong>, invest with conviction, and build things with AI tools. Currently exploring how autonomous agents can augment creative and strategic work.</p>
+      <p>Outside of work, I shoot on a <strong>Fujifilm X-T5</strong>, invest with conviction, and build things with AI tools. Currently exploring how autonomous agents can augment creative and strategic work.</p>
       <div class="about-tags">
         <span>Brand Strategy</span>
         <span>Digital Marketing</span>
@@ -725,7 +726,7 @@
         <div class="card-info">
           <div class="card-tag">Digital Marketing &middot; SEO &middot; A/B Testing</div>
           <div class="card-title">BuffBites: Driving Traffic to a Student Meal Platform</div>
-          <div class="card-desc">Led the build and marketing of a recipe website for budget-conscious college students. Owned the SEO strategy, ran Facebook Group outreach, and designed Instagram A/B tests across ad copy variants.</div>
+          <div class="card-desc">Built and marketed a recipe website for budget-conscious college students. Led SEO strategy, Facebook Group outreach, and Instagram A/B testing across ad copy variants.</div>
           <div class="card-metrics">
             <div class="metric">
               <span class="metric-val">3,816</span>
@@ -751,7 +752,7 @@
         <div class="card-info">
           <div class="card-tag">Product Strategy &middot; Consumer Research</div>
           <div class="card-title">Beach Security: Opportunity Assessment</div>
-          <div class="card-desc">Led the consumer research and competitive analysis for an innovation project targeting the $50B smart safety market. I identified the "Fixed Object Gap" in beach belonging security — the core insight that shaped the product direction.</div>
+          <div class="card-desc">Led consumer research and competitive analysis for an innovation project targeting the $50B smart safety market. Identified the "Fixed Object Gap" in beach belonging security.</div>
           <div class="card-metrics">
             <div class="metric">
               <span class="metric-val">$50B</span>
@@ -773,7 +774,7 @@
         <div class="card-info">
           <div class="card-tag">Go-to-Market &middot; Brand Positioning</div>
           <div class="card-title">C-Elite: Go-to-Market Plan</div>
-          <div class="card-desc">Developed the go-to-market strategy for a premium creativity supplement. I positioned it as a luxury D2C brand targeting high-achieving creative professionals, built around scarcity marketing and exclusive launch events.</div>
+          <div class="card-desc">Developed a full go-to-market strategy for a premium creativity supplement. Positioned as a luxury D2C brand targeting high-achieving creative professionals through scarcity marketing and exclusive launch events.</div>
         </div>
       </a>
 
@@ -785,7 +786,7 @@
         <div class="card-info">
           <div class="card-tag">Sales Strategy &middot; Salesforce CRM</div>
           <div class="card-title">Sales Playbook: Personal Brand &amp; Salesforce</div>
-          <div class="card-desc">I built a dual-product sales playbook from scratch — covering prospecting strategy, SPIN selling methodology, and quantifiable value propositions for both a personal professional brand and Salesforce CRM.</div>
+          <div class="card-desc">Dual-product sales playbook examining prospecting strategy, SPIN selling methodology, and quantifiable value propositions for both a personal professional brand and Salesforce CRM.</div>
           <div class="card-metrics">
             <div class="metric">
               <span class="metric-val">$93K</span>
@@ -807,7 +808,7 @@
         <div class="card-info">
           <div class="card-tag">AI Engineering &middot; Intelligence Platform</div>
           <div class="card-title">The Daily Brief</div>
-          <div class="card-desc">I built an AI-powered personal intelligence briefing covering markets, global news, sports, entertainment, and marketing. Designed an autonomous agent pipeline that generates structured JSON, scrapes editorial images, and publishes to a custom editorial interface daily.</div>
+          <div class="card-desc">AI-powered personal intelligence briefing covering markets, global news, sports, entertainment, and marketing. Built with an autonomous agent pipeline that generates structured JSON, scrapes editorial images, and publishes to a custom editorial interface daily.</div>
         </div>
       </a>
 
@@ -824,151 +825,115 @@
     </div>
     <div class="photo-grid">
 
-      <div class="photo-group">
-        <div class="photo-group-label">Morocco &amp; The Sahara</div>
-        <div class="photo-columns">
-          <div class="photo">
-            <img src="img/photos/camel-caravan.jpg" alt="Camel caravan, Sahara Desert" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/desert-kasbah.jpg" alt="Desert kasbah at golden hour" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 487px">
-            <img src="img/photos/artisan-loom.jpg" alt="Moroccan artisan at loom" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/sahara-camp.jpg" alt="Berber camp with flags, Sahara" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/camel-close.jpg" alt="Decorated camel, Morocco" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 460px">
-            <img src="img/photos/sahara-dunes-sunset.jpg" alt="Sahara dunes at sunset" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/morocco-canyon.jpg" alt="Red canyon walls, Morocco" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/gibraltar-monkey.jpg" alt="Barbary macaque, Gibraltar" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 459px">
-            <img src="img/photos/237e6344-584f-42fb-91dc-ee89b5cbb9ef-1-105-c.jpg" alt="237E6344 584F 42Fb 91Dc Ee89B5Cbb9Ef 1 105 C" loading="lazy">
-          </div>
-        </div>
+      <div class="photo-group-label">Morocco &amp; The Sahara</div>
+
+      <div class="photo tall">
+        <img src="img/photos/desert-silhouette.jpg" alt="Desert dunes at sunset" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/camel-caravan.jpg" alt="Camel caravan, Sahara" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/camel-ride.jpg" alt="Camel ride through the Sahara" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/nomad-tent-flags.jpg" alt="Nomad tent at sunset, Sahara" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/goat-shelter.jpg" alt="Goat in desert shelter" loading="lazy">
+      </div>
+      <div class="photo tall">
+        <img src="img/photos/barbary-macaques.jpg" alt="Barbary macaques, Atlas Mountains" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/macaque-roadside.jpg" alt="Macaque by the roadside, Morocco" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/artisan-loom.jpg" alt="Moroccan artisan at loom" loading="lazy">
       </div>
 
-      <div class="photo-group">
-        <div class="photo-group-label">Europe</div>
-        <div class="photo-columns">
-          <div class="photo">
-            <img src="img/photos/gelato-cart-rome.jpg" alt="Gelato cart under Roman pines, Rome" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/colosseum.jpg" alt="Colosseum, Rome" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 469px">
-            <img src="img/photos/venice-canal.jpg" alt="Grand Canal, Venice" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/montserrat-monastery.jpg" alt="Montserrat monastery from above, Spain" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/st-peters-rome.jpg" alt="St. Peter's dome through pines, Rome" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 483px">
-            <img src="img/photos/tunnel-couple.jpg" alt="Tunnel silhouettes, Montserrat" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/arch-alcove-morocco.jpg" alt="Stone arch alcove, Montserrat" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/montserrat-rooftops.jpg" alt="Rooftops and mountains, Montserrat" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 440px">
-            <img src="img/photos/c56e34e9-c143-4a0b-8326-0f30117fd9f4-1-105-c.jpg" alt="C56E34E9 C143 4A0B 8326 0F30117Fd9F4 1 105 C" loading="lazy">
-          </div>
-        </div>
+      <div class="photo-group-label">Europe</div>
+
+      <div class="photo">
+        <img src="img/photos/tunnel-couple.jpg" alt="Montserrat tunnel" loading="lazy">
+      </div>
+      <div class="photo tall">
+        <img src="img/photos/montserrat-cottage.jpg" alt="Stone cottage at golden hour, Montserrat" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/montserrat-rooftops.jpg" alt="Montserrat rooftops" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/st-peters-dome.jpg" alt="St. Peter's Basilica through the pines, Rome" loading="lazy">
+      </div>
+      <div class="photo tall">
+        <img src="img/photos/museum-sculptures.jpg" alt="Classical sculptures, Rome" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/colosseum.jpg" alt="Colosseum, Rome" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/gelato-cart-rome.jpg" alt="Gelato cart, Rome" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/park-bench-rome.jpg" alt="Afternoon nap in the park, Rome" loading="lazy">
       </div>
 
-      <div class="photo-group">
-        <div class="photo-group-label">New York</div>
-        <div class="photo-columns">
-          <div class="photo">
-            <img src="img/photos/soho-dusk.jpg" alt="SoHo at dusk, New York" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 670px">
-            <img src="img/photos/nyc-sunset.jpg" alt="Sunset over Manhattan" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/nyc-bar.jpg" alt="Neon-lit bar, NYC" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 627px">
-            <img src="img/photos/dscf1896-2.jpg" alt="Dscf1896 2" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 424px">
-            <img src="img/photos/dscf1907.jpg" alt="Dscf1907" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 603px">
-            <img src="img/photos/dscf1954.jpg" alt="Dscf1954" loading="lazy">
-          </div>
-        </div>
+      <div class="photo-group-label">New York</div>
+
+      <div class="photo tall">
+        <img src="img/photos/soho-dusk.jpg" alt="SoHo at dusk, New York" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/park-mural-nyc.jpg" alt="Street mural, NYC" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/soho-corner.jpg" alt="SoHo street corner, New York" loading="lazy">
       </div>
 
-      <div class="photo-group">
-        <div class="photo-group-label">Colorado</div>
-        <div class="photo-columns">
-          <div class="photo" style="--h: 588px">
-            <img src="img/photos/flatirons-sunset.jpg" alt="Flatirons at golden hour, Boulder" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 402px">
-            <img src="img/photos/moped-path.jpg" alt="Moped on tree-lined path, Boulder" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 178px">
-            <img src="img/photos/colorado-peaks.jpg" alt="Rocky mountain peaks, Colorado" loading="lazy">
-          </div>
-          <div class="photo">
-            <img src="img/photos/ski-lift-colorado.jpg" alt="Ski lift through pines, Colorado" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 383px">
-            <img src="img/photos/colorado-mountain-mist.jpg" alt="Mountain sunrise, Colorado" loading="lazy">
-          </div>
-          <div class="photo wide" style="--h: 586px">
-            <img src="img/photos/dscf2260.jpg" alt="Dscf2260" loading="lazy">
-          </div>
-        </div>
+      <div class="photo-group-label">Colorado</div>
+
+      <div class="photo">
+        <img src="img/photos/flatirons-sunset.jpg" alt="Flatirons at sunset, Boulder" loading="lazy">
+      </div>
+      <div class="photo tall">
+        <img src="img/photos/flatirons-face.jpg" alt="Flatiron rock face at golden hour, Boulder" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/flatirons-pines.jpg" alt="Flatirons through the pines, Boulder" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/flatirons-silhouette.jpg" alt="Flatirons silhouette, Boulder" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/flatirons-golden.jpg" alt="Flatirons panorama at golden hour, Boulder" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/ski-lift-sunset.jpg" alt="Ski lift at sunset, Colorado" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/boulder-scooter.jpg" alt="Scooter on a tree-lined path, Boulder" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/bear-in-tree.jpg" alt="Bear in the canopy, Colorado" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/moab-overlook.jpg" alt="Red rock canyon overlook, Utah" loading="lazy">
       </div>
 
-      <div class="photo-group">
-        <div class="photo-group-label">Iceland</div>
-        <div class="photo-columns">
-          <div class="photo" style="--h: 491px">
-            <img src="img/photos/iceland-beach.jpg" alt="Black sand beach, Iceland" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 354px">
-            <img src="img/photos/iceland-horses.jpg" alt="Icelandic horses" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 405px">
-            <img src="img/photos/iceland-dock.jpg" alt="Dock at sunset, Iceland" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 162px">
-            <img src="img/photos/iceland-beach-sunset.jpg" alt="Beach at sunset, Iceland" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 270px">
-            <img src="img/photos/ice-cave.jpg" alt="Ice cave tunnel, Iceland" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 242px">
-            <img src="img/photos/iceland-bridge-sunset.jpg" alt="Bridge at sunset, Iceland" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 245px">
-            <img src="img/photos/iceland-geothermal.jpg" alt="Geothermal landscape, Iceland" loading="lazy">
-          </div>
-          <div class="photo" style="--h: 349px">
-            <img src="img/photos/ravens-ice.jpg" alt="Ravens on glacier, Iceland" loading="lazy">
-          </div>
-          <div class="photo wide" style="--h: 610px">
-            <img src="img/photos/6eeaf821-eabe-4bd2-906c-896a0cd69b47-1.jpg" alt="6Eeaf821 Eabe 4Bd2 906C 896A0Cd69B47" loading="lazy">
-          </div>
-        </div>
+      <div class="photo-group-label">Iceland</div>
+
+      <div class="photo tall">
+        <img src="img/photos/iceland-beach-walk.jpg" alt="Walking the black sand beach, Iceland" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/iceland-beach.jpg" alt="Black sand beach, Iceland" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/iceland-horses.jpg" alt="Icelandic horses" loading="lazy">
+      </div>
+      <div class="photo">
+        <img src="img/photos/iceland-town-sunset.jpg" alt="Coastal town at sunset, Iceland" loading="lazy">
       </div>
 
     </div>
@@ -979,8 +944,9 @@
   <!-- ============ CONTACT ============ -->
   <section class="contact-section" id="contact">
     <h2>Let's connect.</h2>
+    <p>Currently looking for opportunities in marketing, brand partnerships, and creative strategy in New York, LA, or Denver.</p>
     <div class="contact-links">
-      <a href="mailto:zubin@zubinshourie.com">Email</a>
+      <a href="/cdn-cgi/l/email-protection#ccb6b9aea5a2e2bfa4a3b9bea5a98cafa3a0a3beada8a3e2a9a8b9">Email</a>
       <a href="#">LinkedIn</a>
       <a href="#">Resume</a>
     </div>
@@ -992,7 +958,7 @@
     <span>Built from scratch</span>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Fade-in observer
     document.documentElement.classList.add('js-loaded');
     const observer = new IntersectionObserver((entries) => {
@@ -1011,10 +977,4 @@
         if (scrollY >= section.offsetTop - 200) current = section.getAttribute('id');
       });
       navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
-      });
-    });
-  </script>
-</body>
-</html>
+        link.class
