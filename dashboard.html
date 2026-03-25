@@ -93,6 +93,7 @@
       .markets-row { grid-template-columns: repeat(2, 1fr); }
       .scores-row { grid-template-columns: 1fr; }
       .ent-grid { grid-template-columns: 1fr; }
+      .rates-grid { grid-template-columns: repeat(2, 1fr) !important; }
     }
   </style>
 </head>
@@ -135,9 +136,19 @@
       <span class="change down">&#9660; -0.40%</span>
     </div>
     <div class="ticker-item">
+      <span class="symbol">2-YR</span>
+      <span class="price">4.01%</span>
+      <span class="change down">&#9660; -0.04pp</span>
+    </div>
+    <div class="ticker-item">
       <span class="symbol">10-YR</span>
       <span class="price">4.32%</span>
       <span class="change down">&#9660; -0.07pp</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">2s/10s</span>
+      <span class="price">+31bp</span>
+      <span class="change up">steepening</span>
     </div>
   </div>
 
@@ -196,6 +207,44 @@
           <div class="delta down">&#9660; -0.40%</div>
         </div>
       </div>
+
+      <!-- RATES & CREDIT ROW -->
+      <div style="margin-bottom: 1.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--warm-gray); margin-bottom:0.75rem;">Rates &amp; Credit</div>
+        <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:0.75rem; flex-wrap:wrap;">
+          <div class="market-card">
+            <div class="name">2-Yr Yield</div>
+            <div class="value" style="font-size:1.2rem;">4.01%</div>
+            <div class="delta down">&#9660; -0.04pp</div>
+          </div>
+          <div class="market-card">
+            <div class="name">10-Yr Yield</div>
+            <div class="value" style="font-size:1.2rem;">4.32%</div>
+            <div class="delta down">&#9660; -0.07pp</div>
+          </div>
+          <div class="market-card">
+            <div class="name">2s/10s Spread</div>
+            <div class="value" style="font-size:1.2rem;">+31bp</div>
+            <div class="delta up" style="color:var(--market-green);">steepening</div>
+          </div>
+          <div class="market-card">
+            <div class="name">IG Spread (OAS)</div>
+            <div class="value" style="font-size:1.2rem;">~105bp</div>
+            <div class="delta" style="color:var(--warm-gray);">ICE BofA</div>
+          </div>
+          <div class="market-card">
+            <div class="name">HY Spread (OAS)</div>
+            <div class="value" style="font-size:1.2rem;">~390bp</div>
+            <div class="delta" style="color:var(--warm-gray);">ICE BofA</div>
+          </div>
+          <div class="market-card">
+            <div class="name">10Y Breakeven</div>
+            <div class="value" style="font-size:1.2rem;">2.81%</div>
+            <div class="delta" style="color:var(--warm-gray);">mkt inflation</div>
+          </div>
+        </div>
+      </div>
+
       <p class="market-note">U.S. futures are sharply higher Wednesday morning — Dow +0.94% to ~46,689, S&P 500 +0.91% to ~6,634, Nasdaq +1.08% to ~24,327 — almost entirely driven by Iran ceasefire hopes and a 4% drop in oil. Tuesday's session closed lower on rebounding crude and mixed data, so today is a relief rally, not a trend change. VIX is down ~4% pre-market. Portfolio names to note: PLTR +2.23%, Intel +3.74%, NVDA +1.39%, AMZN +1.65% — broad tech participation.</p>
       <div class="market-stories">
         <div class="market-story">
