@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fixed Income & Rates | Education | Zubin Shourie</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --cream: #F4F1EB;
+      --warm-white: #FAF8F5;
+      --tan: #E5DDD0;
+      --sand: #D4C9B8;
+      --charcoal: #2A2A2A;
+      --soft-black: #1A1A1A;
+      --forest: #3D5A47;
+      --forest-light: #5A7A63;
+      --forest-dark: #2B3E30;
+      --warm-gray: #8A8478;
+      --mid-gray: #6B655D;
+      --light-gray: #B5AFA6;
+      --correct: #3D5A47;
+      --wrong: #B8524D;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Sora', -apple-system, sans-serif;
+      background-color: var(--cream);
+      color: var(--charcoal);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(244, 241, 235, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(229, 221, 208, 0.6);
+    }
+    .nav-back {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--warm-gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--soft-black); }
+    .nav-module-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+    .nav-progress {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--warm-gray);
+    }
+
+    /* LAYOUT */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+      min-height: 100vh;
+      padding-top: 65px;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      top: 65px;
+      left: 0;
+      width: 260px;
+      height: calc(100vh - 65px);
+      overflow-y: auto;
+      background: var(--warm-white);
+      border-right: 1px solid var(--tan);
+      padding: 2rem 0;
+    }
+    .sidebar-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--warm-gray);
+      padding: 0 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .sidebar-progress-bar {
+      height: 3px;
+      background: var(--tan);
+      margin: 0 1.5rem 1.5rem;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .sidebar-progress-fill {
+      height: 100%;
+      background: var(--forest);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+    .lesson-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-left: 3px solid transparent;
+    }
+    .lesson-nav-item:hover { background: var(--tan); }
+    .lesson-nav-item.active {
+      background: var(--tan);
+      border-left-color: var(--forest);
+    }
+    .lesson-nav-item.completed .lesson-num { color: var(--forest); }
+    .lesson-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--light-gray);
+      min-width: 20px;
+    }
+    .lesson-nav-title {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      line-height: 1.3;
+      flex: 1;
+    }
+    .lesson-check {
+      font-size: 0.7rem;
+      color: var(--forest);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .lesson-nav-item.completed .lesson-check { opacity: 1; }
+
+    /* MOBILE SIDEBAR TOGGLE */
+    .mobile-lesson-select {
+      display: none;
+      margin: 1rem 1.5rem;
+    }
+    .mobile-lesson-select select {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      background: var(--warm-white);
+      border: 1px solid var(--tan);
+      border-radius: 4px;
+      color: var(--charcoal);
+    }
+
+    /* MAIN CONTENT */
+    .lesson-content {
+      margin-left: 260px;
+      padding: 3rem 4rem 6rem;
+      max-width: 860px;
+    }
+
+    .lesson-pane { display: none; }
+    .lesson-pane.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    .lesson-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--forest);
+      margin-bottom: 0.75rem;
+    }
+    .lesson-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.75rem;
+      color: var(--soft-black);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    .lesson-body {
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--charcoal);
+    }
+    .lesson-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--soft-black);
+      margin: 2rem 0 0.75rem;
+      letter-spacing: -0.01em;
+    }
+    .lesson-body h4 {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--charcoal);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 1.5rem 0 0.5rem;
+    }
+    .lesson-body p { margin-bottom: 1.25rem; }
+    .lesson-body ul, .lesson-body ol {
+      margin: 0.5rem 0 1.25rem 1.5rem;
+    }
+    .lesson-body li { margin-bottom: 0.4rem; }
+    .lesson-body strong { font-weight: 600; color: var(--soft-black); }
+
+    .callout {
+      background: var(--warm-white);
+      border-left: 3px solid var(--forest);
+      border-radius: 0 6px 6px 0;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+    }
+    .callout-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--forest);
+      margin-bottom: 0.5rem;
+    }
+
+    .formula-block {
+      background: var(--soft-black);
+      color: #e8e0d0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      padding: 1.25rem 1.5rem;
+      border-radius: 6px;
+      margin: 1.25rem 0;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    .curve-diagram {
+      background: var(--warm-white);
+      border: 1px solid var(--tan);
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--charcoal);
+      line-height: 1.6;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .lesson-footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--tan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-complete {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: var(--forest);
+      color: var(--cream);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      text-decoration: none;
+    }
+    .btn-complete:hover { background: var(--forest-dark); transform: translateY(-1px); }
+    .btn-complete:active { transform: none; }
+    .btn-complete.done {
+      background: var(--warm-gray);
+      cursor: default;
+    }
+    .lesson-prev {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--warm-gray);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem 0;
+    }
+    .lesson-prev:hover { color: var(--charcoal); }
+
+    /* QUIZ STYLES */
+    .quiz-intro {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--mid-gray);
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+    .quiz-progress-bar {
+      height: 4px;
+      background: var(--tan);
+      border-radius: 2px;
+      margin-bottom: 2.5rem;
+      overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: var(--forest);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+    .quiz-question-block { display: none; }
+    .quiz-question-block.active { display: block; animation: fadeIn 0.3s ease; }
+
+    .question-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--warm-gray);
+      margin-bottom: 0.5rem;
+    }
+    .question-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--soft-black);
+      line-height: 1.3;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+    .answer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .answer-option {
+      padding: 1rem 1.25rem;
+      border: 1.5px solid var(--tan);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--warm-white);
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+    .answer-option:hover { border-color: var(--forest); background: var(--cream); }
+    .answer-option.selected { border-color: var(--forest); background: rgba(61,90,71,0.08); }
+    .answer-option.correct { border-color: var(--correct); background: rgba(61,90,71,0.12); color: var(--correct); font-weight: 500; }
+    .answer-option.wrong { border-color: var(--wrong); background: rgba(184,82,77,0.08); color: var(--wrong); }
+    .answer-option.disabled { cursor: default; }
+    .answer-letter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 700;
+      margin-right: 0.5rem;
+      opacity: 0.6;
+    }
+
+    .btn-submit {
+      display: none;
+      padding: 0.75rem 2rem;
+      background: var(--forest);
+      color: var(--cream);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 1rem;
+    }
+    .btn-submit:hover { background: var(--forest-dark); }
+    .btn-submit.visible { display: inline-block; }
+
+    .feedback-block {
+      display: none;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    .feedback-block.show { display: block; animation: fadeIn 0.2s ease; }
+    .feedback-block.correct-fb { background: rgba(61,90,71,0.1); border-left: 3px solid var(--correct); color: var(--forest-dark); }
+    .feedback-block.wrong-fb { background: rgba(184,82,77,0.08); border-left: 3px solid var(--wrong); color: #7a2e29; }
+
+    .btn-next-q {
+      display: none;
+      padding: 0.65rem 1.5rem;
+      background: var(--charcoal);
+      color: var(--cream);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-next-q:hover { background: var(--soft-black); }
+    .btn-next-q.visible { display: inline-block; }
+
+    /* RESULTS */
+    .quiz-results { display: none; animation: fadeIn 0.4s ease; }
+    .quiz-results.show { display: block; }
+    .results-score {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      color: var(--forest);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .results-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--warm-gray);
+      margin-bottom: 1.5rem;
+    }
+    .results-message {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--mid-gray);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    .results-breakdown { margin-bottom: 2rem; }
+    .result-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--tan);
+      font-size: 0.85rem;
+    }
+    .result-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+    .result-item .result-q { font-weight: 400; color: var(--charcoal); flex: 1; }
+    .result-item .result-exp { font-size: 0.78rem; color: var(--warm-gray); margin-top: 0.25rem; }
+    .result-correct .result-q { color: var(--forest); }
+
+    .btn-retake {
+      padding: 0.75rem 2rem;
+      background: transparent;
+      color: var(--forest);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: 1.5px solid var(--forest);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-right: 1rem;
+    }
+    .btn-retake:hover { background: var(--forest); color: var(--cream); }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2.5rem 3rem;
+      border-top: 1px solid var(--tan);
+      margin-left: 260px;
+    }
+    footer span, footer a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--warm-gray);
+      text-decoration: none;
+      margin: 0 1rem;
+    }
+    footer a:hover { color: var(--charcoal); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .lesson-content { margin-left: 0; padding: 2rem 1.5rem 5rem; }
+      .lesson-title { font-size: 2rem; }
+      .answer-grid { grid-template-columns: 1fr; }
+      footer { margin-left: 0; }
+      nav { padding: 1rem 1.5rem; }
+      .nav-module-title { display: none; }
+      .mobile-lesson-nav {
+        display: block;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--tan);
+        background: var(--warm-white);
+      }
+      .mobile-lesson-nav select {
+        width: 100%;
+        padding: 0.6rem 0.75rem;
+        font-family: 'Sora', sans-serif;
+        font-size: 0.8rem;
+        background: var(--cream);
+        border: 1px solid var(--tan);
+        border-radius: 4px;
+        color: var(--charcoal);
+      }
+    }
+    @media (min-width: 769px) {
+      .mobile-lesson-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="education.html" class="nav-back">← Education</a>
+  <span class="nav-module-title">Fixed Income &amp; Rates</span>
+  <span class="nav-progress" id="navProgress">Lesson 1 of 8</span>
+</nav>
+
+<!-- Mobile lesson selector -->
+<div class="mobile-lesson-nav">
+  <select id="mobileLessonSelect" onchange="goToLesson(parseInt(this.value))">
+    <option value="0">01 — What Is a Bond?</option>
+    <option value="1">02 — The Yield Curve</option>
+    <option value="2">03 — Duration &amp; Interest Rate Risk</option>
+    <option value="3">04 — The Federal Reserve</option>
+    <option value="4">05 — Treasury Securities</option>
+    <option value="5">06 — Corporate Bonds &amp; Credit Spreads</option>
+    <option value="6">07 — Reading Rates Like a Macro Trader</option>
+    <option value="7">08 — Quiz</option>
+  </select>
+</div>
+
+<div class="module-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-label">Module 01 — Fixed Income</div>
+    <div class="sidebar-progress-bar">
+      <div class="sidebar-progress-fill" id="sidebarProgressFill" style="width:0%"></div>
+    </div>
+    <nav id="lessonNav">
+      <div class="lesson-nav-item active" onclick="goToLesson(0)" data-idx="0">
+        <span class="lesson-num">01</span>
+        <span class="lesson-nav-title">What Is a Bond?</span>
+        <span class="lesson-check">✓</span>
+      </div>
+      <div class="lesson-nav-item" onclick="goToLesson(1)" data-idx="1">
+        <span class="lesson-num">02</span>
+        <span class="lesson-nav-title">The Yield Curve</span>
+        <span class="lesson-check">✓</span>
+      </div>
+      <div class="lesson-nav-item" onclick="goToLesson(2)" data-idx="2">
+        <span class="lesson-num">03</span>
+        <span class="lesson-nav-title">Duration &amp; Interest Rate Risk</span>
+        <span class="lesson-check">✓</span>
+      </div>
+      <div class="lesson-nav-item" onclick="goToLesson(3)" data-idx="3">
+        <span class="lesson-num">04</span>
+        <span class="lesson-nav-title">The Federal Reserve</span>
+        <span class="lesson-check">✓</span>
+      </div>
+      <div class="lesson-nav-item" onclick="goToLesson(4)" data-idx="4">
+        <span class="lesson-num">05</span>
+        <span class="lesson-nav-title">Treasury Securities</span>
+        <span class="lesson-check">✓</span>
+      </div>
+      <div class="lesson-nav-item" onclick="goToLesson(5)" data-idx="5">
+        <span class="lesson-num">06</span>
+        <span class="lesson-nav-title">Corporate Bonds &amp; Credit Spreads</span>
+        <span class="lesson-check">✓</span>
+      </div>
+      <div class="lesson-nav-item" onclick="goToLesson(6)" data-idx="6">
+        <span class="lesson-num">07</span>
+        <span class="lesson-nav-title">Reading Rates Like a Macro Trader</span>
+        <span class="lesson-check">✓</span>
+      </div>
+      <div class="lesson-nav-item" onclick="goToLesson(7)" data-idx="7">
+        <span class="lesson-num">08</span>
+        <span class="lesson-nav-title">Quiz</span>
+        <span class="lesson-check">✓</span>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="lesson-content">
+
+    <!-- LESSON 1 -->
+    <div class="lesson-pane active" id="lesson-0">
+      <div class="lesson-eyebrow">Module 01 · Lesson 1 of 8</div>
+      <h1 class="lesson-title">What Is a Bond?</h1>
+      <div class="lesson-body">
+        <p>A bond is a loan. When you buy a bond, you are the lender. The issuer — a government, a corporation, a municipality — is the borrower. In exchange for your money today, the issuer promises to pay you interest at regular intervals (the <strong>coupon</strong>) and return your principal at a specified future date (the <strong>maturity date</strong>).</p>
+
+        <h3>The Anatomy of a Bond</h3>
+        <p>Every bond has a handful of defining characteristics:</p>
+        <ul>
+          <li><strong>Face value (par value):</strong> The principal amount the issuer will repay at maturity. Typically $1,000 for U.S. bonds.</li>
+          <li><strong>Coupon rate:</strong> The annual interest rate expressed as a percentage of face value. A 5% coupon on a $1,000 bond pays $50/year, usually in two $25 semi-annual installments.</li>
+          <li><strong>Maturity date:</strong> When the issuer repays the face value. Could be 3 months (T-bill) or 30 years (long bond).</li>
+          <li><strong>Yield to maturity (YTM):</strong> The total return you'd earn if you held the bond to maturity and reinvested all coupons at the same rate. The most important single number in fixed income.</li>
+        </ul>
+
+        <h3>Why Governments and Companies Issue Bonds</h3>
+        <p>The U.S. Treasury issues bonds to finance the federal deficit — when tax revenues fall short of spending, the government borrows the difference. It's the world's largest bond issuer, and U.S. Treasuries are considered the global "risk-free" rate benchmark.</p>
+        <p>Corporations issue bonds when they need capital but don't want to dilute shareholders by issuing equity. A company like Apple might issue $5B in bonds at 4.5% if it can deploy that capital to earn more than 4.5% in return. Municipalities issue bonds (often tax-exempt) to fund schools, roads, and infrastructure.</p>
+
+        <h3>The Most Important Concept: Price and Yield Move in Opposite Directions</h3>
+        <p>This is the single most important relationship in fixed income, and it confuses people at first. Here's why it works:</p>
+        <p>Imagine you buy a $1,000 bond with a 5% coupon — it pays you $50/year. Now imagine interest rates in the market rise to 6%. Newly issued bonds are now paying $60/year for the same $1,000. Your old bond, still paying $50, is now less attractive. To sell it, you'd have to lower the price — let's say to $950. The buyer paying $950 for a bond that pays $50/year and returns $1,000 at maturity is effectively earning more than 5% — that's the yield adjusting upward to reflect the new rate environment.</p>
+
+        <div class="callout">
+          <div class="callout-label">Key Rule</div>
+          When interest rates rise → bond prices fall.<br>
+          When interest rates fall → bond prices rise.<br>
+          They move in opposite directions. Always.
+        </div>
+
+        <h3>YTM: A Worked Example</h3>
+        <p>Let's say a $1,000 face value bond with a 5% coupon (pays $50/year) has 10 years to maturity and is currently trading at $950.</p>
+        <p>The approximate YTM formula:</p>
+        <div class="formula-block">YTM ≈ (Annual Coupon + (Face Value - Price) / Years to Maturity)
+         / ((Face Value + Price) / 2)
+
+YTM ≈ ($50 + ($1,000 - $950) / 10)
+       / (($1,000 + $950) / 2)
+
+YTM ≈ ($50 + $5) / $975
+YTM ≈ $55 / $975
+YTM ≈ 5.64%</div>
+        <p>The bond's stated coupon is 5%, but because you're buying it at a discount ($950), your actual return — the YTM — is 5.64%. The discount compensates you for the difference between what you pay now and what you'll receive at maturity.</p>
+
+        <h3>Real-World Examples</h3>
+        <ul>
+          <li><strong>U.S. 10-Year Treasury Note:</strong> Issued by the federal government, matures in 10 years, considered risk-free (no default risk). The benchmark rate for mortgages, corporate borrowing, and global finance.</li>
+          <li><strong>Apple Inc. Corporate Bond:</strong> Apple has issued multi-billion dollar bonds at rates like 3–5%, using the proceeds for buybacks and operations. Slightly higher yield than Treasuries to compensate for (minimal) credit risk.</li>
+          <li><strong>NYC Municipal Bond:</strong> Issued by New York City to fund infrastructure. Interest is typically exempt from federal (and sometimes state) taxes — valuable to high-income investors.</li>
+        </ul>
+      </div>
+      <div class="lesson-footer">
+        <button class="lesson-prev" onclick="goToLesson(0)" style="visibility:hidden">← Previous</button>
+        <button class="btn-complete" id="complete-0" onclick="completeLesson(0)">Mark Complete &amp; Next →</button>
+      </div>
+    </div>
+
+    <!-- LESSON 2 -->
+    <div class="lesson-pane" id="lesson-1">
+      <div class="lesson-eyebrow">Module 01 · Lesson 2 of 8</div>
+      <h1 class="lesson-title">The Yield Curve</h1>
+      <div class="lesson-body">
+        <p>The yield curve is a plot of bond yields against their maturities — from 1-month T-bills out to 30-year bonds. It's the single most watched chart in global finance, and for good reason: it encodes what millions of investors collectively believe about the future path of growth and inflation.</p>
+
+        <h3>Three Shapes, Three Stories</h3>
+
+        <div class="curve-diagram">NORMAL (Upward Sloping)          FLAT                    INVERTED
+Yield                             Yield                   Yield
+  |      *                          |  * * * *               |* *
+  |    *                            |*                        |    * *
+  |  *                              |                         |        * *
+  |*                                |                         |            * *
+  +---------> Maturity              +---------> Maturity      +---------> Maturity
+  2Y  5Y  10Y  30Y                  2Y  5Y  10Y  30Y          2Y  5Y  10Y  30Y</div>
+
+        <h4>Normal Curve (Upward Sloping)</h4>
+        <p>Longer-term bonds yield more than shorter-term ones. This is the "normal" state because lenders demand extra compensation for tying up money longer (more uncertainty, more inflation risk, more opportunity cost). A steep normal curve typically signals that markets expect healthy economic growth and moderate inflation ahead.</p>
+
+        <h4>Flat Curve</h4>
+        <p>Short and long rates are roughly equal. Often a transition state — either flattening from normal (rates rising, slowing growth expected) or steepening from inverted (recovery beginning). A flat curve signals uncertainty: markets aren't sure whether growth or recession is ahead.</p>
+
+        <h4>Inverted Curve</h4>
+        <p>Short-term rates exceed long-term rates. This is abnormal and historically one of the most reliable recession predictors in economics. When the 2-year yield exceeds the 10-year yield, it means markets believe the Fed will be forced to cut rates sharply in the future — which only happens when the economy slows badly. Every U.S. recession since 1970 was preceded by an inverted yield curve.</p>
+
+        <h3>The 2s/10s Spread — The Number to Watch</h3>
+        <p>The most watched version is the spread between the 2-year Treasury yield and the 10-year yield. Here's what each reflects:</p>
+        <ul>
+          <li><strong>2-Year Yield:</strong> Tightly anchored to near-term Fed policy expectations. If markets think the Fed will raise rates, the 2-year moves up fast. It's effectively the market's bet on where the Fed funds rate will be in ~2 years.</li>
+          <li><strong>10-Year Yield:</strong> Reflects long-run growth and inflation expectations. If investors think the economy will be strong and inflation elevated in a decade, the 10-year is higher. If they think a slowdown is coming, it's lower.</li>
+          <li><strong>2s/10s Spread:</strong> 10Y minus 2Y. Positive = normal curve (good). Negative = inverted (warning signal). The spread tells you how much "slope" the curve has.</li>
+        </ul>
+
+        <div class="callout">
+          <div class="callout-label">In Your Daily Brief</div>
+          When you see "2Y: 4.01% | 10Y: 4.32% | Curve: +31bp" — the +31bp is the 2s/10s spread. Barely positive means the curve is nearly flat. If it turns negative, pay attention — historically that's when you start the recession clock.
+        </div>
+
+        <h3>Historical Context: The Inversion That Called the Last Two Recessions</h3>
+        <p><strong>2006–2007:</strong> The 2s/10s spread inverted in 2006, going to about -20bp. The financial crisis hit in 2007–2008. The curve had called it.</p>
+        <p><strong>2022–2023:</strong> The most aggressive Fed tightening cycle in 40 years drove the 2s/10s spread to nearly -100bp — the deepest inversion since the early 1980s Volcker era. The expected recession hasn't arrived yet (soft landing narrative), which has made this the most debated inversion in modern history.</p>
+        <p>The current curve is where it is partly because of where we are in the rate cycle. Watch it daily in the brief — it's the market's running commentary on the economy's health.</p>
+      </div>
+      <div class="lesson-footer">
+        <button class="lesson-prev" onclick="goToLesson(0)">← Previous</button>
+        <button class="btn-complete" id="complete-1" onclick="completeLesson(1)">Mark Complete &amp; Next →</button>
+      </div>
+    </div>
+
+    <!-- LESSON 3 -->
+    <div class="lesson-pane" id="lesson-2">
+      <div class="lesson-eyebrow">Module 01 · Lesson 3 of 8</div>
+      <h1 class="lesson-title">Duration &amp; Interest Rate Risk</h1>
+      <div class="lesson-body">
+        <p>Duration is the most important risk metric in fixed income, and it's more nuanced than "how long until the bond matures." It measures a bond's <strong>sensitivity to changes in interest rates</strong>. In practical terms: if a bond has a duration of 7, a 1% rise in interest rates will cause the bond's price to fall by approximately 7%.</p>
+
+        <h3>Macaulay Duration</h3>
+        <p>The original concept, developed by Frederick Macaulay in 1938. It's the weighted average time until you receive the bond's cash flows (coupons + principal), where the weights are the present values of those cash flows.</p>
+        <p>Intuitively: a zero-coupon bond (no interim payments) has duration equal to its maturity — all the cash flow comes at the end. A coupon-paying bond has duration <em>less</em> than its maturity because you receive cash earlier (coupons along the way).</p>
+
+        <h3>Modified Duration: The Practical Tool</h3>
+        <p>Modified Duration = Macaulay Duration / (1 + YTM/n), where n = payment periods per year.</p>
+        <p>Modified duration is what you actually use for risk management. It gives you the percentage price change per 1% (100 basis point) change in yield:</p>
+        <div class="formula-block">ΔPrice% ≈ -Modified Duration × ΔYield%
+
+Example: Bond with Modified Duration = 7
+If rates rise 1% (100bp): Price falls ≈ 7%
+If rates fall 0.5% (50bp): Price rises ≈ 3.5%</div>
+
+        <div class="callout">
+          <div class="callout-label">The Core Intuition</div>
+          Duration is time-weighted exposure. The longer you wait to get your money back, the more rate changes hurt you. A 30-year bond is far more sensitive to rate moves than a 2-year note paying the same coupon.
+        </div>
+
+        <h3>Practical Comparison: Two Bonds</h3>
+        <p>Consider two bonds, both yielding 5%:</p>
+        <ul>
+          <li><strong>Bond A:</strong> 2-year maturity, 5% coupon → Modified Duration ≈ 1.9</li>
+          <li><strong>Bond B:</strong> 20-year maturity, 5% coupon → Modified Duration ≈ 12.5</li>
+        </ul>
+        <p>If interest rates rise 1%:</p>
+        <ul>
+          <li>Bond A loses ≈ 1.9% of its value</li>
+          <li>Bond B loses ≈ 12.5% of its value</li>
+        </ul>
+        <p>Same YTM, drastically different risk. This is why when the Fed is hiking rates, you want to be in short-duration bonds, not long-duration ones. The 2022–2023 rate cycle saw long-duration Treasuries lose 30–40% of their value as the Fed raised rates 525 basis points — a historically unusual loss for "safe" government bonds.</p>
+
+        <h3>Convexity: The Second-Order Effect</h3>
+        <p>Duration is a linear approximation, but bond price-yield relationships are actually curved (convex). Convexity accounts for this curvature. A bond with higher convexity outperforms a bond with lower convexity in both rising and falling rate environments — it loses less when rates rise and gains more when rates fall. For the purposes of reading markets daily, duration is what matters; convexity becomes important when rates are moving sharply.</p>
+
+        <h3>Duration in a Portfolio Context</h3>
+        <p>Portfolio managers manage "duration risk" by blending short- and long-duration instruments. If you expect rates to rise: shorten duration (move to T-bills, short-term notes). If you expect rates to fall: lengthen duration (buy long bonds) to capture maximum price appreciation. The Fed's rate path is essentially a duration management signal for the entire bond market.</p>
+      </div>
+      <div class="lesson-footer">
+        <button class="lesson-prev" onclick="goToLesson(1)">← Previous</button>
+        <button class="btn-complete" id="complete-2" onclick="completeLesson(2)">Mark Complete &amp; Next →</button>
+      </div>
+    </div>
+
+    <!-- LESSON 4 -->
+    <div class="lesson-pane" id="lesson-3">
+      <div class="lesson-eyebrow">Module 01 · Lesson 4 of 8</div>
+      <h1 class="lesson-title">The Federal Reserve &amp; Monetary Policy</h1>
+      <div class="lesson-body">
+        <p>No institution has more direct influence over bond markets — and by extension, all financial markets — than the Federal Reserve. Understanding how the Fed works, what it's trying to do, and how to read its signals is foundational to understanding anything that happens in markets.</p>
+
+        <h3>The Dual Mandate</h3>
+        <p>Congress gave the Fed two objectives, which it is legally required to pursue simultaneously:</p>
+        <ul>
+          <li><strong>Maximum employment:</strong> Keep unemployment as low as possible without triggering inflation</li>
+          <li><strong>Stable prices:</strong> Keep inflation around 2% over time (the formal target since 2012)</li>
+        </ul>
+        <p>These two goals often pull in opposite directions. When unemployment is very low, workers have more bargaining power, wages rise, and inflation tends to follow. The Fed's constant challenge is finding the balance — the "neutral rate" where policy is neither stimulative nor restrictive.</p>
+
+        <h3>The Federal Funds Rate: The Primary Tool</h3>
+        <p>The federal funds rate is the interest rate at which banks lend each other money overnight. The Fed's Federal Open Market Committee (FOMC) sets a target range for this rate and adjusts it to influence the broader economy.</p>
+        <p><strong>The transmission mechanism:</strong></p>
+        <ol>
+          <li>Fed raises the funds rate target</li>
+          <li>Banks' overnight borrowing costs rise</li>
+          <li>Banks raise rates on consumer loans, mortgages, credit cards, business loans</li>
+          <li>Higher borrowing costs slow consumer spending and business investment</li>
+          <li>Demand falls, labor market cools, inflation pressure eases</li>
+        </ol>
+        <p>The reverse works when the Fed cuts rates — it stimulates borrowing and spending to fight recessions. The challenge: this transmission takes 12–18 months to fully work through the economy. The Fed is always steering by looking in the rearview mirror.</p>
+
+        <h3>QE and QT: The Balance Sheet Tools</h3>
+        <p>When cutting rates isn't enough (e.g., rates are already near zero), the Fed uses its balance sheet:</p>
+        <p><strong>Quantitative Easing (QE):</strong> The Fed buys Treasuries and mortgage-backed securities directly from the market. This injects money into the financial system, drives bond prices up (yields down), and forces investors to take risk in other assets (stocks, corporate bonds). The Fed's balance sheet went from ~$900B in 2008 to ~$8.9T by 2022.</p>
+        <p><strong>Quantitative Tightening (QT):</strong> The reverse — the Fed lets bonds roll off its balance sheet (or sells them), draining liquidity from the system. Puts upward pressure on yields and tightens financial conditions. This is what started in 2022 alongside rate hikes.</p>
+
+        <div class="callout">
+          <div class="callout-label">Why This Matters for Your Portfolio</div>
+          Rate hikes → higher yields → lower bond prices (duration risk). Higher yields also raise the discount rate used to value future corporate earnings → growth stocks fall harder than value stocks. QT drains liquidity from markets → higher volatility. When the Fed pivots to cuts, you often see the opposite: bonds rally, growth stocks surge.
+        </div>
+
+        <h3>The Data the Fed Watches</h3>
+        <ul>
+          <li><strong>CPI (Consumer Price Index):</strong> Headline inflation measure. The Fed watches core CPI (ex-food and energy) more closely.</li>
+          <li><strong>PCE (Personal Consumption Expenditures):</strong> The Fed's <em>preferred</em> inflation gauge. Core PCE is their official 2% target metric.</li>
+          <li><strong>Nonfarm Payrolls:</strong> Monthly jobs report. The single most market-moving economic data release. Strong jobs = sticky inflation = rates stay higher.</li>
+          <li><strong>Unemployment Rate:</strong> Paired with payrolls. "Full employment" is roughly considered to be around 4% unemployment.</li>
+        </ul>
+
+        <h3>The Dot Plot</h3>
+        <p>Four times a year, each FOMC member publishes their forecast for where the fed funds rate will be over the next few years. This is visualized as a "dot plot" — a scatter chart of projections. Markets spend enormous energy analyzing where the median dot is and whether it shifted up or down from the prior meeting. When dots move higher, it means the Fed expects to keep rates elevated longer — bad for bonds and growth stocks. When dots shift lower, markets often rally.</p>
+      </div>
+      <div class="lesson-footer">
+        <button class="lesson-prev" onclick="goToLesson(2)">← Previous</button>
+        <button class="btn-complete" id="complete-3" onclick="completeLesson(3)">Mark Complete &amp; Next →</button>
+      </div>
+    </div>
+
+    <!-- LESSON 5 -->
+    <div class="lesson-pane" id="lesson-4">
+      <div class="lesson-eyebrow">Module 01 · Lesson 5 of 8</div>
+      <h1 class="lesson-title">Treasury Securities</h1>
+      <div class="lesson-body">
+        <p>U.S. Treasury securities are the bedrock of global finance. They're the reference point for every other yield in the world, considered the ultimate "risk-free" asset (backed by the full faith and credit of the U.S. government), and the most liquid securities on earth. Understanding their nuances is essential for reading fixed income markets.</p>
+
+        <h3>Three Types by Maturity</h3>
+        <ul>
+          <li><strong>Treasury Bills (T-bills):</strong> Mature in 4 weeks to 52 weeks. Sold at a discount to face value; no coupon payments. The 3-month T-bill rate is often used as the proxy for the "risk-free rate" in financial models.</li>
+          <li><strong>Treasury Notes (T-notes):</strong> 2, 3, 5, 7, and 10-year maturities. Pay semi-annual coupon interest. The 10-year T-note is the benchmark rate for mortgages, corporate bonds, and global capital flows.</li>
+          <li><strong>Treasury Bonds (T-bonds):</strong> 20 and 30-year maturities. Same structure as notes, just longer. Most sensitive to rate changes (high duration). Primarily held by pension funds and insurance companies with long-term liabilities.</li>
+        </ul>
+
+        <h3>TIPS: Treasury Inflation-Protected Securities</h3>
+        <p>TIPS are Treasury bonds with a twist: their principal adjusts with CPI inflation. If inflation runs at 3% per year, the principal of a TIPS bond grows at 3% per year, protecting your purchasing power. The coupon rate stays fixed, but since it's applied to the growing principal, your actual dollar payments also grow with inflation.</p>
+        <p>TIPS are most valuable when inflation is high or rising — they protect you from the "inflation tax" that erodes the real value of fixed coupon payments on regular bonds.</p>
+
+        <h3>Real Yield vs. Nominal Yield</h3>
+        <p>This is a critical distinction:</p>
+        <div class="formula-block">Nominal Yield (regular Treasury) = Real Yield + Expected Inflation
+
+Real Yield = Nominal Yield - Expected Inflation
+           ≈ 10-Year Treasury Yield - 10-Year TIPS Yield</div>
+        <p>The real yield is what you earn after stripping out inflation. A 4.5% nominal 10-year yield with 2.5% inflation expectations = 2.0% real yield. That 2% is your actual compensation for lending money.</p>
+
+        <h3>Breakeven Inflation Rate</h3>
+        <p>The spread between a nominal Treasury yield and the equivalent-maturity TIPS yield is called the <strong>breakeven inflation rate</strong>. It's the market's implied forecast for average inflation over that period.</p>
+        <div class="formula-block">10Y Breakeven = 10Y Treasury Yield - 10Y TIPS Yield
+
+Example: 10Y Treasury = 4.32%, 10Y TIPS = 1.51%
+10Y Breakeven = 2.81%
+
+Interpretation: Bond markets expect average inflation of 2.81% 
+over the next 10 years.</div>
+        <p>This is why the breakeven is your best real-time inflation barometer. It updates continuously as the market absorbs new data — far faster than waiting for monthly CPI prints. When breakevens are rising, the bond market is pricing in more inflation. When they fall, inflation fears are easing.</p>
+
+        <div class="callout">
+          <div class="callout-label">Why Rising Real Yields Hurt Growth Stocks</div>
+          Growth stocks (tech, biotech, anything with earnings far in the future) are valued using discounted cash flow — you discount future earnings back to today. The discount rate used is tied to the real yield. When real yields rise, future earnings are worth less today. This is why a sharp move up in real yields tanks high-multiple growth stocks, even if the company's fundamentals haven't changed.
+        </div>
+
+        <h3>On-the-Run vs. Off-the-Run</h3>
+        <p>"On-the-run" Treasuries are the most recently issued security of a given maturity — they're the most liquid and most actively traded. "Off-the-run" are older issues. When traders talk about "the 10-year," they almost always mean the current on-the-run 10-year note. The small yield difference between on- and off-the-run bonds is called the "on-the-run premium" — a measure of liquidity preference in the Treasury market.</p>
+      </div>
+      <div class="lesson-footer">
+        <button class="lesson-prev" onclick="goToLesson(3)">← Previous</button>
+        <button class="btn-complete" id="complete-4" onclick="completeLesson(4)">Mark Complete &amp; Next →</button>
+      </div>
+    </div>
+
+    <!-- LESSON 6 -->
+    <div class="lesson-pane" id="lesson-5">
+      <div class="lesson-eyebrow">Module 01 · Lesson 6 of 8</div>
+      <h1 class="lesson-title">Corporate Bonds &amp; Credit Spreads</h1>
+      <div class="lesson-body">
+        <p>Not all bonds are created equal. Corporate bonds carry an extra risk that Treasuries don't: the issuer might default. To compensate, corporate bonds pay a higher yield than equivalent-maturity Treasuries. The difference is the <strong>credit spread</strong> — and it's one of the most important signals in all of macro finance.</p>
+
+        <h3>What Is a Credit Spread?</h3>
+        <p>If a 10-year Treasury yields 4.32% and a similarly maturing corporate bond from Apple yields 4.87%, the credit spread is 55 basis points (0.55%). That 55bp is the market's price tag for Apple's credit risk — the probability of default multiplied by the expected loss if Apple did default.</p>
+        <p>For investment-grade companies like Apple (which are extremely unlikely to default), spreads are tight. For riskier, high-yield borrowers, spreads can be hundreds of basis points.</p>
+
+        <h3>Investment Grade vs. High Yield</h3>
+        <ul>
+          <li><strong>Investment Grade (IG):</strong> Rated BBB-/Baa3 or above by S&P/Moody's. Includes companies like Apple, JPMorgan, Microsoft. Historical default rates are very low (&lt;0.5%/year). IG spreads typically range from 80–150bp in normal markets.</li>
+          <li><strong>High Yield (HY) / "Junk":</strong> Rated BB+/Ba1 or below. Higher default risk, higher coupons. Includes leveraged buyout companies, distressed issuers, early-stage businesses. HY spreads typically range from 300–500bp in normal markets, and can blow out to 800–1,000bp+ in a crisis.</li>
+          <li><strong>The "Fallen Angel":</strong> A bond that was IG and got downgraded to HY. This causes forced selling (many funds can only hold IG), creating buying opportunities.</li>
+        </ul>
+
+        <h3>Option-Adjusted Spread (OAS)</h3>
+        <p>Many corporate bonds have embedded options — the issuer can call the bond early (redeem it before maturity) if rates fall. This makes comparing yields across bonds tricky. OAS solves this by stripping out the value of the embedded option, leaving just the "pure" credit spread. It's a more apples-to-apples comparison across bonds with different structures.</p>
+        <p>When you see IG OAS or HY OAS in the daily brief, it's this adjusted spread. It's the standard benchmark used by institutional investors and published by ICE BofA (part of the now-Bank of America Merrill Lynch index family).</p>
+
+        <h3>What Spreads Signal</h3>
+        <p><strong>Spreads tightening (falling):</strong> Markets are optimistic. Investors are comfortable taking credit risk, default fears are low, economic outlook is positive. Typically coincides with equity rallies.</p>
+        <p><strong>Spreads widening (rising):</strong> Markets are stressed. Investors demand more compensation for risk. Widening spreads often precede or accompany equity selloffs. In a serious widening, companies find it expensive or impossible to issue new debt.</p>
+
+        <h3>Historical Context: When Spreads Move</h3>
+        <ul>
+          <li><strong>2008 Financial Crisis:</strong> HY spreads blew out to ~2,000bp (20%!) at the peak. IG spreads hit ~600bp. The credit market had essentially seized up — companies couldn't borrow at any reasonable rate.</li>
+          <li><strong>March 2020 (COVID crash):</strong> HY spreads went from ~350bp to ~1,100bp in about 30 days — one of the fastest spread widenings ever. The Fed stepped in and announced it would buy corporate bonds (first time ever), which almost instantly reversed the move.</li>
+          <li><strong>Normal market:</strong> HY around 300–450bp, IG around 80–120bp. When you see these levels, credit markets are saying "nothing to worry about."</li>
+        </ul>
+
+        <div class="callout">
+          <div class="callout-label">The Credit Market as a Canary</div>
+          Credit spreads often move before equities do. If stocks are flat but HY spreads are quietly widening over several weeks, that's often an early warning that something is deteriorating beneath the surface. Professional macro traders watch spreads as a leading indicator of equity market health.
+        </div>
+      </div>
+      <div class="lesson-footer">
+        <button class="lesson-prev" onclick="goToLesson(4)">← Previous</button>
+        <button class="btn-complete" id="complete-5" onclick="completeLesson(5)">Mark Complete &amp; Next →</button>
+      </div>
+    </div>
+
+    <!-- LESSON 7 -->
+    <div class="lesson-pane" id="lesson-6">
+      <div class="lesson-eyebrow">Module 01 · Lesson 7 of 8</div>
+      <h1 class="lesson-title">Reading Rates Like a Macro Trader</h1>
+      <div class="lesson-body">
+        <p>You now have all the individual pieces. This lesson is about synthesizing them into a unified picture — reading the rates market the way a macro portfolio manager would. Every morning when you open the brief, you should be able to look at the yield curve, credit spreads, and breakeven inflation and form a view about what the market is collectively saying about the economy.</p>
+
+        <h3>The Three Signals and What They Mean Together</h3>
+
+        <h4>Signal 1: The Yield Curve (2s/10s)</h4>
+        <p>Answers: What does the market think about near-term Fed policy vs. long-run growth?</p>
+        <ul>
+          <li>Steepening curve → market expects growth to accelerate, or the Fed to cut rates</li>
+          <li>Flattening curve → market expects the Fed to keep hiking, or long-run growth to slow</li>
+          <li>Inverted curve → market expects a recession, with the Fed eventually forced to cut</li>
+        </ul>
+
+        <h4>Signal 2: Credit Spreads (IG OAS, HY OAS)</h4>
+        <p>Answers: How much risk are investors willing to take? Do they believe in the economic outlook?</p>
+        <ul>
+          <li>Tight spreads → confidence, risk appetite high, default risk seen as low</li>
+          <li>Widening spreads → caution, risk appetite falling, growth fears rising</li>
+          <li>Blowout spreads → crisis, credit markets freezing</li>
+        </ul>
+
+        <h4>Signal 3: Breakeven Inflation (10Y BEI)</h4>
+        <p>Answers: What does the market think average inflation will be?</p>
+        <ul>
+          <li>BEI rising → inflation expectations rising → Fed may need to stay tighter longer</li>
+          <li>BEI falling → inflation fears easing → Fed may have room to cut</li>
+          <li>BEI above 2.5% → meaningfully above Fed target → bond market skeptical inflation is under control</li>
+        </ul>
+
+        <h3>The Major Market Scenarios</h3>
+
+        <div class="callout">
+          <div class="callout-label">Scenario: Soft Landing</div>
+          Curve: Steepening (from inverted back to flat/positive)<br>
+          Spreads: Tight and stable<br>
+          Breakeven: Falling toward 2–2.5%<br>
+          <br>
+          Reading: The Fed tightened just enough — inflation is cooling, employment is holding, the economy avoided recession. This is the "Goldilocks" scenario everyone hopes for. Equities typically rally hard in this environment.
+        </div>
+
+        <div class="callout">
+          <div class="callout-label">Scenario: Stagflation Fear</div>
+          Curve: Flat or inverted<br>
+          Spreads: Widening<br>
+          Breakeven: Rising<br>
+          <br>
+          Reading: The worst of all worlds — growth is slowing (inverted curve, widening spreads) but inflation isn't coming down (rising breakevens). The Fed can't cut without making inflation worse, but can't hike without crushing the economy. This is the scenario that terrified markets in 2022 and is relevant again in 2026 with energy-driven inflation from the Middle East conflict.
+        </div>
+
+        <div class="callout">
+          <div class="callout-label">Scenario: Hard Recession</div>
+          Curve: Deeply inverted, then rapidly steepening as Fed cuts<br>
+          Spreads: Blowing out (especially HY)<br>
+          Breakeven: Collapsing<br>
+          <br>
+          Reading: Recession has arrived or is imminent. The Fed is cutting or about to cut aggressively. HY spreads are blowing out as default risk rises. Long-duration Treasuries rally (a "flight to safety" trade). This is 2008, 2020.
+        </div>
+
+        <h3>Connecting Rates to Your Equity Portfolio</h3>
+        <p>Rising rates don't affect all stocks equally. Here's the transmission:</p>
+        <ul>
+          <li><strong>Rising real yields → growth/tech stocks hurt most.</strong> Their value comes from future cash flows, which get discounted more heavily. High P/E, no dividends, long "duration" on earnings = most rate-sensitive.</li>
+          <li><strong>Rising nominal yields → banks benefit.</strong> Net interest margins expand when rates rise. BX (Blackstone) and financials generally do better in rate-rising environments.</li>
+          <li><strong>Rising breakevens → commodity-linked stocks benefit.</strong> GLD, XLU, energy names hedge inflation. TIPS also rally in real terms.</li>
+          <li><strong>Widening spreads → avoid leveraged companies.</strong> Companies with lots of floating-rate debt or needing to refinance get hit hardest when spreads widen.</li>
+        </ul>
+
+        <h3>Daily Practice: The Two-Minute Rates Check</h3>
+        <p>Every morning when you read the brief, run through this mental checklist:</p>
+        <ol>
+          <li>Is the curve steeper or flatter vs. yesterday? Which direction is it trending over the past week?</li>
+          <li>Are IG and HY spreads tight, widening, or blowing out?</li>
+          <li>Is the 10Y breakeven above or below 2.5%? Moving up or down?</li>
+          <li>What does the combination of those three signals tell me about market expectations for growth and inflation?</li>
+          <li>Does that match what I see in equity markets? If bonds and stocks are sending conflicting signals, which is more likely to be right?</li>
+        </ol>
+        <p>Bonds are generally smarter than stocks. When credit spreads quietly widen for weeks while stocks drift higher, pay attention to the spreads.</p>
+      </div>
+      <div class="lesson-footer">
+        <button class="lesson-prev" onclick="goToLesson(5)">← Previous</button>
+        <button class="btn-complete" id="complete-6" onclick="completeLesson(6)">Mark Complete &amp; Next →</button>
+      </div>
+    </div>
+
+    <!-- LESSON 8: QUIZ -->
+    <div class="lesson-pane" id="lesson-7">
+      <div class="lesson-eyebrow">Module 01 · Lesson 8 of 8</div>
+      <h1 class="lesson-title">Module Quiz</h1>
+      <p class="quiz-intro">10 questions covering everything in Fixed Income &amp; Rates. Take your time — there's no timer.</p>
+
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div>
+      </div>
+
+      <div id="quizContainer">
+        <!-- Q1 -->
+        <div class="quiz-question-block active" id="qq-0">
+          <div class="question-num">Question 1 of 10</div>
+          <div class="question-text">If a bond's price falls, what happens to its yield?</div>
+          <div class="answer-grid">
+            <div class="answer-option" onclick="selectAnswer(0,0,false)"><span class="answer-letter">A</span> The yield falls too</div>
+            <div class="answer-option" onclick="selectAnswer(0,1,true)"><span class="answer-letter">B</span> The yield rises</div>
+            <div class="answer-option" onclick="selectAnswer(0,2,false)"><span class="answer-letter">C</span> The yield stays the same</div>
+            <div class="answer-option" onclick="selectAnswer(0,3,false)"><span class="answer-letter">D</span> It depends on the coupon</div>
+          </div>
+          <button class="btn-submit" id="submit-0" onclick="submitAnswer(0)">Submit Answer</button>
+          <div class="feedback-block" id="fb-0"></div>
+          <button class="btn-next-q" id="next-0" onclick="nextQuestion(0)">Next Question →</button>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-question-block" id="qq-1">
+          <div class="question-num">Question 2 of 10</div>
+          <div class="question-text">A normal (upward-sloping) yield curve means:</div>
+          <div class="answer-grid">
+            <div class="answer-option" onclick="selectAnswer(1,0,false)"><span class="answer-letter">A</span> Short-term rates exceed long-term rates</div>
+            <div class="answer-option" onclick="selectAnswer(1,1,true)"><span class="answer-letter">B</span> Long-term rates exceed short-term rates</div>
+            <div class="answer-option" onclick="selectAnswer(1,2,false)"><span class="answer-letter">C</span> All maturities yield the same</div>
+            <div class="answer-option" onclick="selectAnswer(1,3,false)"><span class="answer-letter">D</span> The yield curve is inverted</div>
+          </div>
+          <button class="btn-submit" id="submit-1" onclick="submitAnswer(1)">Submit Answer</button>
+          <div class="feedback-block" id="fb-1"></div>
+          <button class="btn-next-q" id="next-1" onclick="nextQuestion(1)">Next Question →</button>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-question-block" id="qq-2">
+          <div class="question-num">Question 3 of 10</div>
+          <div class="question-text">A bond has a modified duration of 6. If interest rates rise by 1%, the bond's price will approximately:</div>
+          <div class="answer-grid">
+            <div class="answer-option" onclick="selectAnswer(2,0,false)"><span class="answer-letter">A</span> Rise by 6%</div>
+            <div class="answer-option" onclick="selectAnswer(2,1,false)"><span class="answer-letter">B</span> Fall by 1%</div>
+            <div class="answer-option" onclick="selectAnswer(2,2,true)"><span class="answer-letter">C</span> Fall by 6%</div>
+            <div class="answer-option" onclick="selectAnswer(2,3,false)"><span class="answer-letter">D</span> Rise by 1%</div>
+          </div>
+          <button class="btn-submit" id="submit-2" onclick="submitAnswer(2)">Submit Answer</button>
+          <div class="feedback-block" id="fb-2"></div>
+          <button class="btn-next-q" id="next-2" onclick="nextQuestion(2)">Next Question →</button>
+        </div>
+
+        <!-- Q4 -->
+        <div class="quiz-question-block" id="qq-3">
+          <div class="question-num">Question 4 of 10</div>
+          <div class="question-text">The Federal Reserve's dual mandate is:</div>
+          <div class="answer-grid">
+            <div class="answer-option" onclick="selectAnswer(3,0,false)"><span class="answer-letter">A</span> Low interest rates and high growth</div>
+            <div class="answer-option" onclick="selectAnswer(3,1,true)"><span class="answer-letter">B</span> Maximum employment and stable prices</div>
+            <div class="answer-option" onclick="selectAnswer(3,2,false)"><span class="answer-letter">C</span> Balanced budget and low inflation</div>
+            <div class="answer-option" onclick="selectAnswer(3,3,false)"><span class="answer-letter">D</span> Strong dollar and low unemployment</div>
+          </div>
+          <button class="btn-submit" id="submit-3" onclick="submitAnswer(3)">Submit Answer</button>
+          <div class="feedback-block" id="fb-3"></div>
+          <button class="btn-next-q" id="next-3" onclick="nextQuestion(3)">Next Question →</button>
+        </div>
+
+        <!-- Q5 -->
+        <div class="quiz-question-block" id="qq-4">
+          <div class="question-num">Question 5 of 10</div>
+          <div class="question-text">Treasury Inflation-Protected Securities (TIPS) protect investors against:</div>
+          <div class="answer-grid">
+            <div class="answer-option" onclick="selectAnswer(4,0,false)"><span class="answer-letter">A</span> Credit default risk</div>
+            <div class="answer-option" onclick="selectAnswer(4,1,false)"><span class="answer-letter">B</span> Duration risk from rising rates</div>
+            <div class="answer-option" onclick="selectAnswer(4,2,true)"><span class="answer-letter">C</span> Inflation eroding purchasing power</div>
+            <div class="answer-option" onclick="selectAnswer(4,3,false)"><span class="answer-letter">D</span> Currency devaluation</div>
+          </div>
+          <button class="btn-submit" id="submit-4" onclick="submitAnswer(4)">Submit Answer</button>
+          <div class="feedback-block" id="fb-4"></div>
+          <button class="btn-next-q" id="next-4" onclick="nextQuestion(4)">Next Question →</button>
+        </div>
+
+        <!-- Q6 -->
+        <div class="quiz-question-block" id="qq-5">
+          <div class="question-num">Question 6 of 10</div>
+          <div class="question-text">The 10-year breakeven inflation rate is calculated as:</div>
+          <div class="answer-grid">
+            <div class="answer-option" onclick="selectAnswer(5,0,false)"><span class="answer-letter">A</span> The Fed's official CPI forecast</div>
+            <div class="answer-option" onclick="selectAnswer(5,1,true)"><span class="answer-letter">B</span> 10-year Treasury yield minus 10-year TIPS yield</div>
+            <div class="answer-option" onclick="selectAnswer(5,2,false)"><span class="answer-letter">C</span> Fed funds rate minus GDP growth rate</div>
+            <div class="answer-option" onclick="selectAnswer(5,3,false)"><span class="answer-letter">D</span> Core PCE minus headline CPI</div>
+          </div>
+          <button class="btn-submit" id="submit-5" onclick="submitAnswer(5)">Submit Answer</button>
+          <div class="feedback-block" id="fb-5"></div>
+          <button class="btn-next-q" id="next-5" onclick="nextQuestion(5)">Next Question →</button>
+        </div>
+
+        <!-- Q7 -->
+        <div class="quiz-question-block" id="qq-6">
+          <div class="question-num">Question 7 of 10</div>
+          <div class="question-text">Investment grade corporate bonds are rated:</div>
+          <div class="answer-grid">
+            <div class="answer-option" onclick="selectAnswer(6,0,false)"><span class="answer-letter">A</span> BB or higher</div>
+            <div class="answer-option" onclick="selectAnswer(6,1,true)"><span class="answer-letter">B</span> BBB/Baa or higher</div>
+            <div class="answer-option" onclick="selectAnswer(6,2,false)"><span class="answer-letter">C</span> A or higher only</div>
+            <div class="answer-option" onclick="selectAnswer(6,3,false)"><span class="answer-letter">D</span> Any bond with a credit rating</div>
+          </div>
+          <button class="btn-submit" id="submit-6" onclick="submitAnswer(6)">Submit Answer</button>
+          <div class="feedback-block" id="fb-6"></div>
+          <button class="btn-next-q" id="next-6" onclick="nextQuestion(6)">Next Question →</button>
+        </div>
+
+        <!-- Q8 -->
+        <div class="quiz-question-block" id="qq-7">
+          <div class="question-num">Question 8 of 10</div>
+          <div class="question-text">Option-Adjusted Spread (OAS) is preferred over nominal spread because it:</div>
+          <div class="answer-grid">
+            <div class="answer-option" onclick="selectAnswer(7,0,false)"><span class="answer-letter">A</span> Is always a higher number</div>
+            <div class="answer-option" onclick="selectAnswer(7,1,true)"><span class="answer-letter">B</span> Strips out the value of embedded options for a cleaner comparison</div>
+            <div class="answer-option" onclick="selectAnswer(7,2,false)"><span class="answer-letter">C</span> Uses a different benchmark rate</div>
+            <div class="answer-option" onclick="selectAnswer(7,3,false)"><span class="answer-letter">D</span> Only applies to Treasury bonds</div>
+          </div>
+          <button class="btn-submit" id="submit-7" onclick="submitAnswer(7)">Submit Answer</button>
+          <div class="feedback-block" id="fb-7"></div>
+          <button class="btn-next-q" id="next-7" onclick="nextQuestion(7)">Next Question →</button>
+        </div>
+
+        <!-- Q9 -->
+        <div class="quiz-question-block" id="qq-8">
+          <div class="question-num">Question 9 of 10</div>
+          <div class="question-text">Rising real yields tend to have what effect on high-growth technology stocks?</div>
+          <div class="answer-grid">
+            <div class="answer-option" onclick="selectAnswer(8,0,false)"><span class="answer-letter">A</span> They boost growth stock valuations</div>
+            <div class="answer-option" onclick="selectAnswer(8,1,true)"><span class="answer-letter">B</span> They compress P/E multiples and reduce valuations</div>
+            <div class="answer-option" onclick="selectAnswer(8,2,false)"><span class="answer-letter">C</span> They have no meaningful effect on equities</div>
+            <div class="answer-option" onclick="selectAnswer(8,3,false)"><span class="answer-letter">D</span> They benefit high-duration bonds</div>
+          </div>
+          <button class="btn-submit" id="submit-8" onclick="submitAnswer(8)">Submit Answer</button>
+          <div class="feedback-block" id="fb-8"></div>
+          <button class="btn-next-q" id="next-8" onclick="nextQuestion(8)">Next Question →</button>
+        </div>
+
+        <!-- Q10 -->
+        <div class="quiz-question-block" id="qq-9">
+          <div class="question-num">Question 10 of 10</div>
+          <div class="question-text">Widening high-yield credit spreads are typically a signal of:</div>
+          <div class="answer-grid">
+            <div class="answer-option" onclick="selectAnswer(9,0,false)"><span class="answer-letter">A</span> Market optimism and strong risk appetite</div>
+            <div class="answer-option" onclick="selectAnswer(9,1,false)"><span class="answer-letter">B</span> Rising growth and earnings expectations</div>
+            <div class="answer-option" onclick="selectAnswer(9,2,true)"><span class="answer-letter">C</span> Increased risk aversion and recession concerns</div>
+            <div class="answer-option" onclick="selectAnswer(9,3,false)"><span class="answer-letter">D</span> Imminent Federal Reserve rate cuts</div>
+          </div>
+          <button class="btn-submit" id="submit-9" onclick="submitAnswer(9)">Submit Answer</button>
+          <div class="feedback-block" id="fb-9"></div>
+          <button class="btn-next-q" id="next-9" onclick="showQuizResults()">See Results →</button>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="quiz-results" id="quizResults">
+        <div class="results-score" id="resultsScore">—</div>
+        <div class="results-label">out of 10 correct</div>
+        <div class="results-message" id="resultsMessage"></div>
+        <div class="results-breakdown" id="resultsBreakdown"></div>
+        <button class="btn-retake" onclick="retakeQuiz()">Retake Quiz</button>
+        <a href="education.html" class="btn-complete" style="display:inline-flex;">Back to Modules →</a>
+      </div>
+
+      <div class="lesson-footer">
+        <button class="lesson-prev" onclick="goToLesson(6)">← Previous</button>
+        <div></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <span>&copy; 2026 Zubin Shourie</span>
+  <a href="education.html">← Education</a>
+  <a href="index.html">Site</a>
+</footer>
+
+<script>
+  const TOTAL_LESSONS = 8;
+  const STORAGE_KEY = 'edu_module1_lessons_complete';
+  const QUIZ_KEY = 'edu_module1_quiz_score';
+
+  let currentLesson = 0;
+  let completedLessons = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+  // Quiz state
+  const quizAnswers = new Array(10).fill(null); // user's selected answer index
+  const quizCorrect = [1, 1, 2, 1, 2, 1, 1, 1, 1, 2]; // correct answer indices
+  const quizExplanations = [
+    "Price and yield move inversely. When a bond's price falls, it means the market demands a higher return — that's the yield rising.",
+    "A normal curve slopes upward: long-term bonds yield more than short-term ones, compensating investors for time and uncertainty.",
+    "Modified duration ≈ % price change per 1% rate move. Duration of 6 → price falls ~6% when rates rise 1%.",
+    "The Fed's two mandates are maximum employment and stable prices (2% inflation target). It has no mandate around interest rate levels or GDP growth.",
+    "TIPS principal adjusts with CPI. If inflation runs hot, your principal grows — protecting purchasing power. They don't protect against rate or credit risk.",
+    "Breakeven = Nominal Treasury yield minus TIPS yield. It's the market's implied average inflation expectation over the bond's life.",
+    "Investment grade is BBB-/Baa3 and above. BB is the top of high yield ('junk'). Many institutional investors are restricted to IG-only holdings.",
+    "OAS strips out embedded options (like call provisions) so you can compare the pure credit risk across bonds with different structures.",
+    "Rising real yields raise the discount rate on future cash flows. Growth stocks, valued on distant earnings, get hit hardest. This is why rate cycles and tech valuations move inversely.",
+    "Widening HY spreads mean investors are demanding more compensation for credit risk — a sign of risk aversion and rising recession/default fears. It's one of the best early warning signals in markets."
+  ];
+
+  function goToLesson(idx) {
+    document.querySelectorAll('.lesson-pane').forEach(p => p.classList.remove('active'));
+    document.getElementById('lesson-' + idx).classList.add('active');
+    document.querySelectorAll('.lesson-nav-item').forEach((item, i) => {
+      item.classList.toggle('active', i === idx);
+    });
+    document.getElementById('navProgress').textContent = 'Lesson ' + (idx + 1) + ' of ' + TOTAL_LESSONS;
+    const mobileSel = document.getElementById('mobileLessonSelect');
+    if (mobileSel) mobileSel.value = idx;
+    currentLesson = idx;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderCompletedState();
+  }
+
+  function completeLesson(idx) {
+    if (!completedLessons.includes(idx)) {
+      completedLessons.push(idx);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(completedLessons));
+    }
+    renderCompletedState();
+    if (idx < TOTAL_LESSONS - 1) {
+      setTimeout(() => goToLesson(idx + 1), 150);
+    } else {
+      const btn = document.getElementById('complete-' + idx);
+      if (btn) { btn.textContent = '✓ Complete'; btn.classList.add('done'); }
+    }
+  }
+
+  function renderCompletedState() {
+    const navItems = document.querySelectorAll('.lesson-nav-item');
+    navItems.forEach((item, i) => {
+      item.classList.toggle('completed', completedLessons.includes(i));
+    });
+    const pct = Math.round((completedLessons.length / TOTAL_LESSONS) * 100);
+    document.getElementById('sidebarProgressFill').style.width = pct + '%';
+    // Update complete buttons
+    for (let i = 0; i < TOTAL_LESSONS - 1; i++) {
+      const btn = document.getElementById('complete-' + i);
+      if (btn && completedLessons.includes(i)) {
+        btn.textContent = '✓ Complete — Next →';
+      }
+    }
+  }
+
+  // QUIZ LOGIC
+  let quizUserAnswers = new Array(10).fill(null);
+  let quizScore = 0;
+
+  function selectAnswer(qIdx, optIdx, isCorrect) {
+    const block = document.getElementById('qq-' + qIdx);
+    const options = block.querySelectorAll('.answer-option');
+    // Don't allow re-selection after submit
+    if (block.dataset.submitted === 'true') return;
+    options.forEach(o => o.classList.remove('selected'));
+    options[optIdx].classList.add('selected');
+    quizUserAnswers[qIdx] = optIdx;
+    document.getElementById('submit-' + qIdx).classList.add('visible');
+  }
+
+  function submitAnswer(qIdx) {
+    const block = document.getElementById('qq-' + qIdx);
+    if (block.dataset.submitted === 'true') return;
+    const userAns = quizUserAnswers[qIdx];
+    if (userAns === null) return;
+    block.dataset.submitted = 'true';
+
+    const options = block.querySelectorAll('.answer-option');
+    const correctIdx = quizCorrect[qIdx];
+    const isCorrect = userAns === correctIdx;
+
+    options.forEach((o, i) => {
+      o.classList.add('disabled');
+      o.onclick = null;
+      if (i === correctIdx) o.classList.add('correct');
+      if (i === userAns && !isCorrect) o.classList.add('wrong');
+    });
+
+    const fb = document.getElementById('fb-' + qIdx);
+    fb.classList.add('show');
+    if (isCorrect) {
+      fb.classList.add('correct-fb');
+      fb.innerHTML = '✓ Correct. ' + quizExplanations[qIdx];
+    } else {
+      fb.classList.add('wrong-fb');
+      fb.innerHTML = '✗ Not quite. ' + quizExplanations[qIdx];
+    }
+
+    document.getElementById('submit-' + qIdx).style.display = 'none';
+    document.getElementById('next-' + qIdx).classList.add('visible');
+
+    // Update progress bar
+    const answered = quizUserAnswers.filter(a => a !== null).length;
+    document.getElementById('quizProgressFill').style.width = (answered / 10 * 100) + '%';
+  }
+
+  function nextQuestion(qIdx) {
+    document.getElementById('qq-' + qIdx).classList.remove('active');
+    if (qIdx < 9) {
+      document.getElementById('qq-' + (qIdx + 1)).classList.add('active');
+    }
+  }
+
+  function showQuizResults() {
+    // Hide all question blocks
+    document.querySelectorAll('.quiz-question-block').forEach(b => b.classList.remove('active'));
+
+    // Tally score
+    quizScore = 0;
+    for (let i = 0; i < 10; i++) {
+      if (quizUserAnswers[i] === quizCorrect[i]) quizScore++;
+    }
+
+    // Save to localStorage
+    localStorage.setItem(QUIZ_KEY, JSON.stringify({ score: quizScore, date: new Date().toISOString() }));
+    if (!completedLessons.includes(7)) {
+      completedLessons.push(7);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(completedLessons));
+    }
+    renderCompletedState();
+
+    document.getElementById('resultsScore').textContent = quizScore;
+
+    const messages = {
+      range: [
+        [0, 4, "You're just getting started — go back through the lessons and take your time. The concepts compound on each other."],
+        [5, 7, "Solid foundation. A few gaps to close — review the questions you missed and the lessons they came from."],
+        [8, 9, "Strong grasp of fixed income fundamentals. You're reading the bond market like a pro."],
+        [10, 10, "Perfect score. You've got this module locked down. Time for the next one."]
+      ]
+    };
+    let msg = messages.range[3][2];
+    for (const [lo, hi, text] of messages.range) {
+      if (quizScore >= lo && quizScore <= hi) { msg = text; break; }
+    }
+    document.getElementById('resultsMessage').textContent = msg;
+
+    // Breakdown
+    const breakdown = document.getElementById('resultsBreakdown');
+    const questionTexts = [
+      "Bond price falls → yield rises",
+      "Normal yield curve: long rates > short rates",
+      "Modified duration 6 → ~6% price drop per 1% rate rise",
+      "Fed dual mandate: max employment + stable prices",
+      "TIPS protect against inflation",
+      "Breakeven = Nominal yield − TIPS yield",
+      "Investment grade: BBB/Baa or above",
+      "OAS strips out embedded option value",
+      "Rising real yields compress growth stock P/E multiples",
+      "Widening HY spreads → risk aversion / recession fears"
+    ];
+    breakdown.innerHTML = questionTexts.map((q, i) => {
+      const correct = quizUserAnswers[i] === quizCorrect[i];
+      return `<div class="result-item ${correct ? 'result-correct' : ''}">
+        <span class="result-icon">${correct ? '✓' : '✗'}</span>
+        <div>
+          <div class="result-q">${q}</div>
+          ${!correct ? `<div class="result-exp">${quizExplanations[i]}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('quizResults').classList.add('show');
+  }
+
+  function retakeQuiz() {
+    quizUserAnswers = new Array(10).fill(null);
+    document.querySelectorAll('.quiz-question-block').forEach((b, i) => {
+      b.classList.remove('active');
+      b.dataset.submitted = '';
+      const opts = b.querySelectorAll('.answer-option');
+      opts.forEach((o, oi) => {
+        o.classList.remove('selected', 'correct', 'wrong', 'disabled');
+        const isCorrect = oi === quizCorrect[i];
+        o.onclick = () => selectAnswer(i, oi, isCorrect);
+      });
+      const fb = document.getElementById('fb-' + i);
+      fb.classList.remove('show', 'correct-fb', 'wrong-fb');
+      fb.innerHTML = '';
+      document.getElementById('submit-' + i).classList.remove('visible');
+      document.getElementById('submit-' + i).style.display = '';
+      document.getElementById('next-' + i).classList.remove('visible');
+    });
+    document.getElementById('quizProgressFill').style.width = '0%';
+    document.getElementById('quizResults').classList.remove('show');
+    document.getElementById('qq-0').classList.add('active');
+  }
+
+  // Init
+  renderCompletedState();
+</script>
+</body>
+</html>

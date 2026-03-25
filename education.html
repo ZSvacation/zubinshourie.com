@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Education | Zubin Shourie</title>
+  <meta name="description" content="A personal finance curriculum. Learn bonds, yield curves, equity valuation, macro, and more.">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --cream: #F4F1EB;
+      --warm-white: #FAF8F5;
+      --tan: #E5DDD0;
+      --sand: #D4C9B8;
+      --charcoal: #2A2A2A;
+      --soft-black: #1A1A1A;
+      --forest: #3D5A47;
+      --forest-light: #5A7A63;
+      --forest-dark: #2B3E30;
+      --warm-gray: #8A8478;
+      --mid-gray: #6B655D;
+      --light-gray: #B5AFA6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Sora', -apple-system, sans-serif;
+      background-color: var(--cream);
+      color: var(--charcoal);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(244, 241, 235, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(229, 221, 208, 0.5);
+    }
+
+    .nav-logo {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--soft-black);
+      text-decoration: none;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--warm-gray);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active { color: var(--soft-black); }
+
+    /* PAGE HEADER */
+    .page-header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 9rem 3rem 4rem;
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--forest);
+      margin-bottom: 1.25rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      color: var(--soft-black);
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .page-subtitle {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--mid-gray);
+      font-weight: 400;
+    }
+
+    /* DIVIDER */
+    .divider { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
+    .divider hr { border: none; border-top: 1px solid var(--tan); }
+
+    /* ASSESSMENT BANNER */
+    .assessment-banner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem;
+    }
+
+    .banner-inner {
+      background: var(--forest-dark);
+      border-radius: 4px;
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .banner-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .banner-text p {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.85rem;
+      color: var(--sand);
+      font-weight: 300;
+      max-width: 460px;
+      line-height: 1.7;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--forest-dark);
+      background: var(--cream);
+      padding: 0.85rem 1.75rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      white-space: nowrap;
+      border-radius: 2px;
+    }
+
+    .btn-primary:hover { background: var(--tan); }
+
+    /* MODULE GRID */
+    .module-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--warm-gray);
+      margin-bottom: 2rem;
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .module-card {
+      background: var(--warm-white);
+      border: 1px solid var(--tan);
+      border-radius: 4px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .module-card:hover {
+      border-color: var(--sand);
+      box-shadow: 0 4px 20px rgba(42,42,42,0.06);
+    }
+
+    .module-card.coming-soon {
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .module-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--forest);
+      letter-spacing: 0.1em;
+    }
+
+    .module-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--soft-black);
+      line-height: 1.2;
+    }
+
+    .module-desc {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      color: var(--warm-gray);
+      font-weight: 300;
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    .module-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+    }
+
+    .badge-foundational { background: rgba(61,90,71,0.1); color: var(--forest); }
+    .badge-intermediate { background: rgba(138,132,120,0.12); color: var(--mid-gray); }
+    .badge-advanced { background: rgba(42,42,42,0.08); color: var(--charcoal); }
+    .badge-available { background: rgba(61,90,71,0.15); color: var(--forest-dark); }
+    .badge-soon { background: var(--tan); color: var(--warm-gray); }
+
+    .lesson-count {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      color: var(--light-gray);
+      margin-left: auto;
+    }
+
+    .module-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--forest);
+      margin-top: 0.25rem;
+    }
+
+    .module-progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--tan);
+    }
+
+    .module-progress-fill {
+      height: 100%;
+      background: var(--forest);
+      transition: width 0.4s ease;
+    }
+
+    /* ASSESSMENT SECTION */
+    .assessment-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 3rem;
+    }
+
+    .assessment-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: var(--soft-black);
+      margin-bottom: 0.5rem;
+    }
+
+    .assessment-section .sub {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--warm-gray);
+      margin-bottom: 2.5rem;
+    }
+
+    .quiz-container {
+      background: var(--warm-white);
+      border: 1px solid var(--tan);
+      border-radius: 4px;
+      padding: 2.5rem;
+    }
+
+    .quiz-progress-bar {
+      height: 4px;
+      background: var(--tan);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    .quiz-progress-fill {
+      height: 100%;
+      background: var(--forest);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .quiz-q-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--forest);
+      margin-bottom: 0.75rem;
+    }
+
+    .quiz-question {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--soft-black);
+      margin-bottom: 1.5rem;
+      line-height: 1.4;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--tan);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.82rem;
+      color: var(--charcoal);
+      background: var(--cream);
+      user-select: none;
+    }
+
+    .quiz-option:hover { border-color: var(--forest-light); }
+    .quiz-option.selected { border-color: var(--forest); background: rgba(61,90,71,0.06); }
+    .quiz-option.correct { border-color: var(--forest); background: rgba(61,90,71,0.12); }
+    .quiz-option.incorrect { border-color: #c0392b; background: rgba(192,57,43,0.06); }
+
+    .option-letter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--forest);
+      min-width: 1.2rem;
+    }
+
+    .quiz-submit {
+      display: none;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--warm-white);
+      background: var(--forest);
+      padding: 0.85rem 2rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      border-radius: 2px;
+    }
+
+    .quiz-submit:hover { background: var(--forest-dark); }
+
+    .quiz-feedback {
+      display: none;
+      margin-top: 1rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.82rem;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    .quiz-nav {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      align-items: center;
+    }
+
+    .btn-next {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--forest);
+      background: transparent;
+      padding: 0.75rem 1.5rem;
+      border: 1.5px solid var(--forest);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-radius: 2px;
+    }
+
+    .btn-next:hover { background: var(--forest); color: var(--cream); }
+
+    .quiz-result {
+      display: none;
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    .result-score {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 400;
+      color: var(--forest);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--warm-gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .result-message {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--charcoal);
+      max-width: 460px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    .result-breakdown {
+      text-align: left;
+      margin-top: 2rem;
+    }
+
+    .result-breakdown h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--soft-black);
+      margin-bottom: 1rem;
+    }
+
+    .result-item {
+      padding: 1rem;
+      border-radius: 3px;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--tan);
+    }
+
+    .result-item.wrong {
+      border-color: rgba(192,57,43,0.3);
+      background: rgba(192,57,43,0.03);
+    }
+
+    .result-item.right {
+      border-color: rgba(61,90,71,0.25);
+      background: rgba(61,90,71,0.03);
+    }
+
+    .result-item-q {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 0.35rem;
+    }
+
+    .result-item-exp {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.75rem;
+      color: var(--warm-gray);
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    footer {
+      max-width: 1200px;
+      margin: 4rem auto 0;
+      padding: 2rem 3rem;
+      border-top: 1px solid var(--tan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      color: var(--light-gray);
+    }
+
+    footer a {
+      color: var(--warm-gray);
+      text-decoration: none;
+    }
+
+    footer a:hover { color: var(--soft-black); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .page-header { padding: 7rem 1.5rem 3rem; }
+      .assessment-banner, .module-section, .assessment-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .banner-inner { flex-direction: column; padding: 2rem; }
+      .banner-text p { max-width: 100%; }
+      .module-grid { grid-template-columns: 1fr; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.75rem; text-align: center; }
+    }
+
+    @media (max-width: 540px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Zubin Shourie</a>
+    <ul class="nav-links">
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#photos">Photos</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="education.html" class="active">Education</a></li>
+      <li><a href="dashboard.html">Daily Brief</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="eyebrow">Knowledge Base</div>
+    <h1>Education</h1>
+    <p class="page-subtitle">A personal curriculum. Learn at your own pace.</p>
+  </div>
+
+  <div class="divider"><hr></div>
+
+  <!-- ASSESSMENT BANNER -->
+  <div class="assessment-banner">
+    <div class="banner-inner">
+      <div class="banner-text">
+        <h2>Not sure where to start?</h2>
+        <p>Take the 5-minute assessment to see what you already know. We'll suggest where to begin.</p>
+      </div>
+      <a href="#assessment" class="btn-primary">Start Assessment</a>
+    </div>
+  </div>
+
+  <div class="divider"><hr></div>
+
+  <!-- MODULE GRID -->
+  <section class="module-section">
+    <div class="section-label">Modules — 6 Tracks</div>
+    <div class="module-grid" id="moduleGrid">
+
+      <!-- Module 01 -->
+      <a href="education-fixed-income.html" class="module-card" id="mod-1">
+        <div class="module-number">01</div>
+        <div class="module-title">Fixed Income &amp; Rates</div>
+        <div class="module-desc">Bonds, yield curves, duration, spreads, the Fed. What drives interest rates and why it matters.</div>
+        <div class="module-meta">
+          <span class="badge badge-foundational">Foundational</span>
+          <span class="badge badge-available">Available</span>
+          <span class="lesson-count">8 lessons</span>
+        </div>
+        <div class="module-action">Begin <span>&rarr;</span></div>
+        <div class="module-progress-bar"><div class="module-progress-fill" id="prog-1" style="width:0%"></div></div>
+      </a>
+
+      <!-- Module 02 -->
+      <div class="module-card coming-soon">
+        <div class="module-number">02</div>
+        <div class="module-title">Equity Valuation</div>
+        <div class="module-desc">P/E, DCF, EV/EBITDA, comparables. How to think about what a stock is worth.</div>
+        <div class="module-meta">
+          <span class="badge badge-intermediate">Intermediate</span>
+          <span class="badge badge-soon">Coming Soon</span>
+          <span class="lesson-count">— lessons</span>
+        </div>
+        <div class="module-progress-bar"><div class="module-progress-fill" style="width:0%"></div></div>
+      </div>
+
+      <!-- Module 03 -->
+      <div class="module-card coming-soon">
+        <div class="module-number">03</div>
+        <div class="module-title">Macroeconomics</div>
+        <div class="module-desc">Business cycles, inflation, monetary policy, fiscal policy. The big picture.</div>
+        <div class="module-meta">
+          <span class="badge badge-foundational">Foundational</span>
+          <span class="badge badge-soon">Coming Soon</span>
+          <span class="lesson-count">— lessons</span>
+        </div>
+        <div class="module-progress-bar"><div class="module-progress-fill" style="width:0%"></div></div>
+      </div>
+
+      <!-- Module 04 -->
+      <div class="module-card coming-soon">
+        <div class="module-number">04</div>
+        <div class="module-title">Credit Markets</div>
+        <div class="module-desc">Investment grade vs. high yield, OAS spreads, default risk, credit ratings.</div>
+        <div class="module-meta">
+          <span class="badge badge-intermediate">Intermediate</span>
+          <span class="badge badge-soon">Coming Soon</span>
+          <span class="lesson-count">— lessons</span>
+        </div>
+        <div class="module-progress-bar"><div class="module-progress-fill" style="width:0%"></div></div>
+      </div>
+
+      <!-- Module 05 -->
+      <div class="module-card coming-soon">
+        <div class="module-number">05</div>
+        <div class="module-title">Portfolio Theory</div>
+        <div class="module-desc">MPT, Sharpe ratio, correlation, diversification, factor investing.</div>
+        <div class="module-meta">
+          <span class="badge badge-intermediate">Intermediate</span>
+          <span class="badge badge-soon">Coming Soon</span>
+          <span class="lesson-count">— lessons</span>
+        </div>
+        <div class="module-progress-bar"><div class="module-progress-fill" style="width:0%"></div></div>
+      </div>
+
+      <!-- Module 06 -->
+      <div class="module-card coming-soon">
+        <div class="module-number">06</div>
+        <div class="module-title">Derivatives &amp; Options</div>
+        <div class="module-desc">Calls, puts, Greeks, hedging strategies.</div>
+        <div class="module-meta">
+          <span class="badge badge-advanced">Advanced</span>
+          <span class="badge badge-soon">Coming Soon</span>
+          <span class="lesson-count">— lessons</span>
+        </div>
+        <div class="module-progress-bar"><div class="module-progress-fill" style="width:0%"></div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <!-- PRE-ASSESSMENT QUIZ -->
+  <section class="assessment-section" id="assessment">
+    <div class="eyebrow">Pre-Assessment</div>
+    <h2>Test Your Knowledge</h2>
+    <p class="sub">10 questions across all tracks. Takes about 5 minutes.</p>
+
+    <div class="quiz-container" id="quizContainer">
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quizProgressFill" style="width:10%"></div>
+      </div>
+
+      <div id="quizBody">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="quiz-result" id="quizResult">
+        <div class="result-score" id="resultScore"></div>
+        <div class="result-label">out of 10</div>
+        <div class="result-message" id="resultMessage"></div>
+        <a href="education-fixed-income.html" class="btn-primary" id="resultCTA" style="display:inline-block;background:var(--forest);color:var(--cream);">Begin Fixed Income &amp; Rates &rarr;</a>
+        <div class="result-breakdown" id="resultBreakdown"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; 2026 Zubin Shourie</span>
+    <a href="index.html">&larr; Back to Portfolio</a>
+    <span>Built from scratch</span>
+  </footer>
+
+  <script>
+    // ── Progress bars from localStorage ──
+    function loadProgress() {
+      try {
+        const completed = JSON.parse(localStorage.getItem('edu_module1_lessons_complete') || '[]');
+        const pct = Math.round((completed.length / 8) * 100);
+        const fill = document.getElementById('prog-1');
+        if (fill) fill.style.width = pct + '%';
+        if (pct > 0) {
+          const card = document.getElementById('mod-1');
+          const action = card && card.querySelector('.module-action');
+          if (action) action.innerHTML = 'Continue <span>&rarr;</span>';
+        }
+      } catch(e) {}
+    }
+    loadProgress();
+
+    // ── Quiz data ──
+    const questions = [
+      {
+        q: "What does it mean when the yield curve inverts?",
+        options: ["Short-term rates are higher than long-term rates", "Long-term rates are higher than short-term rates", "All rates are equal across maturities", "The Federal Reserve raised rates"],
+        correct: 0,
+        explanation: "An inverted yield curve means short-term rates exceed long-term rates — investors expect future rates to fall, often signaling recession. The 2s/10s spread going negative is the most-watched inversion signal."
+      },
+      {
+        q: "What is a bond's duration?",
+        options: ["The number of years until it matures", "The sensitivity of the bond's price to changes in interest rates", "The schedule of coupon payments", "The bond's credit rating"],
+        correct: 1,
+        explanation: "Duration measures interest rate sensitivity. Modified duration of 7 means the bond's price falls approximately 7% if rates rise 1%. Maturity and duration are related but distinct concepts."
+      },
+      {
+        q: "P/E ratio stands for:",
+        options: ["Profit-to-Expenses", "Price-to-Earnings", "Portfolio-to-Equity", "None of the above"],
+        correct: 1,
+        explanation: "Price-to-Earnings is the most basic equity valuation multiple. It divides market price per share by earnings per share, showing how much investors pay per dollar of profit."
+      },
+      {
+        q: "The Federal Reserve's primary tool for controlling inflation is:",
+        options: ["Tax rates", "The federal funds rate", "Stock buyback regulations", "Trade tariffs"],
+        correct: 1,
+        explanation: "The Fed sets the federal funds rate — the overnight lending rate between banks. Raising it increases borrowing costs across the economy, slowing demand and cooling inflation."
+      },
+      {
+        q: "What does OAS stand for in credit markets?",
+        options: ["Overnight Average Spread", "Option-Adjusted Spread", "Outstanding Aggregate Securities", "Open Asset Swap"],
+        correct: 1,
+        explanation: "Option-Adjusted Spread strips out the value of embedded options (like call provisions) from a bond's spread, providing a cleaner measure of pure credit risk."
+      },
+      {
+        q: "Which metric best measures a portfolio's risk-adjusted return?",
+        options: ["Total return", "Beta", "Sharpe ratio", "Alpha"],
+        correct: 2,
+        explanation: "The Sharpe ratio divides excess return (above the risk-free rate) by the portfolio's standard deviation. Higher is better — you're getting more return per unit of risk taken."
+      },
+      {
+        q: "A call option gives the buyer the right to:",
+        options: ["Sell the stock at the strike price", "Buy the stock at the strike price", "Receive dividends on the stock", "Short the stock at market price"],
+        correct: 1,
+        explanation: "A call option grants the right (not obligation) to buy shares at the strike price. If the stock rises above the strike, the call becomes profitable."
+      },
+      {
+        q: "The breakeven inflation rate is calculated as:",
+        options: ["CPI minus PPI", "Nominal Treasury yield minus TIPS yield", "Fed funds rate minus GDP growth", "Core PCE minus headline CPI"],
+        correct: 1,
+        explanation: "Breakeven inflation = nominal yield − TIPS yield. It represents the market's implied inflation expectation over that maturity — if inflation exceeds the breakeven, TIPS outperform."
+      },
+      {
+        q: "Investment grade bonds are rated:",
+        options: ["BB or below", "B or above", "BBB or above (S&P/Fitch) / Baa3 or above (Moody's)", "AA or above only"],
+        correct: 2,
+        explanation: "Investment grade (IG) starts at BBB-/Baa3. Below that is high yield (HY), also called 'junk.' The IG/HY divide matters because many institutional investors can only hold IG."
+      },
+      {
+        q: "What does duration risk mean for a bond portfolio?",
+        options: ["The risk the bond will mature too soon", "The risk that rising interest rates cause bond prices to fall", "Credit default risk", "Liquidity risk"],
+        correct: 1,
+        explanation: "Duration risk is interest rate risk. A high-duration portfolio loses significant value when rates rise. This is why long-duration bonds got crushed in 2022 when the Fed hiked aggressively."
+      }
+    ];
+
+    let current = 0;
+    let answers = new Array(10).fill(null);
+    let submitted = new Array(10).fill(false);
+
+    function renderQuestion() {
+      const q = questions[current];
+      const isSubmitted = submitted[current];
+      const selected = answers[current];
+
+      document.getElementById('quizProgressFill').style.width = ((current + 1) / 10 * 100) + '%';
+
+      let optionsHtml = q.options.map((opt, i) => {
+        let cls = 'quiz-option';
+        if (isSubmitted) {
+          if (i === q.correct) cls += ' correct';
+          else if (i === selected && i !== q.correct) cls += ' incorrect';
+        } else if (i === selected) {
+          cls += ' selected';
+        }
+        return `<div class="${cls}" onclick="selectOption(${i})" data-idx="${i}">
+          <span class="option-letter">${String.fromCharCode(65+i)}</span>
+          <span>${opt}</span>
+        </div>`;
+      }).join('');
+
+      let feedbackHtml = '';
+      if (isSubmitted) {
+        const correct = selected === q.correct;
+        feedbackHtml = `<div class="quiz-feedback" style="display:block;color:${correct ? 'var(--forest)' : '#c0392b'}">
+          ${correct ? '✓ Correct. ' : '✗ Incorrect. '}
+          <span style="color:var(--charcoal)">${q.explanation}</span>
+        </div>`;
+      }
+
+      const navHtml = `
+        <div class="quiz-nav">
+          ${!isSubmitted && selected !== null ? `<button class="quiz-submit" style="display:inline-block" onclick="submitAnswer()">Check Answer</button>` : ''}
+          ${isSubmitted && current < 9 ? `<button class="btn-next" onclick="nextQuestion()">Next Question &rarr;</button>` : ''}
+          ${isSubmitted && current === 9 ? `<button class="btn-next" onclick="showResults()">See Results &rarr;</button>` : ''}
+        </div>`;
+
+      document.getElementById('quizBody').innerHTML = `
+        <div class="quiz-q-num">Question ${current + 1} of 10</div>
+        <div class="quiz-question">${q.q}</div>
+        <div class="quiz-options">${optionsHtml}</div>
+        ${feedbackHtml}
+        ${navHtml}
+      `;
+    }
+
+    function selectOption(idx) {
+      if (submitted[current]) return;
+      answers[current] = idx;
+      renderQuestion();
+    }
+
+    function submitAnswer() {
+      if (answers[current] === null) return;
+      submitted[current] = true;
+      renderQuestion();
+    }
+
+    function nextQuestion() {
+      if (current < 9) {
+        current++;
+        renderQuestion();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('quizBody').style.display = 'none';
+      const result = document.getElementById('quizResult');
+      result.style.display = 'block';
+
+      let score = answers.reduce((acc, ans, i) => acc + (ans === questions[i].correct ? 1 : 0), 0);
+
+      document.getElementById('resultScore').textContent = score;
+
+      let msg = '';
+      let cta = document.getElementById('resultCTA');
+      if (score <= 4) {
+        msg = "Start from the beginning — foundational modules first. Fixed Income & Rates is a solid entry point.";
+        cta.textContent = 'Start with Fixed Income & Rates →';
+      } else if (score <= 7) {
+        msg = "Solid base. You've got the concepts — begin with Fixed Income or Macro to build structure.";
+        cta.textContent = 'Begin Fixed Income & Rates →';
+      } else {
+        msg = "Strong foundation. You already know the basics — jump straight to the Intermediate modules.";
+        cta.textContent = 'Explore Equity Valuation →';
+      }
+      document.getElementById('resultMessage').textContent = msg;
+
+      // Wrong answers breakdown
+      const wrong = [];
+      answers.forEach((ans, i) => {
+        const q = questions[i];
+        const html = `<div class="result-item ${ans === q.correct ? 'right' : 'wrong'}">
+          <div class="result-item-q">${ans === q.correct ? '✓' : '✗'} ${q.q}</div>
+          <div class="result-item-exp">${q.explanation}</div>
+        </div>`;
+        if (ans !== q.correct) wrong.push(html);
+      });
+
+      const bd = document.getElementById('resultBreakdown');
+      if (wrong.length > 0) {
+        bd.innerHTML = `<h3>Missed Questions</h3>${wrong.join('')}`;
+      } else {
+        bd.innerHTML = `<h3 style="color:var(--forest)">Perfect score. Impressive.</h3>`;
+      }
+
+      // Save to localStorage
+      try {
+        localStorage.setItem('edu_preassessment_score', score);
+        localStorage.setItem('edu_preassessment_date', new Date().toISOString());
+      } catch(e) {}
+    }
+
+    // Init quiz
+    renderQuestion();
+  </script>
+
+</body>
+</html>
