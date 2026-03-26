@@ -21,10 +21,10 @@
     .brief-header .masthead { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 0.5rem; }
     .brief-header .edition { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
     .brief-header .greeting { font-family: 'Lora', serif; font-style: italic; font-size: 1.1rem; color: var(--warm-gray); margin-top: 1.5rem; }
-    /* ── SCROLLING TICKER ── */
-    .ticker-wrap {
+    /* ── TICKER ROWS ── */
+    .ticker-row-1 {
       border-top: 1px solid var(--tan);
-      border-bottom: 1px solid var(--tan);
+      border-bottom: 1px solid rgba(212,201,184,0.4);
       background: var(--cream);
       overflow: hidden;
       position: relative;
@@ -36,7 +36,7 @@
       display: flex;
       align-items: center;
       white-space: nowrap;
-      animation: ticker-scroll 90s linear infinite;
+      animation: ticker-scroll 120s linear infinite;
       will-change: transform;
     }
     .ticker-track:hover { animation-play-state: paused; }
@@ -44,27 +44,48 @@
       0%   { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
+    /* Row 2: static macro bar */
+    .ticker-row-2 {
+      border-bottom: 1px solid var(--tan);
+      background: var(--warm-white);
+      height: 36px;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .ticker-row-2::-webkit-scrollbar { display: none; }
+    .ticker-row-2-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: nowrap;
+    }
+    /* shared item styles */
     .ticker-item {
       display: inline-flex;
       align-items: baseline;
       gap: 0.35rem;
-      padding: 0 1.5rem;
+      padding: 0 1.2rem;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.7rem;
       white-space: nowrap;
     }
+    .ticker-row-2 .ticker-item {
+      padding: 0 1rem;
+      border-right: 1px solid var(--tan);
+    }
+    .ticker-row-2 .ticker-item:last-child { border-right: none; }
     .ticker-item .t-sym {
       font-weight: 700;
       color: var(--soft-black);
       letter-spacing: 0.04em;
     }
-    .ticker-item .t-price {
-      color: var(--charcoal);
-    }
-    .ticker-item .t-chg {
-      font-size: 0.65rem;
-    }
-    .ticker-item .t-chg.up  { color: var(--market-green); }
+    .ticker-item .t-price { color: var(--charcoal); }
+    .ticker-item .t-chg { font-size: 0.65rem; }
+    .ticker-item .t-chg.up   { color: var(--market-green); }
     .ticker-item .t-chg.down { color: var(--market-red); }
     .ticker-divider {
       display: inline-flex;
@@ -91,6 +112,18 @@
       color: var(--warm-gray);
       padding-left: 2rem;
       letter-spacing: 0.08em;
+    }
+    .ticker-row-2-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--forest);
+      padding-right: 1rem;
+      border-right: 1px solid var(--tan);
+      margin-right: 0;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .brief-content { max-width: 1000px; margin: 0 auto; padding: 0 3rem; }
     .brief-section { padding: 2.5rem 0; border-bottom: 1px solid var(--tan); }
@@ -172,11 +205,16 @@
     <p class="greeting">Good morning, Zubin. The Middle East conflict that's been reshaping energy markets for nearly a month may be approaching a turning point — Trump floated a 15-point ceasefire plan with Iran overnight, oil dropped 4%, and futures are ripping higher. Meanwhile, OpenAI killed Sora and raised its war chest to $120 billion. It's shaping up to be a busy Wednesday.</p>
   </header>
 
-  <!-- SCROLLING TICKER -->
-  <div class="ticker-wrap" id="tickerWrap">
+  <!-- ROW 1: Portfolio scroll ticker -->
+  <div class="ticker-row-1" id="tickerWrap">
     <div class="ticker-track" id="tickerTrack">
       <span class="ticker-loading" id="tickerLoading">Loading market data&hellip;</span>
     </div>
+  </div>
+  <!-- ROW 2: Static macro bar -->
+  <div class="ticker-row-2" id="macroBar">
+    <span class="ticker-row-2-label">Markets</span>
+    <span class="ticker-loading" id="macroLoading" style="padding-left:1rem">&hellip;</span>
   </div>
 
   <script>
@@ -349,19 +387,11 @@
       </span>`;
     }
 
-    // ── BUILD ticker HTML ────────────────────────────────────────────────────
-    function buildTicker(quoteMap) {
+    // ── BUILD ROW 1: Portfolio scroll ticker ────────────────────────────────
+    function buildPortfolioTicker(quoteMap) {
       let html = '';
 
-      // SECTION 1 — Market Overview
-      html += `<span class="ticker-section-label">Markets</span>`;
-      for (const { sym, label } of OVERVIEW_SYMBOLS) {
-        html += makeItem(sym, label, quoteMap);
-      }
-
-      html += `<span class="ticker-divider">· · ·</span>`;
-
-      // SECTION 2 — Portfolio
+      // Portfolio positions
       html += `<span class="ticker-section-label">Portfolio</span>`;
       for (const sym of PORTFOLIO_SYMBOLS) {
         html += makeItem(sym, sym, quoteMap);
@@ -369,7 +399,7 @@
 
       html += `<span class="ticker-divider">· · ·</span>`;
 
-      // SECTION 3 — Big Movers (top 4 gainers + top 4 losers from portfolio)
+      // Big Movers
       const movers = PORTFOLIO_SYMBOLS
         .map(sym => ({ sym, chg: quoteMap[sym]?.change ?? null }))
         .filter(x => x.chg !== null)
@@ -378,15 +408,11 @@
       const gainers = movers.slice(0, 4);
       const losers  = movers.slice(-4).reverse();
 
-      html += `<span class="ticker-section-label">· Big Movers ·</span>`;
+      html += `<span class="ticker-section-label">Movers</span>`;
       html += `<span class="ticker-section-label" style="color:var(--market-green);margin-right:-0.5rem">▲</span>`;
-      for (const { sym } of gainers) {
-        html += makeItem(sym, sym, quoteMap);
-      }
+      for (const { sym } of gainers) html += makeItem(sym, sym, quoteMap);
       html += `<span class="ticker-section-label" style="color:var(--market-red);margin:0 0.25rem">▼</span>`;
-      for (const { sym } of losers) {
-        html += makeItem(sym, sym, quoteMap);
-      }
+      for (const { sym } of losers) html += makeItem(sym, sym, quoteMap);
 
       html += `<span class="ticker-divider">· · ·</span>`;
 
@@ -394,33 +420,45 @@
       return html + html;
     }
 
+    // ── BUILD ROW 2: Static macro bar ────────────────────────────────────────
+    function buildMacroBar(quoteMap) {
+      let html = '';
+      for (const { sym, label } of OVERVIEW_SYMBOLS) {
+        html += makeItem(sym, label, quoteMap);
+      }
+      return html;
+    }
+
     // ── INIT ─────────────────────────────────────────────────────────────────
     async function init() {
-      const track = document.getElementById('tickerTrack');
+      const track   = document.getElementById('tickerTrack');
       const loading = document.getElementById('tickerLoading');
+      const macroBar    = document.getElementById('macroBar');
+      const macroLoading = document.getElementById('macroLoading');
+
       try {
         const quoteMap = await fetchQuotes(ALL_SYMS);
-        const html = buildTicker(quoteMap);
-        track.innerHTML = html;
 
-        // Measure actual track width and set animation duration proportionally
-        // (so speed stays constant regardless of content length)
+        // Row 1 — portfolio scroll
+        const portfolioHtml = buildPortfolioTicker(quoteMap);
+        track.innerHTML = portfolioHtml;
         requestAnimationFrame(() => {
-          const fullWidth = track.scrollWidth / 2; // half because we doubled
+          const fullWidth = track.scrollWidth / 2;
           const pixelsPerSecond = 80;
           const dur = Math.round(fullWidth / pixelsPerSecond);
           track.style.animationDuration = dur + 's';
         });
 
+        // Row 2 — static macro bar
+        const macroHtml = buildMacroBar(quoteMap);
+        macroBar.innerHTML = `<span class="ticker-row-2-label">Markets</span><div class="ticker-row-2-inner">${macroHtml}</div>`;
+
         // Refresh every 60 seconds
         setTimeout(init, 60000);
       } catch (e) {
-        if (loading) {
-          loading.textContent = 'Market data unavailable';
-        } else {
-          track.innerHTML = '<span class="ticker-loading">Market data unavailable</span>';
-        }
-        // Retry in 30s
+        if (loading) loading.textContent = 'Market data unavailable';
+        else track.innerHTML = '<span class="ticker-loading">Market data unavailable</span>';
+        if (macroLoading) macroLoading.textContent = '';
         setTimeout(init, 30000);
       }
     }
