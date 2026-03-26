@@ -438,6 +438,7 @@
 
       try {
         const quoteMap = await fetchQuotes(ALL_SYMS);
+        console.log('[ticker] quoteMap keys:', Object.keys(quoteMap).length, Object.keys(quoteMap).slice(0,5));
 
         // Row 1 — portfolio scroll
         const portfolioHtml = buildPortfolioTicker(quoteMap);
