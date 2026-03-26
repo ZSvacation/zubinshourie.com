@@ -21,13 +21,77 @@
     .brief-header .masthead { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 0.5rem; }
     .brief-header .edition { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
     .brief-header .greeting { font-family: 'Lora', serif; font-style: italic; font-size: 1.1rem; color: var(--warm-gray); margin-top: 1.5rem; }
-    .ticker { max-width: 100%; padding: 1.25rem 3rem; display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--tan); flex-wrap: wrap; }
-    .ticker-item { display: flex; flex-direction: column; min-width: fit-content; }
-    .ticker-item .symbol { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; color: var(--charcoal); }
-    .ticker-item .price { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--charcoal); }
-    .ticker-item .change { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; }
-    .ticker-item .change.up { color: var(--market-green); }
-    .ticker-item .change.down { color: var(--market-red); }
+    /* ── SCROLLING TICKER ── */
+    .ticker-wrap {
+      border-top: 1px solid var(--tan);
+      border-bottom: 1px solid var(--tan);
+      background: var(--cream);
+      overflow: hidden;
+      position: relative;
+      height: 36px;
+      display: flex;
+      align-items: center;
+    }
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      animation: ticker-scroll 90s linear infinite;
+      will-change: transform;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.35rem;
+      padding: 0 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      white-space: nowrap;
+    }
+    .ticker-item .t-sym {
+      font-weight: 700;
+      color: var(--soft-black);
+      letter-spacing: 0.04em;
+    }
+    .ticker-item .t-price {
+      color: var(--charcoal);
+    }
+    .ticker-item .t-chg {
+      font-size: 0.65rem;
+    }
+    .ticker-item .t-chg.up  { color: var(--market-green); }
+    .ticker-item .t-chg.down { color: var(--market-red); }
+    .ticker-divider {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--sand);
+      letter-spacing: 0.12em;
+    }
+    .ticker-section-label {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--forest);
+    }
+    .ticker-loading {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--warm-gray);
+      padding-left: 2rem;
+      letter-spacing: 0.08em;
+    }
     .brief-content { max-width: 1000px; margin: 0 auto; padding: 0 3rem; }
     .brief-section { padding: 2.5rem 0; border-bottom: 1px solid var(--tan); }
     .brief-section:last-child { border-bottom: none; }
@@ -108,49 +172,172 @@
     <p class="greeting">Good morning, Zubin. The Middle East conflict that's been reshaping energy markets for nearly a month may be approaching a turning point — Trump floated a 15-point ceasefire plan with Iran overnight, oil dropped 4%, and futures are ripping higher. Meanwhile, OpenAI killed Sora and raised its war chest to $120 billion. It's shaping up to be a busy Wednesday.</p>
   </header>
 
-  <!-- TICKER -->
-  <div class="ticker">
-    <div class="ticker-item">
-      <span class="symbol">S&P 500</span>
-      <span class="price">6,556</span>
-      <span class="change down">&#9660; -0.37%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">Nasdaq</span>
-      <span class="price">21,762</span>
-      <span class="change down">&#9660; -0.84%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">WTI Oil</span>
-      <span class="price">$87.68</span>
-      <span class="change down">&#9660; -6.0%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">Bitcoin</span>
-      <span class="price">$71,533</span>
-      <span class="change up">&#9650; +0.5%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">Gold</span>
-      <span class="price">$4,470</span>
-      <span class="change down">&#9660; -0.40%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">2-YR</span>
-      <span class="price">4.01%</span>
-      <span class="change down">&#9660; -0.04pp</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">10-YR</span>
-      <span class="price">4.32%</span>
-      <span class="change down">&#9660; -0.07pp</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">2s/10s</span>
-      <span class="price">+31bp</span>
-      <span class="change up">steepening</span>
+  <!-- SCROLLING TICKER -->
+  <div class="ticker-wrap" id="tickerWrap">
+    <div class="ticker-track" id="tickerTrack">
+      <span class="ticker-loading" id="tickerLoading">Loading market data&hellip;</span>
     </div>
   </div>
+
+  <script>
+  (function() {
+    // ── CONFIG ──────────────────────────────────────────────────────────────
+    const OVERVIEW_SYMBOLS = [
+      { sym: 'SPY',  label: 'S&P 500' },
+      { sym: 'QQQ',  label: 'Nasdaq' },
+      { sym: '^VIX', label: 'VIX' },
+      { sym: 'BTC-USD', label: 'Bitcoin' },
+      { sym: 'GLD',  label: 'Gold' },
+      { sym: '^TNX', label: '10-YR' },
+    ];
+
+    const PORTFOLIO_SYMBOLS = [
+      'SPY','QQQ','SMH','GOOGL','AMZN','MSFT','UBER','GLD','SLV',
+      'BX','VXUS','COHR','SCHD','NLR','STX','META','AAPL','PLTR',
+      'CRWV','XLU','GFS','BABA','SOFI','APLD','ORCL','QCOM','UUUU','BLK'
+    ];
+
+    // All symbols to fetch (deduplicated)
+    const ALL_SYMS = [...new Set([
+      ...OVERVIEW_SYMBOLS.map(s => s.sym),
+      ...PORTFOLIO_SYMBOLS,
+    ])];
+
+    // ── FETCH via Yahoo Finance (cors proxy) ─────────────────────────────────
+    async function fetchQuotes(symbols) {
+      const joined = symbols.join(',');
+      // Use allorigins as a CORS proxy for Yahoo Finance v8 API
+      const url = `https://query1.finance.yahoo.com/v8/finance/spark?symbols=${encodeURIComponent(joined)}&range=1d&interval=1d`;
+      const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+
+      // Also fetch price + change via v7 quoteSummary endpoint via proxy
+      const quoteUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(joined)}&fields=regularMarketPrice,regularMarketChangePercent,regularMarketChange`;
+      const quoteProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(quoteUrl)}`;
+
+      const resp = await fetch(quoteProxy);
+      if (!resp.ok) throw new Error('fetch failed');
+      const data = await resp.json();
+      const results = data?.quoteResponse?.result || [];
+      const map = {};
+      for (const r of results) {
+        map[r.symbol] = {
+          price: r.regularMarketPrice,
+          change: r.regularMarketChangePercent,
+          changeDollar: r.regularMarketChange,
+        };
+      }
+      return map;
+    }
+
+    // ── FORMAT helpers ───────────────────────────────────────────────────────
+    function fmtPrice(sym, price) {
+      if (price === undefined || price === null) return '—';
+      if (sym === 'BTC-USD') return '$' + Math.round(price).toLocaleString();
+      if (sym === '^TNX') return price.toFixed(2) + '%';
+      if (sym === '^VIX') return price.toFixed(2);
+      if (price >= 1000) return price.toLocaleString(undefined, {maximumFractionDigits: 0});
+      if (price >= 100)  return price.toFixed(2);
+      return price.toFixed(2);
+    }
+
+    function fmtChg(chg) {
+      if (chg === undefined || chg === null) return { text: '—', cls: '' };
+      const sign = chg >= 0 ? '+' : '';
+      return {
+        text: (chg >= 0 ? '▲ ' : '▼ ') + sign + chg.toFixed(2) + '%',
+        cls: chg >= 0 ? 'up' : 'down',
+      };
+    }
+
+    function makeItem(sym, label, quoteMap) {
+      const q = quoteMap[sym] || {};
+      const { text, cls } = fmtChg(q.change);
+      return `<span class="ticker-item">
+        <span class="t-sym">${label || sym}</span>
+        <span class="t-price">${fmtPrice(sym, q.price)}</span>
+        <span class="t-chg ${cls}">${text}</span>
+      </span>`;
+    }
+
+    // ── BUILD ticker HTML ────────────────────────────────────────────────────
+    function buildTicker(quoteMap) {
+      let html = '';
+
+      // SECTION 1 — Market Overview
+      html += `<span class="ticker-section-label">Markets</span>`;
+      for (const { sym, label } of OVERVIEW_SYMBOLS) {
+        html += makeItem(sym, label, quoteMap);
+      }
+
+      html += `<span class="ticker-divider">· · ·</span>`;
+
+      // SECTION 2 — Portfolio
+      html += `<span class="ticker-section-label">Portfolio</span>`;
+      for (const sym of PORTFOLIO_SYMBOLS) {
+        html += makeItem(sym, sym, quoteMap);
+      }
+
+      html += `<span class="ticker-divider">· · ·</span>`;
+
+      // SECTION 3 — Big Movers (top 4 gainers + top 4 losers from portfolio)
+      const movers = PORTFOLIO_SYMBOLS
+        .map(sym => ({ sym, chg: quoteMap[sym]?.change ?? null }))
+        .filter(x => x.chg !== null)
+        .sort((a, b) => b.chg - a.chg);
+
+      const gainers = movers.slice(0, 4);
+      const losers  = movers.slice(-4).reverse();
+
+      html += `<span class="ticker-section-label">· Big Movers ·</span>`;
+      html += `<span class="ticker-section-label" style="color:var(--market-green);margin-right:-0.5rem">▲</span>`;
+      for (const { sym } of gainers) {
+        html += makeItem(sym, sym, quoteMap);
+      }
+      html += `<span class="ticker-section-label" style="color:var(--market-red);margin:0 0.25rem">▼</span>`;
+      for (const { sym } of losers) {
+        html += makeItem(sym, sym, quoteMap);
+      }
+
+      html += `<span class="ticker-divider">· · ·</span>`;
+
+      // Double for seamless loop
+      return html + html;
+    }
+
+    // ── INIT ─────────────────────────────────────────────────────────────────
+    async function init() {
+      const track = document.getElementById('tickerTrack');
+      const loading = document.getElementById('tickerLoading');
+      try {
+        const quoteMap = await fetchQuotes(ALL_SYMS);
+        const html = buildTicker(quoteMap);
+        track.innerHTML = html;
+
+        // Measure actual track width and set animation duration proportionally
+        // (so speed stays constant regardless of content length)
+        requestAnimationFrame(() => {
+          const fullWidth = track.scrollWidth / 2; // half because we doubled
+          const pixelsPerSecond = 80;
+          const dur = Math.round(fullWidth / pixelsPerSecond);
+          track.style.animationDuration = dur + 's';
+        });
+
+        // Refresh every 60 seconds
+        setTimeout(init, 60000);
+      } catch (e) {
+        if (loading) {
+          loading.textContent = 'Market data unavailable';
+        } else {
+          track.innerHTML = '<span class="ticker-loading">Market data unavailable</span>';
+        }
+        // Retry in 30s
+        setTimeout(init, 30000);
+      }
+    }
+
+    init();
+  })();
+  </script>
 
   <div class="brief-content">
 
