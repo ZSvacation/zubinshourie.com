@@ -203,37 +203,35 @@
       ...PORTFOLIO_SYMBOLS,
     ])];
 
-    // ── FETCH via Yahoo Finance (multiple CORS proxy fallbacks) ──────────────
-    async function tryFetch(url) {
-      const proxies = [
-        u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-        u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-        u => `https://cors-anywhere.herokuapp.com/${u}`,
-      ];
-      for (const makeProxy of proxies) {
-        try {
-          const resp = await fetch(makeProxy(url), { signal: AbortSignal.timeout(6000) });
-          if (resp.ok) {
-            const text = await resp.text();
-            return JSON.parse(text);
-          }
-        } catch(e) { /* try next */ }
-      }
-      throw new Error('all proxies failed');
+    // ── FETCH via Yahoo Finance v8 chart endpoint (no proxy needed) ──────────
+    // Yahoo's /v8/finance/chart endpoint works directly from browsers with no CORS issues
+    async function fetchSingleQuote(symbol) {
+      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=2d`;
+      try {
+        const resp = await fetch(url, {
+          signal: AbortSignal.timeout(8000),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!resp.ok) return null;
+        const data = await resp.json();
+        const meta = data?.chart?.result?.[0]?.meta;
+        if (!meta) return null;
+        const price = meta.regularMarketPrice;
+        const prev  = meta.chartPreviousClose || meta.previousClose;
+        const change = prev ? ((price - prev) / prev) * 100 : null;
+        return { price, change, prev };
+      } catch(e) { return null; }
     }
 
     async function fetchQuotes(symbols) {
-      const joined = symbols.join(',');
-      const quoteUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(joined)}&fields=regularMarketPrice,regularMarketChangePercent,regularMarketChange`;
-      const data = await tryFetch(quoteUrl);
-      const results = data?.quoteResponse?.result || [];
+      // Batch with small concurrency to avoid rate limits
       const map = {};
-      for (const r of results) {
-        map[r.symbol] = {
-          price: r.regularMarketPrice,
-          change: r.regularMarketChangePercent,
-          changeDollar: r.regularMarketChange,
-        };
+      const BATCH = 6;
+      for (let i = 0; i < symbols.length; i += BATCH) {
+        const batch = symbols.slice(i, i + BATCH);
+        const results = await Promise.all(batch.map(s => fetchSingleQuote(s)));
+        batch.forEach((sym, j) => { if (results[j]) map[sym] = results[j]; });
+        if (i + BATCH < symbols.length) await new Promise(r => setTimeout(r, 300));
       }
       return map;
     }
