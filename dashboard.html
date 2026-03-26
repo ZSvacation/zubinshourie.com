@@ -203,19 +203,31 @@
       ...PORTFOLIO_SYMBOLS,
     ])];
 
-    // ── FETCH via Finnhub ────────────────────────────────────────────────────
+    // ── FETCH ────────────────────────────────────────────────────────────────
     const FKEY = 'd72ccfhr01qqkte0eu00d72ccfhr01qqkte0eu0g';
 
-    // Finnhub symbol map — some overview symbols need translation
-    const SYM_MAP = {
-      '^VIX':   'VIX',
-      '^TNX':   null,       // Finnhub doesn't carry TNX — use hardcoded
-      'BTC-USD':'BINANCE:BTCUSDT',
-    };
+    // Symbols that need Yahoo (Finnhub free doesn't carry indices/Treasury)
+    const YAHOO_ONLY = new Set(['^VIX', '^TNX']);
+    const SYM_MAP = { 'BTC-USD': 'BINANCE:BTCUSDT' };
 
-    async function fetchSingleQuote(symbol) {
-      const fsym = SYM_MAP.hasOwnProperty(symbol) ? SYM_MAP[symbol] : symbol;
-      if (!fsym) return null; // skip unmapped
+    async function fetchYahoo(symbol) {
+      const encoded = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`);
+      const url = `https://api.allorigins.win/raw?url=${encoded}`;
+      try {
+        const resp = await fetch(url, { signal: AbortSignal.timeout(8000) });
+        if (!resp.ok) return null;
+        const d = await resp.json();
+        const meta = d?.chart?.result?.[0]?.meta;
+        if (!meta?.regularMarketPrice) return null;
+        const price = meta.regularMarketPrice;
+        const prev  = meta.chartPreviousClose || meta.previousClose;
+        const change = prev ? ((price - prev) / prev) * 100 : null;
+        return { price, change, prev };
+      } catch(e) { return null; }
+    }
+
+    async function fetchFinnhub(symbol) {
+      const fsym = SYM_MAP[symbol] || symbol;
       const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(fsym)}&token=${FKEY}`;
       try {
         const resp = await fetch(url, { signal: AbortSignal.timeout(8000) });
@@ -228,8 +240,9 @@
 
     async function fetchQuotes(symbols) {
       const map = {};
-      // Finnhub free = 60 calls/min — fetch all in parallel, they'll queue fine
-      const results = await Promise.all(symbols.map(s => fetchSingleQuote(s)));
+      const results = await Promise.all(symbols.map(s =>
+        YAHOO_ONLY.has(s) ? fetchYahoo(s) : fetchFinnhub(s)
+      ));
       symbols.forEach((sym, i) => { if (results[i]) map[sym] = results[i]; });
       return map;
     }
@@ -238,7 +251,7 @@
     function fmtPrice(sym, price) {
       if (price === undefined || price === null) return '—';
       if (sym === 'BTC-USD') return '$' + Math.round(price).toLocaleString();
-      if (sym === '^TNX')    return '—'; // not available via Finnhub free
+      if (sym === '^TNX')    return price.toFixed(2) + '%';
       if (sym === '^VIX')    return price.toFixed(2);
       if (price >= 10000) return '$' + price.toLocaleString(undefined, {maximumFractionDigits: 0});
       if (price >= 1000)  return price.toLocaleString(undefined, {maximumFractionDigits: 2});
