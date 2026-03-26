@@ -183,12 +183,14 @@
   (function() {
     // ── CONFIG ──────────────────────────────────────────────────────────────
     const OVERVIEW_SYMBOLS = [
-      { sym: 'SPY',  label: 'S&P 500' },
-      { sym: 'QQQ',  label: 'Nasdaq' },
-      { sym: '^VIX', label: 'VIX' },
-      { sym: 'BTC-USD', label: 'Bitcoin' },
-      { sym: 'GLD',  label: 'Gold' },
-      { sym: '^TNX', label: '10-YR' },
+      { sym: 'SPY',    label: 'S&P 500' },
+      { sym: 'QQQ',    label: 'Nasdaq' },
+      { sym: '^VIX',   label: 'VIX' },
+      { sym: 'BTC-USD',label: 'Bitcoin' },
+      { sym: 'GLD',    label: 'Gold' },
+      { sym: '^TNX',   label: '10-YR' },
+      { sym: '^TWO',   label: '2-YR' },
+      { sym: '^SPREAD',label: '2s10s' },
     ];
 
     const PORTFOLIO_SYMBOLS = [
@@ -206,8 +208,10 @@
     // ── FETCH ────────────────────────────────────────────────────────────────
     const FKEY = 'd72ccfhr01qqkte0eu00d72ccfhr01qqkte0eu0g';
 
-    // Symbols that need Yahoo (Finnhub free doesn't carry indices/Treasury)
-    const YAHOO_ONLY = new Set(['^VIX', '^TNX']);
+    // Symbols routed to Yahoo (VIX only — real-time index)
+    const YAHOO_ONLY = new Set(['^VIX']);
+    // Symbols fetched from FRED CSV (Treasury yields — most reliable source)
+    const FRED_MAP = { '^TNX': 'DGS10', '^TWO': 'DGS2' };
     const SYM_MAP = { 'BTC-USD': 'BINANCE:BTCUSDT' };
 
     async function fetchYahoo(symbol) {
@@ -226,6 +230,24 @@
       } catch(e) { return null; }
     }
 
+    async function fetchFred(fredId) {
+      const encoded = encodeURIComponent(`https://fred.stlouisfed.org/graph/fredgraph.csv?id=${fredId}`);
+      const url = `https://api.allorigins.win/raw?url=${encoded}`;
+      try {
+        const resp = await fetch(url, { signal: AbortSignal.timeout(10000) });
+        if (!resp.ok) return null;
+        const text = await resp.text();
+        // CSV: DATE,VALUE — grab last two rows for price + prev
+        const rows = text.trim().split('\n').slice(1).filter(r => !r.includes('.')==false || r.split(',')[1]!='.');
+        const valid = rows.filter(r => r.split(',')[1] !== '.');
+        if (valid.length < 1) return null;
+        const latest = parseFloat(valid[valid.length - 1].split(',')[1]);
+        const prev   = valid.length > 1 ? parseFloat(valid[valid.length - 2].split(',')[1]) : null;
+        const change = prev ? ((latest - prev) / prev) * 100 : null;
+        return { price: latest, change, prev };
+      } catch(e) { return null; }
+    }
+
     async function fetchFinnhub(symbol) {
       const fsym = SYM_MAP[symbol] || symbol;
       const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(fsym)}&token=${FKEY}`;
@@ -240,10 +262,25 @@
 
     async function fetchQuotes(symbols) {
       const map = {};
-      const results = await Promise.all(symbols.map(s =>
-        YAHOO_ONLY.has(s) ? fetchYahoo(s) : fetchFinnhub(s)
-      ));
-      symbols.forEach((sym, i) => { if (results[i]) map[sym] = results[i]; });
+      // Fetch all except the computed spread
+      const fetchable = symbols.filter(s => s !== '^SPREAD');
+      const results = await Promise.all(fetchable.map(s => {
+        if (YAHOO_ONLY.has(s))   return fetchYahoo(s);
+        if (FRED_MAP[s])         return fetchFred(FRED_MAP[s]);
+        return fetchFinnhub(s);
+      }));
+      fetchable.forEach((sym, i) => { if (results[i]) map[sym] = results[i]; });
+
+      // Compute 2s10s spread
+      const t10 = map['^TNX'];
+      const t2  = map['^TWO'];
+      if (t10 && t2) {
+        const spread = t10.price - t2.price;
+        const prevSpread = (t10.prev && t2.prev) ? t10.prev - t2.prev : null;
+        const change = prevSpread !== null ? spread - prevSpread : null;
+        map['^SPREAD'] = { price: spread, change, prev: prevSpread, isSpread: true };
+      }
+
       return map;
     }
 
@@ -251,12 +288,35 @@
     function fmtPrice(sym, price) {
       if (price === undefined || price === null) return '—';
       if (sym === 'BTC-USD') return '$' + Math.round(price).toLocaleString();
-      if (sym === '^TNX')    return price.toFixed(2) + '%';
-      if (sym === '^VIX')    return price.toFixed(2);
+      if (sym === '^TNX' || sym === '^TWO') return price.toFixed(2) + '%';
+      if (sym === '^SPREAD') {
+        const sign = price >= 0 ? '+' : '';
+        return sign + (price * 100).toFixed(0) + 'bps';
+      }
+      if (sym === '^VIX') return price.toFixed(2);
       if (price >= 10000) return '$' + price.toLocaleString(undefined, {maximumFractionDigits: 0});
       if (price >= 1000)  return price.toLocaleString(undefined, {maximumFractionDigits: 2});
       if (price >= 100)   return price.toFixed(2);
       return price.toFixed(2);
+    }
+
+    function fmtChange(sym, q) {
+      // For spread: show bps change, not % change
+      if (sym === '^SPREAD' && q.isSpread) {
+        if (q.change === null || q.change === undefined) return '';
+        const sign = q.change >= 0 ? '+' : '';
+        return `${sign}${(q.change * 100).toFixed(0)}bps`;
+      }
+      // For yields: show absolute bp change
+      if (sym === '^TNX' || sym === '^TWO') {
+        if (!q.prev || q.change === null) return '';
+        const bpChange = (q.price - q.prev) * 100;
+        const sign = bpChange >= 0 ? '+' : '';
+        return `${sign}${bpChange.toFixed(1)}bps`;
+      }
+      if (q.change === null || q.change === undefined) return '';
+      const sign = q.change >= 0 ? '+' : '';
+      return `${sign}${q.change.toFixed(2)}%`;
     }
 
     function fmtChg(chg) {
@@ -270,11 +330,22 @@
 
     function makeItem(sym, label, quoteMap) {
       const q = quoteMap[sym] || {};
-      const { text, cls } = fmtChg(q.change);
+      let changeText, cls;
+      // Yields and spread: use bps display
+      if (sym === '^TNX' || sym === '^TWO' || sym === '^SPREAD') {
+        const raw = fmtChange(sym, q);
+        changeText = raw || '—';
+        cls = (q.change !== null && q.change !== undefined)
+          ? (q.change >= 0 ? 'up' : 'down') : '';
+      } else {
+        const r = fmtChg(q.change);
+        changeText = r.text;
+        cls = r.cls;
+      }
       return `<span class="ticker-item">
         <span class="t-sym">${label || sym}</span>
         <span class="t-price">${fmtPrice(sym, q.price)}</span>
-        <span class="t-chg ${cls}">${text}</span>
+        <span class="t-chg ${cls}">${changeText}</span>
       </span>`;
     }
 
