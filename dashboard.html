@@ -31,7 +31,10 @@
       height: 36px;
       display: flex;
       align-items: center;
+      cursor: grab;
+      user-select: none;
     }
+    .ticker-row-1:active { cursor: grabbing; }
     .ticker-track {
       display: flex;
       align-items: center;
@@ -442,11 +445,107 @@
         // Row 1 — portfolio scroll
         const portfolioHtml = buildPortfolioTicker(quoteMap);
         track.innerHTML = portfolioHtml;
+
+        let animDur = 60;
         requestAnimationFrame(() => {
           const fullWidth = track.scrollWidth / 2;
           const pixelsPerSecond = 80;
-          const dur = Math.round(fullWidth / pixelsPerSecond);
-          track.style.animationDuration = dur + 's';
+          animDur = Math.round(fullWidth / pixelsPerSecond);
+          track.style.animationDuration = animDur + 's';
+        });
+
+        // ── Drag-to-scrub ────────────────────────────────────────────────────
+        const wrap = document.getElementById('tickerWrap');
+        let isDragging = false;
+        let dragStartX = 0;
+        let pausedAt = 0;   // 0–1 progress through the animation when paused
+
+        function getProgress() {
+          // Returns current CSS animation progress as a fraction 0–1
+          const computed = getComputedStyle(track);
+          const matrix = new DOMMatrix(computed.transform);
+          const tx = matrix.m41; // translateX in px
+          const halfWidth = track.scrollWidth / 2;
+          // tx is 0 → -halfWidth over the animation
+          return halfWidth > 0 ? Math.abs(tx) / halfWidth : 0;
+        }
+
+        function pauseAtCurrent() {
+          pausedAt = getProgress();
+          const tx = -(pausedAt * (track.scrollWidth / 2));
+          track.style.animationPlayState = 'paused';
+          // Freeze the exact frame via negative delay
+          track.style.animationDelay = `-${pausedAt * animDur}s`;
+          track.style.transform = `translateX(${tx}px)`;
+          track.style.animation = 'none';
+          track.style.transform = `translateX(${tx}px)`;
+        }
+
+        function resumeFromOffset(px) {
+          const halfWidth = track.scrollWidth / 2;
+          // Clamp to valid range (mod halfWidth for seamless wrap)
+          const clamped = ((px % halfWidth) + halfWidth) % halfWidth;
+          const delay = -(clamped / halfWidth) * animDur;
+          track.style.transform = '';
+          track.style.animation = '';
+          track.style.animationDuration = animDur + 's';
+          track.style.animationDelay = delay + 's';
+          track.style.animationPlayState = 'running';
+        }
+
+        let dragOffsetPx = 0; // px position when drag started
+
+        wrap.addEventListener('mousedown', e => {
+          isDragging = true;
+          dragStartX = e.clientX;
+          // Capture current tx offset
+          const computed = getComputedStyle(track);
+          const matrix = new DOMMatrix(computed.transform);
+          dragOffsetPx = matrix.m41;
+          pauseAtCurrent();
+          dragOffsetPx = parseFloat(track.style.transform.replace('translateX(','').replace('px)','')) || 0;
+          wrap.style.cursor = 'grabbing';
+          e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', e => {
+          if (!isDragging) return;
+          const dx = e.clientX - dragStartX;
+          const halfWidth = track.scrollWidth / 2;
+          let newX = dragOffsetPx + dx;
+          track.style.transform = `translateX(${newX}px)`;
+        });
+
+        window.addEventListener('mouseup', e => {
+          if (!isDragging) return;
+          isDragging = false;
+          wrap.style.cursor = '';
+          const dx = e.clientX - dragStartX;
+          const currentX = dragOffsetPx + dx;
+          resumeFromOffset(-currentX);
+        });
+
+        // Touch support
+        wrap.addEventListener('touchstart', e => {
+          isDragging = true;
+          dragStartX = e.touches[0].clientX;
+          const computed = getComputedStyle(track);
+          const matrix = new DOMMatrix(computed.transform);
+          pauseAtCurrent();
+          dragOffsetPx = parseFloat(track.style.transform.replace('translateX(','').replace('px)','')) || 0;
+        }, { passive: true });
+
+        wrap.addEventListener('touchmove', e => {
+          if (!isDragging) return;
+          const dx = e.touches[0].clientX - dragStartX;
+          track.style.transform = `translateX(${dragOffsetPx + dx}px)`;
+        }, { passive: true });
+
+        wrap.addEventListener('touchend', e => {
+          if (!isDragging) return;
+          isDragging = false;
+          const dx = (e.changedTouches[0].clientX - dragStartX);
+          resumeFromOffset(-(dragOffsetPx + dx));
         });
 
         // Row 2 — static macro bar
