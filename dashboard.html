@@ -251,9 +251,54 @@
 
     // Symbols routed to Yahoo (VIX only — real-time index)
     const YAHOO_ONLY = new Set(['^VIX']);
-    // Symbols fetched from FRED CSV (Treasury yields — most reliable source)
-    const FRED_MAP = { '^TNX': 'DGS10', '^TWO': 'DGS2' };
+    // Treasury yields fetched directly from US Treasury (open CORS, no proxy)
+    const TREASURY_SYMS = new Set(['^TNX', '^TWO']);
     const SYM_MAP = { 'BTC-USD': 'BINANCE:BTCUSDT' };
+
+    // Cache treasury data so we only fetch once per init cycle
+    let _treasuryCache = null;
+
+    async function fetchTreasuryYields() {
+      if (_treasuryCache) return _treasuryCache;
+      const now = new Date();
+      // Try current month, fall back to prior month if needed
+      for (let mOffset = 0; mOffset <= 1; mOffset++) {
+        const d = new Date(now.getFullYear(), now.getMonth() - mOffset, 1);
+        const ym = d.getFullYear().toString() + String(d.getMonth() + 1).padStart(2, '0');
+        const url = `https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=${ym}`;
+        try {
+          const resp = await fetch(url, { signal: AbortSignal.timeout(10000) });
+          if (!resp.ok) continue;
+          const text = await resp.text();
+          const parser = new DOMParser();
+          const xml = parser.parseFromString(text, 'application/xml');
+          const entries = xml.querySelectorAll('entry');
+          if (!entries.length) continue;
+
+          function getVal(entry, tag) {
+            const el = entry.querySelector(tag);
+            return el ? parseFloat(el.textContent) : null;
+          }
+
+          const rows = [];
+          entries.forEach(e => {
+            rows.push({ y2: getVal(e, 'BC_2YEAR'), y10: getVal(e, 'BC_10YEAR') });
+          });
+          const valid = rows.filter(r => r.y2 !== null && r.y10 !== null);
+          if (!valid.length) continue;
+
+          const latest = valid[valid.length - 1];
+          const prev   = valid.length > 1 ? valid[valid.length - 2] : null;
+
+          _treasuryCache = {
+            '^TNX': { price: latest.y10, prev: prev?.y10 ?? null, change: prev ? ((latest.y10 - prev.y10) / prev.y10) * 100 : null },
+            '^TWO': { price: latest.y2,  prev: prev?.y2  ?? null, change: prev ? ((latest.y2  - prev.y2)  / prev.y2)  * 100 : null },
+          };
+          return _treasuryCache;
+        } catch(e) { continue; }
+      }
+      return {};
+    }
 
     async function fetchYahoo(symbol) {
       const encoded = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`);
@@ -271,24 +316,6 @@
       } catch(e) { return null; }
     }
 
-    async function fetchFred(fredId) {
-      const encoded = encodeURIComponent(`https://fred.stlouisfed.org/graph/fredgraph.csv?id=${fredId}`);
-      const url = `https://api.allorigins.win/raw?url=${encoded}`;
-      try {
-        const resp = await fetch(url, { signal: AbortSignal.timeout(10000) });
-        if (!resp.ok) return null;
-        const text = await resp.text();
-        // CSV: DATE,VALUE — grab last two rows for price + prev
-        const rows = text.trim().split('\n').slice(1).filter(r => !r.includes('.')==false || r.split(',')[1]!='.');
-        const valid = rows.filter(r => r.split(',')[1] !== '.');
-        if (valid.length < 1) return null;
-        const latest = parseFloat(valid[valid.length - 1].split(',')[1]);
-        const prev   = valid.length > 1 ? parseFloat(valid[valid.length - 2].split(',')[1]) : null;
-        const change = prev ? ((latest - prev) / prev) * 100 : null;
-        return { price: latest, change, prev };
-      } catch(e) { return null; }
-    }
-
     async function fetchFinnhub(symbol) {
       const fsym = SYM_MAP[symbol] || symbol;
       const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(fsym)}&token=${FKEY}`;
@@ -302,12 +329,17 @@
     }
 
     async function fetchQuotes(symbols) {
+      _treasuryCache = null; // reset cache each cycle
       const map = {};
-      // Fetch all except the computed spread
+
+      // Pre-fetch treasury data once (shared between TNX + TWO)
+      const treasury = await fetchTreasuryYields();
+
+      // Fetch all except computed spread
       const fetchable = symbols.filter(s => s !== '^SPREAD');
       const results = await Promise.all(fetchable.map(s => {
-        if (YAHOO_ONLY.has(s))   return fetchYahoo(s);
-        if (FRED_MAP[s])         return fetchFred(FRED_MAP[s]);
+        if (TREASURY_SYMS.has(s)) return Promise.resolve(treasury[s] || null);
+        if (YAHOO_ONLY.has(s))    return fetchYahoo(s);
         return fetchFinnhub(s);
       }));
       fetchable.forEach((sym, i) => { if (results[i]) map[sym] = results[i]; });
