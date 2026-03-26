@@ -249,62 +249,19 @@
     // ── FETCH ────────────────────────────────────────────────────────────────
     const FKEY = 'd72ccfhr01qqkte0eu00d72ccfhr01qqkte0eu0g';
 
-    // Symbols routed to Yahoo (VIX only — real-time index)
+    // Symbols routed to Yahoo (VIX only — real-time)
     const YAHOO_ONLY = new Set(['^VIX']);
-    // Treasury yields fetched directly from US Treasury (open CORS, no proxy)
-    const TREASURY_SYMS = new Set(['^TNX', '^TWO']);
     const SYM_MAP = { 'BTC-USD': 'BINANCE:BTCUSDT' };
-
-    // Cache treasury data so we only fetch once per init cycle
-    let _treasuryCache = null;
-
-    async function fetchTreasuryYields() {
-      if (_treasuryCache) return _treasuryCache;
-      const now = new Date();
-      // Try current month, fall back to prior month if needed
-      for (let mOffset = 0; mOffset <= 1; mOffset++) {
-        const d = new Date(now.getFullYear(), now.getMonth() - mOffset, 1);
-        const ym = d.getFullYear().toString() + String(d.getMonth() + 1).padStart(2, '0');
-        const url = `https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=${ym}`;
-        try {
-          const resp = await fetch(url, { signal: AbortSignal.timeout(10000) });
-          if (!resp.ok) continue;
-          const text = await resp.text();
-          const parser = new DOMParser();
-          const xml = parser.parseFromString(text, 'application/xml');
-          const entries = xml.querySelectorAll('entry');
-          if (!entries.length) continue;
-
-          function getVal(entry, tag) {
-            const el = entry.querySelector(tag);
-            return el ? parseFloat(el.textContent) : null;
-          }
-
-          const rows = [];
-          entries.forEach(e => {
-            rows.push({ y2: getVal(e, 'BC_2YEAR'), y10: getVal(e, 'BC_10YEAR') });
-          });
-          const valid = rows.filter(r => r.y2 !== null && r.y10 !== null);
-          if (!valid.length) continue;
-
-          const latest = valid[valid.length - 1];
-          const prev   = valid.length > 1 ? valid[valid.length - 2] : null;
-
-          _treasuryCache = {
-            '^TNX': { price: latest.y10, prev: prev?.y10 ?? null, change: prev ? ((latest.y10 - prev.y10) / prev.y10) * 100 : null },
-            '^TWO': { price: latest.y2,  prev: prev?.y2  ?? null, change: prev ? ((latest.y2  - prev.y2)  / prev.y2)  * 100 : null },
-          };
-          return _treasuryCache;
-        } catch(e) { continue; }
-      }
-      return {};
-    }
+    // Yields fetched separately after main data loads (non-blocking)
+    const YIELD_SYMS = new Set(['^TNX', '^TWO', '^SPREAD']);
 
     async function fetchYahoo(symbol) {
-      const encoded = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`);
+      const ymap = { '^VIX': '%5EVIX' };
+      const ysym = ymap[symbol] || encodeURIComponent(symbol);
+      const encoded = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${ysym}?interval=1d&range=2d`);
       const url = `https://api.allorigins.win/raw?url=${encoded}`;
       try {
-        const resp = await fetch(url, { signal: AbortSignal.timeout(8000) });
+        const resp = await fetch(url, { signal: AbortSignal.timeout(6000) });
         if (!resp.ok) return null;
         const d = await resp.json();
         const meta = d?.chart?.result?.[0]?.meta;
@@ -328,40 +285,40 @@
       } catch(e) { return null; }
     }
 
+    // Fetch yields async after main data — updates ticker row 2 when ready
+    async function fetchYieldsAsync(map, onUpdate) {
+      try {
+        const now = new Date();
+        const ym = now.getFullYear().toString() + String(now.getMonth() + 1).padStart(2, '0');
+        const url = `https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=${ym}`;
+        const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
+        if (!resp.ok) return;
+        const text = await resp.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, 'application/xml');
+        const entries = [...xml.querySelectorAll('entry')];
+        if (!entries.length) return;
+        const getVal = (e, tag) => { const el = e.querySelector(tag); return el ? parseFloat(el.textContent) : null; };
+        const rows = entries.map(e => ({ y2: getVal(e,'BC_2YEAR'), y10: getVal(e,'BC_10YEAR') })).filter(r => r.y2 && r.y10);
+        if (!rows.length) return;
+        const lat = rows[rows.length-1], prev = rows.length > 1 ? rows[rows.length-2] : null;
+        map['^TNX'] = { price: lat.y10, prev: prev?.y10, change: prev ? ((lat.y10-prev.y10)/prev.y10)*100 : null };
+        map['^TWO'] = { price: lat.y2,  prev: prev?.y2,  change: prev ? ((lat.y2-prev.y2)/prev.y2)*100 : null };
+        const spread = lat.y10 - lat.y2;
+        const ps = prev ? prev.y10 - prev.y2 : null;
+        map['^SPREAD'] = { price: spread, change: ps !== null ? spread - ps : null, prev: ps, isSpread: true };
+        onUpdate(map);
+      } catch(e) { /* yields unavailable — silent */ }
+    }
+
     async function fetchQuotes(symbols) {
-      _treasuryCache = null; // reset cache each cycle
       const map = {};
-
-      // Fetch all in parallel — treasury fetch races alongside Finnhub, won't block it
-      const fetchable = symbols.filter(s => s !== '^SPREAD');
-
-      // Kick off treasury fetch early (non-blocking)
-      const treasuryPromise = fetchTreasuryYields().catch(() => ({}));
-
-      // Fetch everything else in parallel immediately
-      const nonTreasury = fetchable.filter(s => !TREASURY_SYMS.has(s));
-      const nonTreasuryResults = await Promise.all(nonTreasury.map(s => {
-        if (YAHOO_ONLY.has(s)) return fetchYahoo(s);
-        return fetchFinnhub(s);
-      }));
-      nonTreasury.forEach((sym, i) => { if (nonTreasuryResults[i]) map[sym] = nonTreasuryResults[i]; });
-
-      // Now collect treasury (may already be done, or gracefully null)
-      const treasury = await treasuryPromise;
-      for (const s of fetchable.filter(s => TREASURY_SYMS.has(s))) {
-        if (treasury[s]) map[s] = treasury[s];
-      }
-
-      // Compute 2s10s spread
-      const t10 = map['^TNX'];
-      const t2  = map['^TWO'];
-      if (t10 && t2) {
-        const spread = t10.price - t2.price;
-        const prevSpread = (t10.prev && t2.prev) ? t10.prev - t2.prev : null;
-        const change = prevSpread !== null ? spread - prevSpread : null;
-        map['^SPREAD'] = { price: spread, change, prev: prevSpread, isSpread: true };
-      }
-
+      // Only fetch non-yield symbols — yields come async after
+      const fetchable = symbols.filter(s => !YIELD_SYMS.has(s));
+      const results = await Promise.all(fetchable.map(s =>
+        YAHOO_ONLY.has(s) ? fetchYahoo(s) : fetchFinnhub(s)
+      ));
+      fetchable.forEach((sym, i) => { if (results[i]) map[sym] = results[i]; });
       return map;
     }
 
@@ -588,9 +545,15 @@
           resumeFromOffset(-(dragOffsetPx + dx));
         });
 
-        // Row 2 — static macro bar
+        // Row 2 — static macro bar (renders immediately without yields)
         const macroHtml = buildMacroBar(quoteMap);
         macroBar.innerHTML = `<span class="ticker-row-2-label">Markets</span><div class="ticker-row-2-inner">${macroHtml}</div>`;
+
+        // Fetch yields async — updates row 2 when ready, doesn't block anything
+        fetchYieldsAsync(quoteMap, updatedMap => {
+          const updatedMacro = buildMacroBar(updatedMap);
+          macroBar.innerHTML = `<span class="ticker-row-2-label">Markets</span><div class="ticker-row-2-inner">${updatedMacro}</div>`;
+        });
 
         // Refresh every 60 seconds
         setTimeout(init, 60000);
