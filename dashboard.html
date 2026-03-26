@@ -294,28 +294,15 @@
       } catch(e) { return null; }
     }
 
-    // Fetch yields async after main data — updates ticker row 2 when ready
+    // Fetch yields from local yields.json (updated nightly by Mac Mini cron)
     async function fetchYieldsAsync(map, onUpdate) {
       try {
-        const now = new Date();
-        const ym = now.getFullYear().toString() + String(now.getMonth() + 1).padStart(2, '0');
-        const url = `https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=${ym}`;
-        const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
+        const resp = await fetch(`yields.json?_=${Date.now()}`, { signal: AbortSignal.timeout(4000) });
         if (!resp.ok) return;
-        const text = await resp.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(text, 'application/xml');
-        const entries = [...xml.querySelectorAll('entry')];
-        if (!entries.length) return;
-        const getVal = (e, tag) => { const el = e.querySelector(tag); return el ? parseFloat(el.textContent) : null; };
-        const rows = entries.map(e => ({ y2: getVal(e,'BC_2YEAR'), y10: getVal(e,'BC_10YEAR') })).filter(r => r.y2 && r.y10);
-        if (!rows.length) return;
-        const lat = rows[rows.length-1], prev = rows.length > 1 ? rows[rows.length-2] : null;
-        map['^TNX'] = { price: lat.y10, prev: prev?.y10, change: prev ? ((lat.y10-prev.y10)/prev.y10)*100 : null };
-        map['^TWO'] = { price: lat.y2,  prev: prev?.y2,  change: prev ? ((lat.y2-prev.y2)/prev.y2)*100 : null };
-        const spread = lat.y10 - lat.y2;
-        const ps = prev ? prev.y10 - prev.y2 : null;
-        map['^SPREAD'] = { price: spread, change: ps !== null ? spread - ps : null, prev: ps, isSpread: true };
+        const d = await resp.json();
+        if (d.TNX)    map['^TNX']    = d.TNX;
+        if (d.TWO)    map['^TWO']    = d.TWO;
+        if (d.SPREAD) map['^SPREAD'] = d.SPREAD;
         onUpdate(map);
       } catch(e) { /* yields unavailable — silent */ }
     }
