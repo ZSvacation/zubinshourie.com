@@ -203,20 +203,29 @@
       ...PORTFOLIO_SYMBOLS,
     ])];
 
-    // ── FETCH via Yahoo Finance (cors proxy) ─────────────────────────────────
+    // ── FETCH via Yahoo Finance (multiple CORS proxy fallbacks) ──────────────
+    async function tryFetch(url) {
+      const proxies = [
+        u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+        u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+        u => `https://cors-anywhere.herokuapp.com/${u}`,
+      ];
+      for (const makeProxy of proxies) {
+        try {
+          const resp = await fetch(makeProxy(url), { signal: AbortSignal.timeout(6000) });
+          if (resp.ok) {
+            const text = await resp.text();
+            return JSON.parse(text);
+          }
+        } catch(e) { /* try next */ }
+      }
+      throw new Error('all proxies failed');
+    }
+
     async function fetchQuotes(symbols) {
       const joined = symbols.join(',');
-      // Use allorigins as a CORS proxy for Yahoo Finance v8 API
-      const url = `https://query1.finance.yahoo.com/v8/finance/spark?symbols=${encodeURIComponent(joined)}&range=1d&interval=1d`;
-      const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-
-      // Also fetch price + change via v7 quoteSummary endpoint via proxy
       const quoteUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(joined)}&fields=regularMarketPrice,regularMarketChangePercent,regularMarketChange`;
-      const quoteProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(quoteUrl)}`;
-
-      const resp = await fetch(quoteProxy);
-      if (!resp.ok) throw new Error('fetch failed');
-      const data = await resp.json();
+      const data = await tryFetch(quoteUrl);
       const results = data?.quoteResponse?.result || [];
       const map = {};
       for (const r of results) {
