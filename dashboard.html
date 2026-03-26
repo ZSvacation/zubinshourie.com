@@ -332,17 +332,25 @@
       _treasuryCache = null; // reset cache each cycle
       const map = {};
 
-      // Pre-fetch treasury data once (shared between TNX + TWO)
-      const treasury = await fetchTreasuryYields();
-
-      // Fetch all except computed spread
+      // Fetch all in parallel — treasury fetch races alongside Finnhub, won't block it
       const fetchable = symbols.filter(s => s !== '^SPREAD');
-      const results = await Promise.all(fetchable.map(s => {
-        if (TREASURY_SYMS.has(s)) return Promise.resolve(treasury[s] || null);
-        if (YAHOO_ONLY.has(s))    return fetchYahoo(s);
+
+      // Kick off treasury fetch early (non-blocking)
+      const treasuryPromise = fetchTreasuryYields().catch(() => ({}));
+
+      // Fetch everything else in parallel immediately
+      const nonTreasury = fetchable.filter(s => !TREASURY_SYMS.has(s));
+      const nonTreasuryResults = await Promise.all(nonTreasury.map(s => {
+        if (YAHOO_ONLY.has(s)) return fetchYahoo(s);
         return fetchFinnhub(s);
       }));
-      fetchable.forEach((sym, i) => { if (results[i]) map[sym] = results[i]; });
+      nonTreasury.forEach((sym, i) => { if (nonTreasuryResults[i]) map[sym] = nonTreasuryResults[i]; });
+
+      // Now collect treasury (may already be done, or gracefully null)
+      const treasury = await treasuryPromise;
+      for (const s of fetchable.filter(s => TREASURY_SYMS.has(s))) {
+        if (treasury[s]) map[s] = treasury[s];
+      }
 
       // Compute 2s10s spread
       const t10 = map['^TNX'];
