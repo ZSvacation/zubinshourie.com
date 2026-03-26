@@ -249,28 +249,37 @@
     // ── FETCH ────────────────────────────────────────────────────────────────
     const FKEY = 'd72ccfhr01qqkte0eu00d72ccfhr01qqkte0eu0g';
 
-    // Symbols routed to Yahoo (VIX only — real-time)
-    const YAHOO_ONLY = new Set(['^VIX']);
-    const SYM_MAP = { 'BTC-USD': 'BINANCE:BTCUSDT' };
+    // No Yahoo needed — everything goes through Finnhub
+    const YAHOO_ONLY = new Set(); // empty — Yahoo proxies too unreliable
+    const SYM_MAP = {
+      'BTC-USD': 'BINANCE:BTCUSDT',
+      '^VIX':    'VIXY',  // ProShares VIX ETF — tracks spot VIX
+    };
     // Yields fetched separately after main data loads (non-blocking)
     const YIELD_SYMS = new Set(['^TNX', '^TWO', '^SPREAD']);
 
     async function fetchYahoo(symbol) {
-      const ymap = { '^VIX': '%5EVIX' };
-      const ysym = ymap[symbol] || encodeURIComponent(symbol);
-      const encoded = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${ysym}?interval=1d&range=2d`);
-      const url = `https://api.allorigins.win/raw?url=${encoded}`;
-      try {
-        const resp = await fetch(url, { signal: AbortSignal.timeout(6000) });
-        if (!resp.ok) return null;
-        const d = await resp.json();
-        const meta = d?.chart?.result?.[0]?.meta;
-        if (!meta?.regularMarketPrice) return null;
-        const price = meta.regularMarketPrice;
-        const prev  = meta.chartPreviousClose || meta.previousClose;
-        const change = prev ? ((price - prev) / prev) * 100 : null;
-        return { price, change, prev };
-      } catch(e) { return null; }
+      // Try multiple proxies for Yahoo — allorigins is unreliable
+      const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=2d`;
+      const proxies = [
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`,
+        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(yahooUrl)}`,
+      ];
+      for (const url of proxies) {
+        try {
+          const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
+          if (!resp.ok) continue;
+          const text = await resp.text();
+          const d = JSON.parse(text);
+          const meta = d?.chart?.result?.[0]?.meta;
+          if (!meta?.regularMarketPrice) continue;
+          const price = meta.regularMarketPrice;
+          const prev  = meta.chartPreviousClose || meta.previousClose;
+          const change = prev ? ((price - prev) / prev) * 100 : null;
+          return { price, change, prev };
+        } catch(e) { continue; }
+      }
+      return null;
     }
 
     async function fetchFinnhub(symbol) {
@@ -331,7 +340,7 @@
         const sign = price >= 0 ? '+' : '';
         return sign + (price * 100).toFixed(0) + 'bps';
       }
-      if (sym === '^VIX') return price.toFixed(2);
+      if (sym === '^VIX') return price.toFixed(2); // VIXY price, not spot VIX level
       if (price >= 10000) return '$' + price.toLocaleString(undefined, {maximumFractionDigits: 0});
       if (price >= 1000)  return price.toLocaleString(undefined, {maximumFractionDigits: 2});
       if (price >= 100)   return price.toFixed(2);
