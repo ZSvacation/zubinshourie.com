@@ -203,36 +203,34 @@
       ...PORTFOLIO_SYMBOLS,
     ])];
 
-    // ── FETCH via Yahoo Finance v8 chart endpoint (no proxy needed) ──────────
-    // Yahoo's /v8/finance/chart endpoint works directly from browsers with no CORS issues
+    // ── FETCH via Finnhub ────────────────────────────────────────────────────
+    const FKEY = 'd72ccfhr01qqkte0eu00d72ccfhr01qqkte0eu0g';
+
+    // Finnhub symbol map — some overview symbols need translation
+    const SYM_MAP = {
+      '^VIX':   'VIX',
+      '^TNX':   null,       // Finnhub doesn't carry TNX — use hardcoded
+      'BTC-USD':'BINANCE:BTCUSDT',
+    };
+
     async function fetchSingleQuote(symbol) {
-      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=2d`;
+      const fsym = SYM_MAP.hasOwnProperty(symbol) ? SYM_MAP[symbol] : symbol;
+      if (!fsym) return null; // skip unmapped
+      const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(fsym)}&token=${FKEY}`;
       try {
-        const resp = await fetch(url, {
-          signal: AbortSignal.timeout(8000),
-          headers: { 'Accept': 'application/json' }
-        });
+        const resp = await fetch(url, { signal: AbortSignal.timeout(8000) });
         if (!resp.ok) return null;
-        const data = await resp.json();
-        const meta = data?.chart?.result?.[0]?.meta;
-        if (!meta) return null;
-        const price = meta.regularMarketPrice;
-        const prev  = meta.chartPreviousClose || meta.previousClose;
-        const change = prev ? ((price - prev) / prev) * 100 : null;
-        return { price, change, prev };
+        const d = await resp.json();
+        if (!d.c) return null;
+        return { price: d.c, change: d.dp, prev: d.pc };
       } catch(e) { return null; }
     }
 
     async function fetchQuotes(symbols) {
-      // Batch with small concurrency to avoid rate limits
       const map = {};
-      const BATCH = 6;
-      for (let i = 0; i < symbols.length; i += BATCH) {
-        const batch = symbols.slice(i, i + BATCH);
-        const results = await Promise.all(batch.map(s => fetchSingleQuote(s)));
-        batch.forEach((sym, j) => { if (results[j]) map[sym] = results[j]; });
-        if (i + BATCH < symbols.length) await new Promise(r => setTimeout(r, 300));
-      }
+      // Finnhub free = 60 calls/min — fetch all in parallel, they'll queue fine
+      const results = await Promise.all(symbols.map(s => fetchSingleQuote(s)));
+      symbols.forEach((sym, i) => { if (results[i]) map[sym] = results[i]; });
       return map;
     }
 
@@ -240,10 +238,11 @@
     function fmtPrice(sym, price) {
       if (price === undefined || price === null) return '—';
       if (sym === 'BTC-USD') return '$' + Math.round(price).toLocaleString();
-      if (sym === '^TNX') return price.toFixed(2) + '%';
-      if (sym === '^VIX') return price.toFixed(2);
-      if (price >= 1000) return price.toLocaleString(undefined, {maximumFractionDigits: 0});
-      if (price >= 100)  return price.toFixed(2);
+      if (sym === '^TNX')    return '—'; // not available via Finnhub free
+      if (sym === '^VIX')    return price.toFixed(2);
+      if (price >= 10000) return '$' + price.toLocaleString(undefined, {maximumFractionDigits: 0});
+      if (price >= 1000)  return price.toLocaleString(undefined, {maximumFractionDigits: 2});
+      if (price >= 100)   return price.toFixed(2);
       return price.toFixed(2);
     }
 
