@@ -21,17 +21,81 @@
     .brief-header .masthead { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 0.5rem; }
     .brief-header .edition { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
     .brief-header .greeting { font-family: 'Lora', serif; font-style: italic; font-size: 1.1rem; color: var(--warm-gray); margin-top: 1.5rem; }
-    .ticker-wrap { width: 100%; overflow: hidden; border-bottom: 1px solid var(--tan); padding: 1rem 0; background: var(--warm-white); }
-    .ticker-track { display: flex; gap: 3rem; width: max-content; animation: ticker-scroll 35s linear infinite; }
+    /* ── TICKER ROWS ── */
+    .ticker-row-1 {
+      border-top: 1px solid var(--tan);
+      border-bottom: 1px solid rgba(212,201,184,0.4);
+      background: var(--cream);
+      overflow: hidden;
+      position: relative;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      cursor: grab;
+      user-select: none;
+    }
+    .ticker-row-1:active { cursor: grabbing; }
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      animation: ticker-scroll 120s linear infinite;
+      will-change: transform;
+    }
     .ticker-track:hover { animation-play-state: paused; }
-    @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-    .ticker-item { display: flex; flex-direction: row; align-items: center; gap: 0.5rem; min-width: fit-content; padding: 0 1rem; border-right: 1px solid var(--tan); }
-    .ticker-item:last-child { border-right: none; }
-    .ticker-item .symbol { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; color: var(--charcoal); }
-    .ticker-item .price { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--charcoal); }
-    .ticker-item .change { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; }
-    .ticker-item .change.up { color: var(--market-green); }
-    .ticker-item .change.down { color: var(--market-red); }
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-row-2 {
+      border-bottom: 1px solid var(--tan);
+      background: var(--warm-white);
+      height: 36px;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .ticker-row-2::-webkit-scrollbar { display: none; }
+    .ticker-row-2-inner { display: flex; align-items: center; gap: 0; flex-wrap: nowrap; }
+    .ticker-item {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.35rem;
+      padding: 0 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      white-space: nowrap;
+    }
+    .ticker-row-2 .ticker-item { padding: 0 1rem; border-right: 1px solid var(--tan); }
+    .ticker-row-2 .ticker-item:last-child { border-right: none; }
+    .ticker-item .t-sym { font-weight: 700; color: var(--soft-black); letter-spacing: 0.04em; }
+    .ticker-item .t-price { color: var(--charcoal); }
+    .ticker-item .t-chg { font-size: 0.65rem; }
+    .ticker-item .t-chg.up   { color: var(--market-green); }
+    .ticker-item .t-chg.down { color: var(--market-red); }
+    .ticker-divider {
+      display: inline-flex; align-items: center; padding: 0 0.75rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+      color: var(--sand); letter-spacing: 0.12em;
+    }
+    .ticker-section-label {
+      display: inline-flex; align-items: center; padding: 0 0.75rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.55rem;
+      text-transform: uppercase; letter-spacing: 0.18em; color: var(--forest);
+    }
+    .ticker-loading {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--warm-gray); padding-left: 2rem; letter-spacing: 0.08em;
+    }
+    .ticker-row-2-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.55rem;
+      text-transform: uppercase; letter-spacing: 0.18em; color: var(--forest);
+      padding-right: 1rem; border-right: 1px solid var(--tan);
+      margin-right: 0; white-space: nowrap; flex-shrink: 0;
+    }
     .brief-content { max-width: 1000px; margin: 0 auto; padding: 0 3rem; }
     .brief-section { padding: 2.5rem 0; border-bottom: 1px solid var(--tan); }
     .brief-section:last-child { border-bottom: none; }
@@ -111,33 +175,185 @@
     <p class="greeting">Good morning, Zubin. Rough close Thursday — S&P down 1.7%, Nasdaq -2.4%, META and Micron leading the carnage. The culprit: Iran rejected the ceasefire framing, oil is back above $94 (WTI), and yields are climbing — 10Y at 4.47%, highest since July. PLTR pulled back but the Pentagon just made Maven a formal program of record. Markets are pricing in higher-for-longer as OECD lifts 2026 G20 inflation forecast to 4%. NBA delivered last night, and the weekend has things going for it.</p>
   </header>
 
-  <!-- TICKER -->
-  <div class="ticker-wrap">
-    <div class="ticker-track">
-      <!-- first set -->
-      <div class="ticker-item"><span class="symbol">S&P 500</span><span class="price">6,477</span><span class="change down">&#9660; -1.7%</span></div>
-      <div class="ticker-item"><span class="symbol">Nasdaq</span><span class="price">21,408</span><span class="change down">&#9660; -2.4%</span></div>
-      <div class="ticker-item"><span class="symbol">Dow</span><span class="price">45,960</span><span class="change down">&#9660; -1.0%</span></div>
-      <div class="ticker-item"><span class="symbol">Russell 2K</span><span class="price">2,493</span><span class="change down">&#9660; -1.7%</span></div>
-      <div class="ticker-item"><span class="symbol">BTC</span><span class="price">~$69,500</span><span class="change down">&#9660; risk-off</span></div>
-      <div class="ticker-item"><span class="symbol">Gold</span><span class="price">$4,411</span><span class="change down">&#9660; -0.73%</span></div>
-      <div class="ticker-item"><span class="symbol">WTI</span><span class="price">$94.43</span><span class="change up">&#9650;</span></div>
-      <div class="ticker-item"><span class="symbol">Brent</span><span class="price">$110.91</span><span class="change up">&#9650;</span></div>
-      <div class="ticker-item"><span class="symbol">2Y</span><span class="price">4.01%</span><span class="change up">&#9650;</span></div>
-      <div class="ticker-item"><span class="symbol">10Y</span><span class="price">4.47%</span><span class="change up">&#9650; +46bp</span></div>
-      <!-- duplicate for seamless loop -->
-      <div class="ticker-item"><span class="symbol">S&P 500</span><span class="price">6,477</span><span class="change down">&#9660; -1.7%</span></div>
-      <div class="ticker-item"><span class="symbol">Nasdaq</span><span class="price">21,408</span><span class="change down">&#9660; -2.4%</span></div>
-      <div class="ticker-item"><span class="symbol">Dow</span><span class="price">45,960</span><span class="change down">&#9660; -1.0%</span></div>
-      <div class="ticker-item"><span class="symbol">Russell 2K</span><span class="price">2,493</span><span class="change down">&#9660; -1.7%</span></div>
-      <div class="ticker-item"><span class="symbol">BTC</span><span class="price">~$69,500</span><span class="change down">&#9660; risk-off</span></div>
-      <div class="ticker-item"><span class="symbol">Gold</span><span class="price">$4,411</span><span class="change down">&#9660; -0.73%</span></div>
-      <div class="ticker-item"><span class="symbol">WTI</span><span class="price">$94.43</span><span class="change up">&#9650;</span></div>
-      <div class="ticker-item"><span class="symbol">Brent</span><span class="price">$110.91</span><span class="change up">&#9650;</span></div>
-      <div class="ticker-item"><span class="symbol">2Y</span><span class="price">4.01%</span><span class="change up">&#9650;</span></div>
-      <div class="ticker-item"><span class="symbol">10Y</span><span class="price">4.47%</span><span class="change up">&#9650; +46bp</span></div>
+  <!-- ROW 1: Portfolio scroll ticker -->
+  <div class="ticker-row-1" id="tickerWrap">
+    <div class="ticker-track" id="tickerTrack">
+      <span class="ticker-loading" id="tickerLoading">Loading market data&hellip;</span>
     </div>
   </div>
+  <!-- ROW 2: Static macro bar -->
+  <div class="ticker-row-2" id="macroBar">
+    <span class="ticker-row-2-label">Markets</span>
+    <span class="ticker-loading" id="macroLoading" style="padding-left:1rem">&hellip;</span>
+  </div>
+
+  <script>
+  (function() {
+    const OVERVIEW_SYMBOLS = [
+      { sym: 'SPY',     label: 'S&P 500' },
+      { sym: 'QQQ',     label: 'Nasdaq' },
+      { sym: '^VIX',    label: 'VIX' },
+      { sym: 'BTC-USD', label: 'Bitcoin' },
+      { sym: 'GLD',     label: 'Gold' },
+      { sym: '^TNX',    label: '10-YR' },
+      { sym: '^TWO',    label: '2-YR' },
+      { sym: '^SPREAD', label: '2s10s' },
+    ];
+    const PORTFOLIO_SYMBOLS = [
+      'SPY','QQQ','SMH','GOOGL','AMZN','MSFT','UBER','GLD',
+      'BX','VXUS','COHR','SCHD','NLR','STX','META','AAPL','PLTR',
+      'CRWV','XLU','GFS','BABA','SOFI','APLD','ORCL','QCOM','UUUU','BLK'
+    ];
+    const ALL_SYMS = [...new Set([...OVERVIEW_SYMBOLS.map(s => s.sym), ...PORTFOLIO_SYMBOLS])];
+    const FKEY = 'd72ccfhr01qqkte0eu00d72ccfhr01qqkte0eu0g';
+    const YAHOO_ONLY = new Set();
+    const SYM_MAP = { 'BTC-USD': 'BINANCE:BTCUSDT', '^VIX': 'VIXY' };
+    const YIELD_SYMS = new Set(['^TNX', '^TWO', '^SPREAD']);
+
+    async function fetchFinnhub(symbol) {
+      const fsym = SYM_MAP[symbol] || symbol;
+      const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(fsym)}&token=${FKEY}`;
+      try {
+        const resp = await fetch(url, { signal: AbortSignal.timeout(8000) });
+        if (!resp.ok) return null;
+        const d = await resp.json();
+        if (!d.c) return null;
+        return { price: d.c, change: d.dp, prev: d.pc };
+      } catch(e) { return null; }
+    }
+
+    async function fetchYieldsAsync(map, onUpdate) {
+      try {
+        const resp = await fetch(`yields.json?_=${Date.now()}`, { signal: AbortSignal.timeout(4000) });
+        if (!resp.ok) return;
+        const d = await resp.json();
+        if (d.TNX)    map['^TNX']    = d.TNX;
+        if (d.TWO)    map['^TWO']    = d.TWO;
+        if (d.SPREAD) map['^SPREAD'] = d.SPREAD;
+        onUpdate(map);
+      } catch(e) {}
+    }
+
+    async function fetchQuotes(symbols) {
+      const map = {};
+      const fetchable = symbols.filter(s => !YIELD_SYMS.has(s));
+      const results = await Promise.all(fetchable.map(s => fetchFinnhub(s)));
+      fetchable.forEach((sym, i) => { if (results[i]) map[sym] = results[i]; });
+      return map;
+    }
+
+    function fmtPrice(sym, price) {
+      if (price === undefined || price === null) return '—';
+      if (sym === 'BTC-USD') return '$' + Math.round(price).toLocaleString();
+      if (sym === '^TNX' || sym === '^TWO') return price.toFixed(2) + '%';
+      if (sym === '^SPREAD') { const s = price >= 0 ? '+' : ''; return s + (price * 100).toFixed(0) + 'bps'; }
+      if (sym === '^VIX') return price.toFixed(2);
+      if (price >= 10000) return '$' + price.toLocaleString(undefined, {maximumFractionDigits: 0});
+      if (price >= 1000)  return price.toLocaleString(undefined, {maximumFractionDigits: 2});
+      return price.toFixed(2);
+    }
+
+    function fmtChange(sym, q) {
+      if (sym === '^TNX' || sym === '^TWO') {
+        if (!q.prev || q.change === null) return '';
+        const bp = (q.price - q.prev) * 100;
+        return (bp >= 0 ? '+' : '') + bp.toFixed(1) + 'bps';
+      }
+      if (sym === '^SPREAD' && q.isSpread) {
+        if (q.change === null || q.change === undefined) return '';
+        return (q.change >= 0 ? '+' : '') + (q.change * 100).toFixed(0) + 'bps';
+      }
+      if (q.change === null || q.change === undefined) return '';
+      return (q.change >= 0 ? '+' : '') + q.change.toFixed(2) + '%';
+    }
+
+    function fmtChg(chg) {
+      if (chg === undefined || chg === null) return { text: '—', cls: '' };
+      return { text: (chg >= 0 ? '▲ +' : '▼ ') + chg.toFixed(2) + '%', cls: chg >= 0 ? 'up' : 'down' };
+    }
+
+    function makeItem(sym, label, quoteMap) {
+      const q = quoteMap[sym] || {};
+      let changeText, cls;
+      if (sym === '^TNX' || sym === '^TWO' || sym === '^SPREAD') {
+        changeText = fmtChange(sym, q) || '—';
+        cls = (q.change !== null && q.change !== undefined) ? (q.change >= 0 ? 'up' : 'down') : '';
+      } else {
+        const r = fmtChg(q.change);
+        changeText = r.text; cls = r.cls;
+      }
+      return `<span class="ticker-item"><span class="t-sym">${label || sym}</span><span class="t-price">${fmtPrice(sym, q.price)}</span><span class="t-chg ${cls}">${changeText}</span></span>`;
+    }
+
+    function buildPortfolioTicker(quoteMap) {
+      let html = `<span class="ticker-section-label">Portfolio</span>`;
+      for (const sym of PORTFOLIO_SYMBOLS) html += makeItem(sym, sym, quoteMap);
+      html += `<span class="ticker-divider">· · ·</span>`;
+      const movers = PORTFOLIO_SYMBOLS.map(sym => ({ sym, chg: quoteMap[sym]?.change ?? null })).filter(x => x.chg !== null).sort((a, b) => b.chg - a.chg);
+      html += `<span class="ticker-section-label">Movers</span><span class="ticker-section-label" style="color:var(--market-green);margin-right:-0.5rem">▲</span>`;
+      for (const { sym } of movers.slice(0, 4)) html += makeItem(sym, sym, quoteMap);
+      html += `<span class="ticker-section-label" style="color:var(--market-red);margin:0 0.25rem">▼</span>`;
+      for (const { sym } of movers.slice(-4).reverse()) html += makeItem(sym, sym, quoteMap);
+      html += `<span class="ticker-divider">· · ·</span>`;
+      return html + html;
+    }
+
+    function buildMacroBar(quoteMap) {
+      let html = '';
+      for (const { sym, label } of OVERVIEW_SYMBOLS) html += makeItem(sym, label, quoteMap);
+      return html;
+    }
+
+    async function init() {
+      const track = document.getElementById('tickerTrack');
+      const macroBar = document.getElementById('macroBar');
+      try {
+        const quoteMap = await fetchQuotes(ALL_SYMS);
+        track.innerHTML = buildPortfolioTicker(quoteMap);
+        let animDur = 120;
+        requestAnimationFrame(() => {
+          const fullWidth = track.scrollWidth / 2;
+          animDur = Math.round(fullWidth / 80);
+          track.style.animationDuration = animDur + 's';
+        });
+
+        const wrap = document.getElementById('tickerWrap');
+        let isDragging = false, dragStartX = 0, dragOffsetPx = 0;
+        function pauseAtCurrent() {
+          const matrix = new DOMMatrix(getComputedStyle(track).transform);
+          dragOffsetPx = matrix.m41;
+          track.style.animation = 'none';
+          track.style.transform = `translateX(${dragOffsetPx}px)`;
+        }
+        function resumeFromOffset(px) {
+          const halfWidth = track.scrollWidth / 2;
+          const clamped = ((px % halfWidth) + halfWidth) % halfWidth;
+          track.style.transform = '';
+          track.style.animation = '';
+          track.style.animationDuration = animDur + 's';
+          track.style.animationDelay = -(clamped / halfWidth) * animDur + 's';
+          track.style.animationPlayState = 'running';
+        }
+        wrap.addEventListener('mousedown', e => { isDragging = true; dragStartX = e.clientX; pauseAtCurrent(); wrap.style.cursor = 'grabbing'; e.preventDefault(); });
+        window.addEventListener('mousemove', e => { if (!isDragging) return; track.style.transform = `translateX(${dragOffsetPx + e.clientX - dragStartX}px)`; });
+        window.addEventListener('mouseup', e => { if (!isDragging) return; isDragging = false; wrap.style.cursor = ''; resumeFromOffset(-(dragOffsetPx + e.clientX - dragStartX)); });
+        wrap.addEventListener('touchstart', e => { isDragging = true; dragStartX = e.touches[0].clientX; pauseAtCurrent(); }, { passive: true });
+        wrap.addEventListener('touchmove', e => { if (!isDragging) return; track.style.transform = `translateX(${dragOffsetPx + e.touches[0].clientX - dragStartX}px)`; }, { passive: true });
+        wrap.addEventListener('touchend', e => { if (!isDragging) return; isDragging = false; resumeFromOffset(-(dragOffsetPx + e.changedTouches[0].clientX - dragStartX)); });
+
+        macroBar.innerHTML = `<span class="ticker-row-2-label">Markets</span><div class="ticker-row-2-inner">${buildMacroBar(quoteMap)}</div>`;
+        fetchYieldsAsync(quoteMap, updated => {
+          macroBar.innerHTML = `<span class="ticker-row-2-label">Markets</span><div class="ticker-row-2-inner">${buildMacroBar(updated)}</div>`;
+        });
+        setTimeout(init, 60000);
+      } catch(e) {
+        track.innerHTML = '<span class="ticker-loading">Market data unavailable</span>';
+        setTimeout(init, 30000);
+      }
+    }
+    init();
+  })();
+  </script>
 
   <div class="brief-content">
 
