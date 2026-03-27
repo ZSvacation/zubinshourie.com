@@ -21,10 +21,14 @@
     .brief-header .masthead { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 0.5rem; }
     .brief-header .edition { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
     .brief-header .greeting { font-family: 'Lora', serif; font-style: italic; font-size: 1.1rem; color: var(--warm-gray); margin-top: 1.5rem; }
-    .ticker { max-width: 100%; padding: 1.25rem 3rem; display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--tan); flex-wrap: wrap; }
-    .ticker-item { display: flex; flex-direction: column; min-width: fit-content; }
+    .ticker-wrap { width: 100%; overflow: hidden; border-bottom: 1px solid var(--tan); padding: 1rem 0; background: var(--warm-white); }
+    .ticker-track { display: flex; gap: 3rem; width: max-content; animation: ticker-scroll 35s linear infinite; }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .ticker-item { display: flex; flex-direction: row; align-items: center; gap: 0.5rem; min-width: fit-content; padding: 0 1rem; border-right: 1px solid var(--tan); }
+    .ticker-item:last-child { border-right: none; }
     .ticker-item .symbol { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; color: var(--charcoal); }
-    .ticker-item .price { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--charcoal); }
+    .ticker-item .price { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--charcoal); }
     .ticker-item .change { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; }
     .ticker-item .change.up { color: var(--market-green); }
     .ticker-item .change.down { color: var(--market-red); }
@@ -108,56 +112,30 @@
   </header>
 
   <!-- TICKER -->
-  <div class="ticker">
-    <div class="ticker-item">
-      <span class="symbol">S&P 500</span>
-      <span class="price">6,477</span>
-      <span class="change down">&#9660; -1.7%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">Nasdaq</span>
-      <span class="price">21,408</span>
-      <span class="change down">&#9660; -2.4%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">Dow</span>
-      <span class="price">45,960</span>
-      <span class="change down">&#9660; -1.0%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">Russell 2K</span>
-      <span class="price">2,493</span>
-      <span class="change down">&#9660; -1.7%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">Bitcoin</span>
-      <span class="price">~$69,500</span>
-      <span class="change down">&#9660; risk-off</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">Gold</span>
-      <span class="price">$4,411</span>
-      <span class="change down">&#9660; -0.73%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">WTI</span>
-      <span class="price">$94.43</span>
-      <span class="change up">&#9650; elevated</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">Brent</span>
-      <span class="price">$110.91</span>
-      <span class="change up">&#9650; elevated</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">2Y</span>
-      <span class="price">4.01%</span>
-      <span class="change up">&#9650;</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">10Y</span>
-      <span class="price">4.47%</span>
-      <span class="change up">&#9650; +46bp spread</span>
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <!-- first set -->
+      <div class="ticker-item"><span class="symbol">S&P 500</span><span class="price">6,477</span><span class="change down">&#9660; -1.7%</span></div>
+      <div class="ticker-item"><span class="symbol">Nasdaq</span><span class="price">21,408</span><span class="change down">&#9660; -2.4%</span></div>
+      <div class="ticker-item"><span class="symbol">Dow</span><span class="price">45,960</span><span class="change down">&#9660; -1.0%</span></div>
+      <div class="ticker-item"><span class="symbol">Russell 2K</span><span class="price">2,493</span><span class="change down">&#9660; -1.7%</span></div>
+      <div class="ticker-item"><span class="symbol">BTC</span><span class="price">~$69,500</span><span class="change down">&#9660; risk-off</span></div>
+      <div class="ticker-item"><span class="symbol">Gold</span><span class="price">$4,411</span><span class="change down">&#9660; -0.73%</span></div>
+      <div class="ticker-item"><span class="symbol">WTI</span><span class="price">$94.43</span><span class="change up">&#9650;</span></div>
+      <div class="ticker-item"><span class="symbol">Brent</span><span class="price">$110.91</span><span class="change up">&#9650;</span></div>
+      <div class="ticker-item"><span class="symbol">2Y</span><span class="price">4.01%</span><span class="change up">&#9650;</span></div>
+      <div class="ticker-item"><span class="symbol">10Y</span><span class="price">4.47%</span><span class="change up">&#9650; +46bp</span></div>
+      <!-- duplicate for seamless loop -->
+      <div class="ticker-item"><span class="symbol">S&P 500</span><span class="price">6,477</span><span class="change down">&#9660; -1.7%</span></div>
+      <div class="ticker-item"><span class="symbol">Nasdaq</span><span class="price">21,408</span><span class="change down">&#9660; -2.4%</span></div>
+      <div class="ticker-item"><span class="symbol">Dow</span><span class="price">45,960</span><span class="change down">&#9660; -1.0%</span></div>
+      <div class="ticker-item"><span class="symbol">Russell 2K</span><span class="price">2,493</span><span class="change down">&#9660; -1.7%</span></div>
+      <div class="ticker-item"><span class="symbol">BTC</span><span class="price">~$69,500</span><span class="change down">&#9660; risk-off</span></div>
+      <div class="ticker-item"><span class="symbol">Gold</span><span class="price">$4,411</span><span class="change down">&#9660; -0.73%</span></div>
+      <div class="ticker-item"><span class="symbol">WTI</span><span class="price">$94.43</span><span class="change up">&#9650;</span></div>
+      <div class="ticker-item"><span class="symbol">Brent</span><span class="price">$110.91</span><span class="change up">&#9650;</span></div>
+      <div class="ticker-item"><span class="symbol">2Y</span><span class="price">4.01%</span><span class="change up">&#9650;</span></div>
+      <div class="ticker-item"><span class="symbol">10Y</span><span class="price">4.47%</span><span class="change up">&#9650; +46bp</span></div>
     </div>
   </div>
 
