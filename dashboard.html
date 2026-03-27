@@ -53,13 +53,11 @@
       height: 36px;
       display: flex;
       align-items: center;
-      padding: 0 1rem;
-      gap: 0;
-      overflow-x: auto;
-      scrollbar-width: none;
+      padding: 0 2rem;
+      width: 100%;
+      box-sizing: border-box;
     }
-    .ticker-row-2::-webkit-scrollbar { display: none; }
-    .ticker-row-2-inner { display: flex; align-items: center; gap: 0; flex-wrap: nowrap; }
+    .ticker-row-2-inner { display: flex; align-items: center; justify-content: space-between; flex: 1; }
     .ticker-item {
       display: inline-flex;
       align-items: baseline;
@@ -69,8 +67,7 @@
       font-size: 0.7rem;
       white-space: nowrap;
     }
-    .ticker-row-2 .ticker-item { padding: 0 1rem; border-right: 1px solid var(--tan); }
-    .ticker-row-2 .ticker-item:last-child { border-right: none; }
+    .ticker-row-2 .ticker-item { padding: 0; border-right: none; }
     .ticker-item .t-sym { font-weight: 700; color: var(--soft-black); letter-spacing: 0.04em; }
     .ticker-item .t-price { color: var(--charcoal); }
     .ticker-item .t-chg { font-size: 0.65rem; }
@@ -90,12 +87,7 @@
       font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
       color: var(--warm-gray); padding-left: 2rem; letter-spacing: 0.08em;
     }
-    .ticker-row-2-label {
-      font-family: 'JetBrains Mono', monospace; font-size: 0.55rem;
-      text-transform: uppercase; letter-spacing: 0.18em; color: var(--forest);
-      padding-right: 1rem; border-right: 1px solid var(--tan);
-      margin-right: 0; white-space: nowrap; flex-shrink: 0;
-    }
+    .ticker-row-2-label { display: none; }
     .brief-content { max-width: 1000px; margin: 0 auto; padding: 0 3rem; }
     .brief-section { padding: 2.5rem 0; border-bottom: 1px solid var(--tan); }
     .brief-section:last-child { border-bottom: none; }
