@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Daily Brief &mdash; Friday, March 27, 2026</title>
+  <title>The Daily Brief &mdash; Saturday, March 28, 2026</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
     :root {
@@ -21,73 +21,13 @@
     .brief-header .masthead { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 0.5rem; }
     .brief-header .edition { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
     .brief-header .greeting { font-family: 'Lora', serif; font-style: italic; font-size: 1.1rem; color: var(--warm-gray); margin-top: 1.5rem; }
-    /* ── TICKER ROWS ── */
-    .ticker-row-1 {
-      border-top: 1px solid var(--tan);
-      border-bottom: 1px solid rgba(212,201,184,0.4);
-      background: var(--cream);
-      overflow: hidden;
-      position: relative;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      cursor: grab;
-      user-select: none;
-    }
-    .ticker-row-1:active { cursor: grabbing; }
-    .ticker-track {
-      display: flex;
-      align-items: center;
-      white-space: nowrap;
-      animation: ticker-scroll 120s linear infinite;
-      will-change: transform;
-    }
-    .ticker-track:hover { animation-play-state: paused; }
-    @keyframes ticker-scroll {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .ticker-row-2 {
-      border-bottom: 1px solid var(--tan);
-      background: var(--warm-white);
-      height: 36px;
-      display: flex;
-      align-items: center;
-      padding: 0 2rem;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .ticker-row-2-inner { display: flex; align-items: center; justify-content: space-between; flex: 1; }
-    .ticker-item {
-      display: inline-flex;
-      align-items: baseline;
-      gap: 0.35rem;
-      padding: 0 1.2rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      white-space: nowrap;
-    }
-    .ticker-row-2 .ticker-item { padding: 0; border-right: none; }
-    .ticker-item .t-sym { font-weight: 700; color: var(--soft-black); letter-spacing: 0.04em; }
-    .ticker-item .t-price { color: var(--charcoal); }
-    .ticker-item .t-chg { font-size: 0.65rem; }
-    .ticker-item .t-chg.up   { color: var(--market-green); }
-    .ticker-item .t-chg.down { color: var(--market-red); }
-    .ticker-divider {
-      display: inline-flex; align-items: center; padding: 0 0.75rem;
-      font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
-      color: var(--sand); letter-spacing: 0.12em;
-    }
-    .ticker-section-label {
-      display: inline-flex; align-items: center; padding: 0 0.75rem;
-      font-family: 'JetBrains Mono', monospace; font-size: 0.55rem;
-      text-transform: uppercase; letter-spacing: 0.18em; color: var(--forest);
-    }
-    .ticker-loading {
-      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
-      color: var(--warm-gray); padding-left: 2rem; letter-spacing: 0.08em;
-    }
-    .ticker-row-2-label { display: none; }
+    .ticker { max-width: 100%; padding: 1.25rem 3rem; display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--tan); flex-wrap: wrap; }
+    .ticker-item { display: flex; flex-direction: column; min-width: fit-content; }
+    .ticker-item .symbol { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; color: var(--charcoal); }
+    .ticker-item .price { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--charcoal); }
+    .ticker-item .change { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; }
+    .ticker-item .change.up { color: var(--market-green); }
+    .ticker-item .change.down { color: var(--market-red); }
     .brief-content { max-width: 1000px; margin: 0 auto; padding: 0 3rem; }
     .brief-section { padding: 2.5rem 0; border-bottom: 1px solid var(--tan); }
     .brief-section:last-child { border-bottom: none; }
@@ -159,193 +99,47 @@
 <body>
   <div class="dash-nav">
     <a href="index.html" class="back">&larr; Back to site</a>
-    <span class="date">Friday, March 27, 2026</span>
+    <span class="date">Saturday, March 28, 2026</span>
   </div>
   <header class="brief-header">
     <div class="masthead">The Daily Brief</div>
-    <div class="edition">Morning Edition &middot; Friday, March 27, 2026</div>
-    <p class="greeting">Good morning, Zubin. Trump extended the Iran strike deadline 10 more days to April 6 — a US 15-point peace proposal is now on Tehran's table. Markets aren't buying the relief: S&amp;P down ~0.8% today, Nasdaq officially in correction (&#8209;10% from its October peak). Bitcoin at $66,587. Gold at $4,433, holding. G7 convenes in France today with Rubio working allies. Last night: Hornets stunned New York, Magic ended their skid. This week's streaming: For All Mankind S5 and House of David S2 both drop today.</p>
+    <div class="edition">Morning Edition &middot; Saturday, March 28, 2026</div>
+    <p class="greeting">Good morning, Zubin. The Strait of Hormuz has been closed for four weeks now, and the market is finally pricing in the full weight of it — the S&P posted its fifth straight weekly loss, the longest streak in nearly four years, while Brent crude flirted with $110. Today brings February PCE data, which could either give the Fed cover to hold or add fuel to an already burning inflation narrative.</p>
   </header>
 
-  <!-- ROW 1: Static macro bar -->
-  <div class="ticker-row-2" id="macroBar">
-    <span class="ticker-row-2-label">Markets</span>
-    <span class="ticker-loading" id="macroLoading" style="padding-left:1rem">&hellip;</span>
-  </div>
-  <!-- ROW 2: Portfolio scroll ticker -->
-  <div class="ticker-row-1" id="tickerWrap">
-    <div class="ticker-track" id="tickerTrack">
-      <span class="ticker-loading" id="tickerLoading">Loading positions&hellip;</span>
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-item">
+      <span class="symbol">S&P 500</span>
+      <span class="price">634.09</span>
+      <span class="change down">&#9660; -2.12%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">Nasdaq</span>
+      <span class="price">562.58</span>
+      <span class="change down">&#9660; -2.30%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">VIX</span>
+      <span class="price">31.05</span>
+      <span class="change up">&#9650; +13.32%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">Bitcoin</span>
+      <span class="price">$66,266</span>
+      <span class="change down">&#9660; -0.13%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">Gold</span>
+      <span class="price">$4,492</span>
+      <span class="change up">&#9650; +1.35%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">10-YR</span>
+      <span class="price">4.44%</span>
+      <span class="change up">&#9650; +0.54%</span>
     </div>
   </div>
-
-  <script>
-  (function() {
-    const OVERVIEW_SYMBOLS = [
-      { sym: 'SPY',     label: 'S&P 500' },
-      { sym: 'QQQ',     label: 'Nasdaq' },
-      { sym: '^VIX',    label: 'VIX' },
-      { sym: 'BTC-USD', label: 'Bitcoin' },
-      { sym: 'GLD',     label: 'Gold' },
-      { sym: '^TNX',    label: '10-YR' },
-      { sym: '^TWO',    label: '2-YR' },
-      { sym: '^SPREAD', label: '2s10s' },
-    ];
-    const PORTFOLIO_SYMBOLS = [
-      'SPY','QQQ','SMH','GOOGL','AMZN','MSFT','UBER','GLD',
-      'BX','VXUS','COHR','SCHD','NLR','STX','META','AAPL','PLTR',
-      'CRWV','XLU','GFS','BABA','SOFI','APLD','ORCL','QCOM','UUUU','BLK'
-    ];
-    const ALL_SYMS = [...new Set([...OVERVIEW_SYMBOLS.map(s => s.sym), ...PORTFOLIO_SYMBOLS])];
-    const FKEY = 'd72ccfhr01qqkte0eu00d72ccfhr01qqkte0eu0g';
-    const YAHOO_ONLY = new Set();
-    const SYM_MAP = { 'BTC-USD': 'BINANCE:BTCUSDT', '^VIX': 'VIXY' };
-    const YIELD_SYMS = new Set(['^TNX', '^TWO', '^SPREAD']);
-
-    async function fetchFinnhub(symbol) {
-      const fsym = SYM_MAP[symbol] || symbol;
-      const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(fsym)}&token=${FKEY}`;
-      try {
-        const resp = await fetch(url, { signal: AbortSignal.timeout(8000) });
-        if (!resp.ok) return null;
-        const d = await resp.json();
-        if (!d.c) return null;
-        return { price: d.c, change: d.dp, prev: d.pc };
-      } catch(e) { return null; }
-    }
-
-    async function fetchYieldsAsync(map, onUpdate) {
-      try {
-        const resp = await fetch(`yields.json?_=${Date.now()}`, { signal: AbortSignal.timeout(4000) });
-        if (!resp.ok) return;
-        const d = await resp.json();
-        if (d.TNX)    map['^TNX']    = d.TNX;
-        if (d.TWO)    map['^TWO']    = d.TWO;
-        if (d.SPREAD) map['^SPREAD'] = d.SPREAD;
-        onUpdate(map);
-      } catch(e) {}
-    }
-
-    async function fetchQuotes(symbols) {
-      const map = {};
-      const fetchable = symbols.filter(s => !YIELD_SYMS.has(s));
-      const results = await Promise.all(fetchable.map(s => fetchFinnhub(s)));
-      fetchable.forEach((sym, i) => { if (results[i]) map[sym] = results[i]; });
-      return map;
-    }
-
-    function fmtPrice(sym, price) {
-      if (price === undefined || price === null) return '—';
-      if (sym === 'BTC-USD') return '$' + Math.round(price).toLocaleString();
-      if (sym === '^TNX' || sym === '^TWO') return price.toFixed(2) + '%';
-      if (sym === '^SPREAD') { const s = price >= 0 ? '+' : ''; return s + (price * 100).toFixed(0) + 'bps'; }
-      if (sym === '^VIX') return price.toFixed(2);
-      if (price >= 10000) return '$' + price.toLocaleString(undefined, {maximumFractionDigits: 0});
-      if (price >= 1000)  return price.toLocaleString(undefined, {maximumFractionDigits: 2});
-      return price.toFixed(2);
-    }
-
-    function fmtChange(sym, q) {
-      if (sym === '^TNX' || sym === '^TWO') {
-        if (!q.prev || q.change === null) return '';
-        const bp = (q.price - q.prev) * 100;
-        return (bp >= 0 ? '+' : '') + bp.toFixed(1) + 'bps';
-      }
-      if (sym === '^SPREAD' && q.isSpread) {
-        if (q.change === null || q.change === undefined) return '';
-        return (q.change >= 0 ? '+' : '') + (q.change * 100).toFixed(0) + 'bps';
-      }
-      if (q.change === null || q.change === undefined) return '';
-      return (q.change >= 0 ? '+' : '') + q.change.toFixed(2) + '%';
-    }
-
-    function fmtChg(chg) {
-      if (chg === undefined || chg === null) return { text: '—', cls: '' };
-      return { text: (chg >= 0 ? '▲ +' : '▼ ') + chg.toFixed(2) + '%', cls: chg >= 0 ? 'up' : 'down' };
-    }
-
-    function makeItem(sym, label, quoteMap) {
-      const q = quoteMap[sym] || {};
-      let changeText, cls;
-      if (sym === '^TNX' || sym === '^TWO' || sym === '^SPREAD') {
-        changeText = fmtChange(sym, q) || '—';
-        cls = (q.change !== null && q.change !== undefined) ? (q.change >= 0 ? 'up' : 'down') : '';
-      } else {
-        const r = fmtChg(q.change);
-        changeText = r.text; cls = r.cls;
-      }
-      return `<span class="ticker-item"><span class="t-sym">${label || sym}</span><span class="t-price">${fmtPrice(sym, q.price)}</span><span class="t-chg ${cls}">${changeText}</span></span>`;
-    }
-
-    function buildPortfolioTicker(quoteMap) {
-      let html = `<span class="ticker-section-label">Portfolio</span>`;
-      for (const sym of PORTFOLIO_SYMBOLS) html += makeItem(sym, sym, quoteMap);
-      html += `<span class="ticker-divider">· · ·</span>`;
-      const movers = PORTFOLIO_SYMBOLS.map(sym => ({ sym, chg: quoteMap[sym]?.change ?? null })).filter(x => x.chg !== null).sort((a, b) => b.chg - a.chg);
-      html += `<span class="ticker-section-label">Movers</span><span class="ticker-section-label" style="color:var(--market-green);margin-right:-0.5rem">▲</span>`;
-      for (const { sym } of movers.slice(0, 4)) html += makeItem(sym, sym, quoteMap);
-      html += `<span class="ticker-section-label" style="color:var(--market-red);margin:0 0.25rem">▼</span>`;
-      for (const { sym } of movers.slice(-4).reverse()) html += makeItem(sym, sym, quoteMap);
-      html += `<span class="ticker-divider">· · ·</span>`;
-      return html + html;
-    }
-
-    function buildMacroBar(quoteMap) {
-      let html = '';
-      for (const { sym, label } of OVERVIEW_SYMBOLS) html += makeItem(sym, label, quoteMap);
-      return html;
-    }
-
-    async function init() {
-      const track = document.getElementById('tickerTrack');
-      const macroBar = document.getElementById('macroBar');
-      try {
-        const quoteMap = await fetchQuotes(ALL_SYMS);
-        track.innerHTML = buildPortfolioTicker(quoteMap);
-        let animDur = 120;
-        requestAnimationFrame(() => {
-          const fullWidth = track.scrollWidth / 2;
-          animDur = Math.round(fullWidth / 80);
-          track.style.animationDuration = animDur + 's';
-        });
-
-        const wrap = document.getElementById('tickerWrap');
-        let isDragging = false, dragStartX = 0, dragOffsetPx = 0;
-        function pauseAtCurrent() {
-          const matrix = new DOMMatrix(getComputedStyle(track).transform);
-          dragOffsetPx = matrix.m41;
-          track.style.animation = 'none';
-          track.style.transform = `translateX(${dragOffsetPx}px)`;
-        }
-        function resumeFromOffset(px) {
-          const halfWidth = track.scrollWidth / 2;
-          const clamped = ((px % halfWidth) + halfWidth) % halfWidth;
-          track.style.transform = '';
-          track.style.animation = '';
-          track.style.animationDuration = animDur + 's';
-          track.style.animationDelay = -(clamped / halfWidth) * animDur + 's';
-          track.style.animationPlayState = 'running';
-        }
-        wrap.addEventListener('mousedown', e => { isDragging = true; dragStartX = e.clientX; pauseAtCurrent(); wrap.style.cursor = 'grabbing'; e.preventDefault(); });
-        window.addEventListener('mousemove', e => { if (!isDragging) return; track.style.transform = `translateX(${dragOffsetPx + e.clientX - dragStartX}px)`; });
-        window.addEventListener('mouseup', e => { if (!isDragging) return; isDragging = false; wrap.style.cursor = ''; resumeFromOffset(-(dragOffsetPx + e.clientX - dragStartX)); });
-        wrap.addEventListener('touchstart', e => { isDragging = true; dragStartX = e.touches[0].clientX; pauseAtCurrent(); }, { passive: true });
-        wrap.addEventListener('touchmove', e => { if (!isDragging) return; track.style.transform = `translateX(${dragOffsetPx + e.touches[0].clientX - dragStartX}px)`; }, { passive: true });
-        wrap.addEventListener('touchend', e => { if (!isDragging) return; isDragging = false; resumeFromOffset(-(dragOffsetPx + e.changedTouches[0].clientX - dragStartX)); });
-
-        macroBar.innerHTML = `<span class="ticker-row-2-label">Markets</span><div class="ticker-row-2-inner">${buildMacroBar(quoteMap)}</div>`;
-        fetchYieldsAsync(quoteMap, updated => {
-          macroBar.innerHTML = `<span class="ticker-row-2-label">Markets</span><div class="ticker-row-2-inner">${buildMacroBar(updated)}</div>`;
-        });
-        setTimeout(init, 60000);
-      } catch(e) {
-        track.innerHTML = '<span class="ticker-loading">Market data unavailable</span>';
-        setTimeout(init, 30000);
-      }
-    }
-    init();
-  })();
-  </script>
 
   <div class="brief-content">
 
@@ -355,23 +149,23 @@
       <div class="stories-grid">
         <div class="story-lead">
           <div class="story-lead-img" style="background: #0d1520; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; padding: 1.5rem;">
-            <div style="font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#5a7a9a;">Geopolitics · March 27 · US-Iran</div>
-            <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:#c9d4e0; line-height:1; letter-spacing:-0.03em; text-align:center;">Iran Pause</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#5a7a9a;">Macro · March 28, 2026 · Geopolitics</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:#c9d4e0; line-height:1; letter-spacing:-0.03em; text-align:center;">Hormuz Choke</div>
           </div>
-          <h3>Trump Extends Iran Deadline to April 6, G7 Meets in France — But Markets Still Can't Find Floor</h3>
-          <p>President Trump gave Iran 10 more days — until April 6 — before the US would target Iranian energy facilities, citing "talks are ongoing and going very well." A formal 15-point US peace proposal has reportedly been transmitted to Tehran. G7 foreign ministers convene today in France, where Secretary of State Rubio is pushing reticent allies to back the administration's Iran strategy.</p><p>Markets aren't rallying. The Nasdaq officially entered correction territory Friday — down 10% from its October peak — while the S&P 500 continues sliding, now off roughly 5.8% year-to-date. Oil retreated modestly (WTI near $94, Brent around $110) on the deadline extension, but the war risk premium is deeply embedded. The VIX is at 28.89. The Strait of Hormuz remains partially restricted, hitting Southeast Asian energy importers hardest.</p><p>The macro read: this is not a resolution, it's a delay. Brent needs to break below $100 sustainably before rate-cut expectations can recover and equities can find footing. The OECD already cut 2026 global growth to 2.9% and raised G20 inflation to 4.0%. Watch the April 6 deadline and watch whether Iran formally responds to the peace proposal.</p>
-          <a href="https://www.tipranks.com/news/stock-market-news-today-3-27-26-stock-futures-wobble-as-trump-extends-iran-strike-pause" target="_blank" class="read-more">Full coverage &rarr;</a>
+          <h3>Strait of Hormuz Enters Fifth Week of Closure — IEA Calls It 'Greatest Energy Security Crisis in History'</h3>
+          <p>The effective shutdown of the Strait of Hormuz — the world's most critical oil chokepoint — has now stretched into its fifth week, disrupting over 20% of global oil supplies and a substantial share of LNG shipments. The IEA issued a stark warning Thursday, calling it 'the greatest global energy and food security challenge in history.' Brent crude has surged past $110/barrel, with some analysts projecting $150-$200 if the closure extends past mid-April.</p><p>Brief flickers of ceasefire optimism between the U.S. and Iran last week momentarily lifted stocks, but conflicting military reports quickly extinguished the rally. The Fed is now in an uncomfortable position: spiking energy-driven inflation argues against cuts, but a deteriorating job market — particularly in trade and transport — argues against hikes. Neither option looks clean.</p><p>February PCE data drops today. Any print above +0.3% month-over-month will likely cement the Fed's hawkish posture and add another leg down to a market that's already lost significant ground from January's all-time highs.</p>
+          <a href="https://en.wikipedia.org/wiki/Economic_impact_of_the_2026_Iran_war" target="_blank" class="read-more">Full coverage &rarr;</a>
         </div>
         <div class="story-sidebar">
           <div class="story-small">
-            <div class="source">Economics · March 27 · China</div>
-            <h4>It's Official: China Surpasses the US as World's Largest Economy by PPP</h4>
-            <p>The IMF confirmed China has overtaken the United States in purchasing power parity terms, marking a seismic shift in the global economic order. While PPP comparisons are imperfect — they smooth over currency differences — the milestone carries enormous symbolic weight at a moment when US-China competition is heating up across trade, tech, and military posture. China's central bank followed the news by pledging deeper reforms and capital support to manage financial stability risks.</p>
+            <div class="source">Tech · March 28, 2026 · AI Governance</div>
+            <h4>OpenAI Kills Sora, Redirects Compute to GPT-5.4 — Arm Enters AI Chip Arena with Meta as First Customer</h4>
+            <p>OpenAI pulled the plug on its viral video generation tool Sora, citing deepfake proliferation and non-consensual imagery concerns, redirecting those compute resources toward GPT-5.4 development. Simultaneously, Arm — a 30-year IP licensor — unveiled its first proprietary data center AI chip with Meta as the launch customer, putting it in direct competition with Nvidia and AMD.</p>
           </div>
           <div class="story-small">
-            <div class="source">Policy · March 27 · Congress</div>
-            <h4>Senate Approves DHS Funding — ICE Left Out as Budget Battle Continues</h4>
-            <p>The Senate passed a bill funding most of the Department of Homeland Security early Friday, but notably excluded ICE from the package — a deliberate compromise that signals continued legislative friction over immigration enforcement spending. The partial measure averts an immediate DHS shutdown while kicking the ICE fight to a later appropriations round.</p>
+            <div class="source">Policy · March 28, 2026 · AI Law</div>
+            <h4>Federal Judge Blocks Government Ban on Anthropic — Defense Dept. Had Called It a Supply Chain Threat</h4>
+            <p>A federal judge issued a preliminary injunction halting the administration's move to ban government agencies from using Anthropic's AI. The Defense Department had designated Anthropic a national supply chain risk — a claim Anthropic is fighting in court, seeking guarantees its tech won't be used for mass surveillance or autonomous weapons systems.</p>
           </div>
         </div>
       </div>
@@ -383,58 +177,36 @@
       <div class="markets-row">
         <div class="market-card">
           <div class="name">S&P 500</div>
-          <div class="value">6,422</div>
-          <div class="delta down">&#9660; -0.84% today</div>
+          <div class="value">634.09</div>
+          <div class="delta down">&#9660; -2.12%</div>
         </div>
         <div class="market-card">
           <div class="name">Nasdaq</div>
-          <div class="value">21,160</div>
-          <div class="delta down">&#9660; correction &#8209;10%</div>
+          <div class="value">562.58</div>
+          <div class="delta down">&#9660; -2.30%</div>
         </div>
         <div class="market-card">
           <div class="name">Bitcoin</div>
-          <div class="value">$66,587</div>
-          <div class="delta down">&#9660; -4.2% vs. yest.</div>
+          <div class="value">$66,266</div>
+          <div class="delta down">&#9660; -0.13%</div>
         </div>
         <div class="market-card">
           <div class="name">Gold</div>
-          <div class="value">$4,433</div>
-          <div class="delta up">&#9650; safe-haven bid</div>
+          <div class="value">$4,492</div>
+          <div class="delta up">&#9650; +1.35%</div>
         </div>
       </div>
-      <div class="markets-row" style="margin-top:0.75rem;">
-        <div class="market-card">
-          <div class="name">WTI Crude</div>
-          <div class="value">$94.43</div>
-          <div class="delta up">&#9650; elevated</div>
-        </div>
-        <div class="market-card">
-          <div class="name">Brent</div>
-          <div class="value">$110.91</div>
-          <div class="delta up">&#9650; elevated</div>
-        </div>
-        <div class="market-card">
-          <div class="name">2Y / 10Y</div>
-          <div class="value">4.01% / 4.47%</div>
-          <div class="delta up">&#9650; +46bp curve</div>
-        </div>
-        <div class="market-card">
-          <div class="name">IG / HY Spread</div>
-          <div class="value">87bp / 319bp</div>
-          <div class="delta" style="color:var(--warm-gray);">&#8212; watching</div>
-        </div>
-      </div>
-      <p class="market-note" style="margin-top:1rem;">Friday session: S&P down ~0.8% to ~6,422, Nasdaq off ~1.2% — officially in correction territory, down 10% from October's peak. Bitcoin dropped another $2,900 overnight to $66,587. Gold at $4,433 holding its safe-haven bid. Trump's 10-day Iran extension provided no lasting relief — VIX at 28.89, the Magnificent Seven seeing broad selling pressure. Oil retreated modestly on the peace proposal news (WTI ~$94, Brent ~$110) but the supply disruption threat through the Strait of Hormuz keeps the commodity bid firm. Major indexes on pace for a fifth straight losing week — a streak last seen in 2022.</p>
+      <p class="market-note">The S&P 500 closed Thursday at 6,363 (-1.8%), its fifth straight weekly loss and now in 'larger degree correction' territory from the January 28 all-time high. Nasdaq entered official correction territory, down more than 10% from its recent record, closing at 20,948 (-2.2%). The Dow shed 1.7% to 45,167. Brent crude above $110, 10-year Treasury yield at 4.46%, 30-year approaching 5% — inflation expectations are rising faster than growth confidence. PCE data this morning is the key catalyst.</p>
       <div class="market-stories">
         <div class="market-story">
-          <div class="story-source">Macro · Iran · G7</div>
-          <div class="story-headline"><a href="https://www.morningstar.com/news/dow-jones/202603272767/oil-climbs-higher-stock-recovery-fades-as-doubts-cloud-cease-fire-hopes" target="_blank">Trump Sends 15-Point Peace Proposal to Iran; G7 Meets in France as Nasdaq Hits Correction</a></div>
-          <div class="story-summary">The US transmitted a formal 15-point proposal to Iran as Trump extended the April 6 deadline. G7 foreign ministers gathered in France; Rubio is pressing allies to support the Iran strategy. Despite the diplomatic move, equities continued sliding — Nasdaq entered correction territory (-10% from peak). Oil pulled back slightly but the Strait of Hormuz remains restricted, and Goldman and Fitch both warn of 0.8–1% global GDP drag if the conflict persists.</div>
+          <div class="story-source">Markets · Fed Watch</div>
+          <div class="story-headline"><a href="https://www.dallasfed.org/research/economics/2026/0320" target="_blank">February PCE Today — A Hot Print Could Seal the Rate-Cut Pause Into Summer</a></div>
+          <div class="story-summary">The Fed's preferred inflation gauge — Personal Consumption Expenditures — prints this morning. Markets are braced for anything above +0.3% MoM, which would effectively push rate cut expectations out to fall 2026 at the earliest. With energy prices spiking on Hormuz disruptions and consumer inflation expectations jumping in March, the setup is asymmetrically hawkish.</div>
         </div>
         <div class="market-story">
-          <div class="story-source">MarTech · Snap · Meta · AI</div>
-          <div class="story-headline"><a>Snapchat Launches Snap Takeovers; Meta Expands Reels Trends + Partnership Ads Hub</a></div>
-          <div class="story-summary">Snapchat introduced Total Snap Takeovers — a new high-reach ad format — and is developing a creator/brand promotional option targeting its 619M active users. Meta separately announced expanded Reels Trends and a redesigned Partnership Ads Hub with new attribution insights. Samsung released an AI-driven TV ad optimization platform. And Apollo.io acquired Pocus to bring revenue intelligence into its AI-powered go-to-market stack.</div>
+          <div class="story-source">Markets · Equities</div>
+          <div class="story-headline"><a href="https://www.investing.com/news/stock-market-news/us-tech-pullback-mirrors-late-stages-of-dotcom-era-strategists-say-4586292" target="_blank">Tech Selloff Draws Dotcom Comparisons — Strategists Flag 'Correction Not Yet Complete'</a></div>
+          <div class="story-summary">Some strategists are openly drawing parallels between the current tech correction and the late stages of the dot-com era, pointing to stretched valuations meeting an exogenous macro shock. Elliott Wave analysts see S&P support in the 6,110–6,391 range — still 3-8% below Thursday's close. Portfolio names to watch: PLTR, META, ORCL, and CRWV have been among the harder-hit names in the broader tech unwind.</div>
         </div>
       </div>
     </div>
@@ -444,28 +216,41 @@
       <div class="section-label">Sports</div>
       <div class="scores-row">
         <div class="score-card">
-          <div class="teams"><strong>Charlotte Hornets</strong> vs. New York Knicks</div>
+          <div class="teams"><strong>Duke</strong> vs. St. John's</div>
           <div>
-            <div class="result">114 – 103</div>
-            <div class="status">Final · Knueppel 26/10/8 · snaps NYK 7-game streak</div>
+            <div class="result">80 – 75</div>
+            <div class="status">Sweet 16 Final · Duke advances</div>
           </div>
         </div>
         <div class="score-card">
-          <div class="teams"><strong>Detroit Pistons</strong> vs. New Orleans Pelicans</div>
+          <div class="teams"><strong>Michigan</strong> vs. Alabama</div>
           <div>
-            <div class="result">129 – 108</div>
-            <div class="status">Final · Pistons blowout</div>
+            <div class="result">90 – 77</div>
+            <div class="status">Sweet 16 Final · Big Ten dominates</div>
           </div>
         </div>
         <div class="score-card">
-          <div class="teams"><strong>Orlando Magic</strong> vs. Sacramento Kings</div>
+          <div class="teams"><strong>UConn</strong> vs. Michigan State</div>
           <div>
-            <div class="result">121 – 117</div>
-            <div class="status">Final · Banchero 30 pts · snaps 6-game skid</div>
+            <div class="result">67 – 63</div>
+            <div class="status">Sweet 16 Final · UConn grinding</div>
+          </div>
+        </div>
+        <div class="score-card">
+          <div class="teams"><strong>Tennessee</strong> vs. Iowa State</div>
+          <div>
+            <div class="result">76 – 62</div>
+            <div class="status">Sweet 16 Final · Major upset alert</div>
           </div>
         </div>
       </div>
-      <p class="market-note" style="margin-top:1rem">Kon Knueppel (20 years old) went 26/10/8 and snapped New York's 7-game win streak — Brunson had 26/13 and it still wasn't enough. LaMelo added 22. Charlotte's young core is for real. Detroit keep rolling. Banchero put up 30 to end the Magic's 6-game skid. Quiet Thursday in terms of games but the quality was there.</p>
+      <div class="upcoming">
+        <div class="upcoming-label">Today / Upcoming</div>
+        <div class="upcoming-item">Elite Eight — Illinois vs. Iowa (South Region) — Today, CBS, mid-afternoon. Iowa's 9-seed Cinderella run meets the Big Ten's most complete team.</div>
+        <div class="upcoming-item">Elite Eight — Arizona vs. Purdue (West Region) — Today, TBS. Arizona's been dominant; Purdue looking to avenge last year's early exit.</div>
+        <div class="upcoming-item">Duke vs. UConn in the East Region Elite Eight — today, CBS. Two blue bloods, winner heads to Final Four.</div>
+      </div>
+      <p class="market-note" style="margin-top:1rem">The Big Ten is quietly running March Madness — four teams in the Elite Eight, which hasn't happened since the conference expanded. Duke-UConn is the blue-blood matchup everyone wanted. In the NBA, Luka's 41 for the Lakers was a statement game — that team is quietly building momentum heading into the stretch run, and they're going to be a nightmare matchup come playoff time.</p>
     </div>
 
     <!-- CULTURE & ENTERTAINMENT -->
@@ -474,30 +259,30 @@
       <div class="ent-grid">
         <div class="ent-card">
           <div class="ent-image" style="background: #1a1a2e; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
-            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">Robyn — Sexistential</div>
-            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">Music · Album · Out Today</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">Project Hail Mary</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">Amazon · Film · In Theaters Now</div>
           </div>
-          <div class="ent-type">Album · Independent</div>
-          <h4>Robyn Returns with 'Sexistential' — Her First Album in Years, Out Today</h4>
-          <p>After a long absence, Robyn drops her new album today alongside a stacked Friday release calendar that also includes Raye's 'THIS MUSIC MAY CONTAIN HOPE,' Snail Mail's 'Ricochet,' and Courtney Barnett's 'Creature of Habit.' Robyn's music tends to arrive fully formed and emotionally precise — 'Sexistential' is the most anticipated of the bunch. Put it on this weekend.</p>
+          <div class="ent-type">Sci-Fi Film · Amazon/Theatrical</div>
+          <h4>Ryan Gosling's 'Project Hail Mary' Is the Sci-Fi Movie You've Been Waiting For</h4>
+          <p>Adapted from Andy Weir's beloved novel, Project Hail Mary stars Gosling as a lone astronaut who wakes up with no memory on a mission to save Earth. Early reviews are outstanding — it's being called the best hard sci-fi film since Interstellar. If you haven't seen it yet, this weekend is the move.</p>
         </div>
         <div class="ent-card">
-          <div class="ent-image" style="background: #0a1628; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
-            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#a8c4e0; text-align:center;">For All Mankind</div>
-            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#4a6a9a;">Apple TV+ · Season 5 · Out Today</div>
+          <div class="ent-image" style="background: #1a1a2e; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">Daredevil: Born Again S2</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">Disney+ · TV · Streaming Now</div>
           </div>
-          <div class="ent-type">TV Series · Apple TV+</div>
-          <h4>'For All Mankind' Season 5 Drops Today — The Best Alt-History Sci-Fi on TV Returns</h4>
-          <p>Apple TV+'s ambitious alternate-history space drama returns for its fifth season today. The show imagines a world where the Soviet Union won the moon race — and each season jumps forward in time, raising the stakes considerably. If you haven't started it, clear a weekend. If you're caught up, today's the day.</p>
+          <div class="ent-type">TV Series · Disney+</div>
+          <h4>Daredevil: Born Again Season 2 Dropped Tuesday — The Darkest Marvel Has Been in Years</h4>
+          <p>Season 2 of Born Again premiered March 24 and early reactions are calling it the most tonally dark and mature Marvel streaming content yet. Charlie Cox and Vincent D'Onofrio are both at their best. If you're going to watch one Marvel show this year, this is it.</p>
         </div>
         <div class="ent-card">
-          <div class="ent-image" style="background: #1a1208; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
-            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#e8d5a8; text-align:center;">House of David</div>
-            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#8a6a3a;">Prime Video · Season 2 · Out Today</div>
+          <div class="ent-image" style="background: #1a1a2e; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">RAYE — This Music May Contain Hope</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">Music · Album · Out Now</div>
           </div>
-          <div class="ent-type">TV Series · Prime Video</div>
-          <h4>'House of David' Season 2 Out Today on Prime — Biblical Epic With Real Production Value</h4>
-          <p>Amazon Prime Video's biblical drama returns for its second season today. The series follows the rise of King David and has drawn comparisons to prestige historical epics for its production scope and character work. If S1 is on your list, clear the weekend — S2 drops all at once.</p>
+          <div class="ent-type">Album · Streaming Everywhere</div>
+          <h4>RAYE's Sophomore Album Arrives — One of the Most Anticipated Drops of the Year</h4>
+          <p>After the breakout success of her debut and a Grammy run that made her a household name, RAYE dropped her second studio album 'This Music May Contain Hope' on Friday. She's one of the more interesting voices in mainstream pop right now — emotionally raw, technically brilliant. Worth a full listen this weekend.</p>
         </div>
       </div>
     </div>
@@ -507,19 +292,19 @@
       <div class="rabbit-hole">
         <div class="rh-label">Today&rsquo;s Rabbit Hole</div>
         <div class="rh-image" style="background: linear-gradient(135deg, #0d1b2a 0%, #1a2a1a 50%, #2a1a0d 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; padding: 2rem;">
-          <div style="font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#5a8a5a;">Sports Business · AI · Fan Engagement</div>
-          <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:#c9d4e0; line-height:1; letter-spacing:-0.03em; text-align:center;">AI Owns Sports</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#5a8a5a;">Sports Business · Media Rights · AI + Streaming Convergence</div>
+          <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:#c9d4e0; line-height:1; letter-spacing:-0.03em; text-align:center;">Who Owns the Fan</div>
         </div>
-        <h3>AI Isn't Coming for Sports — It's Already Running It: The $4B Transformation Nobody's Fully Clocked Yet</h3>
-        <p>The AI-in-sports market hit roughly $4 billion in 2026 and is on a trajectory to $11 billion by 2030 — and the numbers undersell what's actually happening. Over 80% of professional sports organizations have deployed AI in some operational capacity. We're past the 'pilot program' era. AI is now core infrastructure for everything from ticket pricing (dynamically adjusted in real time based on weather, opponent, and secondary market data) to injury prevention systems that predict risk with 85-90% accuracy using wearable biometrics. The Detroit Pistons running the East isn't just basketball — it's what happens when front offices get serious about data.</p><p>The more interesting action is in broadcasting and fan engagement. AI is automating multi-feed production at scale — smaller broadcast crews, more personalized viewing angles, real-time highlight generation that used to require an entire editing team. And on the fan side, the shift from 'website' to 'owned app' as the primary digital touchpoint is underway, driven by AI personalization engines that learn what you watch, when you engage, and what you'll pay for. The leagues that crack this — and the Cowboys and Lakers are already deep in it — will extract dramatically more revenue per fan than they do today.</p><p>For someone going into sports marketing, this is the most important structural shift in the industry. The job of a sports marketer is increasingly a data job. Campaigns are built around audience segmentation that would've been impossible five years ago. Sponsorship activation is measurable in ways it never was. Athletes are brands with AI-assisted content pipelines. The entry-level roles that existed in 2022 are being compressed, but the ceiling for people who understand both the creative and the data side is higher than it's ever been.</p><p>What to watch: The NCAA's lawsuit against DraftKings over 'March Madness' trademark use is a microcosm of a bigger fight — who owns the language of sports fandom at the intersection of betting, media, and AI-generated content? The leagues want full control of their IP in a world where AI can generate infinite amounts of branded content. That legal and commercial battle will define the next decade of sports business.</p>
-        <a href="https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/sports-industry-outlook.html" target="_blank" class="read-full">Deloitte 2026 Sports Industry Outlook &rarr;</a>
+        <h3>The AI Sports Rights Land Grab: Why the Next Decade of Entertainment Is Being Decided Right Now</h3>
+        <p>The sports media industry is undergoing its most significant structural shift since cable TV — and it's happening faster than most people realize. The 'AI in sports' market is projected to grow from $8.9 billion in 2024 to $27.6 billion by 2030, but the more interesting story isn't about AI generating highlights. It's about who owns the fan relationship. Leagues, teams, and tech platforms are in an all-out war for first-party fan data, and the outcome of that war will determine who captures the next trillion dollars in sports entertainment value.</p><p>For decades, the model was simple: leagues sold broadcast rights to networks (ESPN, Fox, NBC), who sold eyeballs to advertisers, who paid for it all. The fan was a passive consumer with no direct relationship to the rights holder. Streaming broke the intermediary — and AI is now making it possible for leagues and teams to go fully direct-to-consumer at scale. Real-time personalized feeds, custom multilingual commentary, athlete-centric NIL content ecosystems, integrated betting and fantasy overlays — all of it powered by AI and all of it designed to get fans to subscribe directly rather than through a third-party bundle.</p><p>For someone entering sports marketing and PR in the next two years, this shift has career implications. The skills that will matter most aren't traditional media buying or PR outreach — they're data storytelling, platform strategy, and understanding how to build and monetize a fan community directly. The agencies and teams winning the next decade won't be the ones with the biggest traditional media budgets. They'll be the ones that figured out first-party fan data and turned it into recurring revenue.</p><p>Watch how the NBA's next major rights deal is structured — whether it includes DTC data-sharing clauses, how Netflix and Amazon's sports spend evolves, and whether athletes use NIL frameworks to essentially become their own media companies. The infrastructure is being built right now. The question for your career is: which side of that infrastructure do you want to be on?</p>
+        <a href="https://www.sportsbusinessjournal.com/Articles/2025/12/17/ai-data-on-the-minds-of-sports-tech-in-2026/" target="_blank" class="read-full">Sports Business Journal: AI & Data in Sports 2026 &rarr;</a>
       </div>
     </div>
 
   </div>
 
   <div class="brief-footer">
-    <p>Updated 7:30 AM MT, March 27, 2026 &middot; <a href="index.html">Back to site</a></p>
+    <p>Updated 4:02 AM MT, March 28, 2026 &middot; <a href="index.html">Back to site</a></p>
   </div>
 </body>
 </html>
