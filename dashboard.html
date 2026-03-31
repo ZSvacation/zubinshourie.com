@@ -62,11 +62,39 @@
     .story-headline a:hover { color: var(--forest); }
     .story-summary { font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.5; margin-top: 0.25rem; }
     .scores-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
-    .score-card { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+    .score-card { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+    .score-card:hover { border-color: var(--forest); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
     .score-card .teams { font-size: 0.9rem; color: var(--charcoal); }
     .score-card .teams strong { font-weight: 600; }
     .score-card .result { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 700; color: var(--soft-black); }
     .score-card .status { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+    .score-card .box-hint { font-family: 'JetBrains Mono', monospace; font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--forest); margin-top: 0.4rem; opacity: 0.7; }
+    /* Box Score Modal */
+    #boxscore-modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.55); backdrop-filter: blur(3px); align-items: center; justify-content: center; }
+    #boxscore-modal.open { display: flex; }
+    #boxscore-inner { background: var(--cream); border-radius: 6px; width: min(92vw, 860px); max-height: 88vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    #boxscore-header { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--tan); display: flex; justify-content: space-between; align-items: flex-start; position: sticky; top: 0; background: var(--cream); z-index: 10; }
+    #boxscore-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--soft-black); }
+    #boxscore-subtitle { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); margin-top: 0.25rem; }
+    #boxscore-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--warm-gray); padding: 0 0 0 1rem; line-height: 1; }
+    #boxscore-close:hover { color: var(--soft-black); }
+    #boxscore-body { padding: 1.5rem 2rem 2rem; }
+    #boxscore-body .linescore { display: flex; gap: 0; margin-bottom: 1.5rem; border: 1px solid var(--tan); border-radius: 4px; overflow: hidden; }
+    #boxscore-body .linescore-team { flex: 1; padding: 0.75rem 1rem; border-right: 1px solid var(--tan); }
+    #boxscore-body .linescore-team:last-child { border-right: none; }
+    #boxscore-body .linescore-name { font-size: 0.75rem; font-weight: 600; color: var(--charcoal); }
+    #boxscore-body .linescore-score { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--soft-black); }
+    #boxscore-body .linescore-quarters { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--warm-gray); margin-top: 0.2rem; }
+    .bs-team-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--forest); margin: 1.25rem 0 0.5rem; }
+    .bs-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    .bs-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-gray); padding: 0.4rem 0.5rem; text-align: right; border-bottom: 1px solid var(--tan); }
+    .bs-table th:first-child { text-align: left; }
+    .bs-table td { padding: 0.45rem 0.5rem; text-align: right; border-bottom: 1px solid rgba(212,197,173,0.3); color: var(--charcoal); }
+    .bs-table td:first-child { text-align: left; font-weight: 500; color: var(--soft-black); }
+    .bs-table tr:last-child td { border-bottom: none; }
+    .bs-table tr.starter td { background: rgba(212,197,173,0.08); }
+    #boxscore-loading { text-align: center; padding: 3rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
+    #boxscore-error { text-align: center; padding: 2rem; font-size: 0.85rem; color: var(--warm-gray); }
     .upcoming { margin-top: 1rem; }
     .upcoming-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); margin-bottom: 0.75rem; }
     .upcoming-item { font-size: 0.85rem; font-weight: 300; color: var(--charcoal); padding: 0.5rem 0; border-bottom: 1px solid rgba(212,197,173,0.5); }
@@ -290,35 +318,8 @@
     <!-- SPORTS -->
     <div class="brief-section">
       <div class="section-label">Sports</div>
-      <div class="scores-row">
-        <div class="score-card">
-          <div class="teams"><strong>Wembanyama / Spurs</strong> vs. Bulls</div>
-          <div>
-            <div class="result">129 – 114</div>
-            <div class="status">Final · Wemby: 41 pts, 16 reb — fastest double-double in NBA history</div>
-          </div>
-        </div>
-        <div class="score-card">
-          <div class="teams"><strong>Lakers</strong> vs. Wizards</div>
-          <div>
-            <div class="result">120 – 101</div>
-            <div class="status">Final · LeBron ties Kareem's all-time wins record at 1,228</div>
-          </div>
-        </div>
-        <div class="score-card">
-          <div class="teams"><strong>Timberwolves</strong> vs. Mavericks</div>
-          <div>
-            <div class="result">124 – 94</div>
-            <div class="status">Final · Minnesota dominates, Dallas in freefall</div>
-          </div>
-        </div>
-        <div class="score-card">
-          <div class="teams"><strong>Thunder</strong> vs. Pistons</div>
-          <div>
-            <div class="result">114 – 110</div>
-            <div class="status">Final (OT) · OKC escapes in overtime</div>
-          </div>
-        </div>
+      <div class="scores-row" id="scores-row">
+        <!-- Cards injected by fetchScores() or static fallback below -->
       </div>
       <div class="upcoming">
         <div class="upcoming-label">Today / Upcoming</div>
@@ -381,5 +382,224 @@
   <div class="brief-footer">
     <p>Updated 9:25 AM MT, March 31, 2026 (intraday) &middot; <a href="index.html">Back to site</a></p>
   </div>
+
+  <!-- BOX SCORE MODAL -->
+  <div id="boxscore-modal" role="dialog" aria-modal="true" aria-labelledby="boxscore-title">
+    <div id="boxscore-inner">
+      <div id="boxscore-header">
+        <div>
+          <div id="boxscore-title">Box Score</div>
+          <div id="boxscore-subtitle"></div>
+        </div>
+        <button id="boxscore-close" aria-label="Close">&times;</button>
+      </div>
+      <div id="boxscore-body">
+        <div id="boxscore-loading">Loading box score&hellip;</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ── ESPN hidden API helpers ──────────────────────────────────────────────
+  const ESPN_SCOREBOARD = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard';
+  const ESPN_SUMMARY    = 'https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/summary';
+
+  function todayESPN() {
+    const d = new Date();
+    // ESPN uses YYYYMMDD in ET; close enough
+    return d.toISOString().slice(0,10).replace(/-/g,'');
+  }
+
+  // Static fallback cards for today's brief (used if ESPN scoreboard fetch fails)
+  const STATIC_GAMES = [
+    { away:'Spurs', home:'Bulls', awayScore:129, homeScore:114, status:'Final',
+      note:'Wemby: 41 pts, 16 reb', espnId: null },
+    { away:'Lakers', home:'Wizards', awayScore:120, homeScore:101, status:'Final',
+      note:'LeBron ties Kareem wins record', espnId: null },
+    { away:'Timberwolves', home:'Mavericks', awayScore:124, homeScore:94, status:'Final',
+      note:'Minnesota dominates', espnId: null },
+    { away:'Thunder', home:'Pistons', awayScore:114, homeScore:110, status:'Final (OT)',
+      note:'OKC escapes in overtime', espnId: null },
+  ];
+
+  // ── Render score cards ───────────────────────────────────────────────────
+  function renderCards(games) {
+    const row = document.getElementById('scores-row');
+    row.innerHTML = '';
+    games.forEach(g => {
+      const card = document.createElement('div');
+      card.className = 'score-card';
+      if (g.espnId) card.setAttribute('data-espn-id', g.espnId);
+      card.innerHTML = `
+        <div class="teams">
+          <div><strong>${g.away}</strong> vs. ${g.home}</div>
+          ${g.espnId ? '<div class="box-hint">↗ tap for box score</div>' : ''}
+        </div>
+        <div>
+          <div class="result">${g.awayScore} – ${g.homeScore}</div>
+          <div class="status">${g.status}${g.note ? ' · ' + g.note : ''}</div>
+        </div>`;
+      if (g.espnId) {
+        card.addEventListener('click', () => openBoxScore(g.espnId, `${g.away} vs. ${g.home}`, g.status));
+      }
+      row.appendChild(card);
+    });
+  }
+
+  // ── Fetch last night's NBA scoreboard from ESPN ──────────────────────────
+  async function fetchScores() {
+    try {
+      // Get yesterday's date (games from last night)
+      const yd = new Date(); yd.setDate(yd.getDate() - 1);
+      const yStr = yd.toISOString().slice(0,10).replace(/-/g,'');
+      const url = `${ESPN_SCOREBOARD}?dates=${yStr}&limit=20`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('ESPN scoreboard error');
+      const data = await res.json();
+      const events = data.events || [];
+      if (!events.length) throw new Error('No games found');
+
+      const games = events.map(ev => {
+        const comp   = ev.competitions[0];
+        const away   = comp.competitors.find(c => c.homeAway === 'away');
+        const home   = comp.competitors.find(c => c.homeAway === 'home');
+        const status = comp.status.type.shortDetail || 'Final';
+        const note   = ev.shortName || '';
+        return {
+          away: away.team.shortDisplayName || away.team.displayName,
+          home: home.team.shortDisplayName || home.team.displayName,
+          awayScore: away.score || '–',
+          homeScore: home.score || '–',
+          status,
+          note: '',
+          espnId: ev.id,
+        };
+      });
+      renderCards(games);
+    } catch(e) {
+      console.warn('ESPN scoreboard fetch failed, using static data:', e);
+      // Static fallback — try to patch in IDs from a quick search
+      renderCards(STATIC_GAMES);
+    }
+  }
+
+  // ── Box score modal ──────────────────────────────────────────────────────
+  const modal    = document.getElementById('boxscore-modal');
+  const modalBody = document.getElementById('boxscore-body');
+  const modalTitle = document.getElementById('boxscore-title');
+  const modalSub  = document.getElementById('boxscore-subtitle');
+
+  document.getElementById('boxscore-close').addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  function openModal() { modal.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
+
+  async function openBoxScore(espnId, matchup, status) {
+    modalTitle.textContent = matchup;
+    modalSub.textContent   = status;
+    modalBody.innerHTML    = '<div id="boxscore-loading">Loading box score&hellip;</div>';
+    openModal();
+
+    try {
+      const res = await fetch(`${ESPN_SUMMARY}?region=us&lang=en&contentorigin=espn&event=${espnId}`);
+      if (!res.ok) throw new Error('ESPN summary error ' + res.status);
+      const data = await res.json();
+      renderBoxScore(data);
+    } catch(e) {
+      modalBody.innerHTML = `<div id="boxscore-error">
+        Could not load box score from ESPN.<br>
+        <a href="https://www.espn.com/nba/game/_/gameId/${espnId}" target="_blank" rel="noopener"
+           style="color:var(--forest);text-decoration:underline;font-size:0.85rem;">
+          View on ESPN &rarr;
+        </a>
+      </div>`;
+    }
+  }
+
+  function renderBoxScore(data) {
+    const boxscore = data.boxscore;
+    if (!boxscore) { modalBody.innerHTML = '<div id="boxscore-error">No box score data available.</div>'; return; }
+
+    // Linescore (quarter-by-quarter)
+    const header    = data.header || {};
+    const comps     = header.competitions || [];
+    const comp      = comps[0] || {};
+    const teams     = comp.competitors || [];
+    const awayTeam  = teams.find(t => t.homeAway === 'away') || teams[0] || {};
+    const homeTeam  = teams.find(t => t.homeAway === 'home') || teams[1] || {};
+
+    // Quarter scores
+    const linescore = boxscore.teams || [];
+    const awayLine  = linescore.find(t => t.homeAway === 'away') || linescore[0] || {};
+    const homeLine  = linescore.find(t => t.homeAway === 'home') || linescore[1] || {};
+
+    function qtrs(lineTeam) {
+      const ls = lineTeam.linescores || [];
+      return ls.map(q => q.displayValue || q.value || '').join('  ');
+    }
+
+    let html = `<div class="linescore">
+      <div class="linescore-team">
+        <div class="linescore-name">${awayTeam.team?.displayName || awayLine.team?.displayName || 'Away'}</div>
+        <div class="linescore-score">${awayTeam.score || awayLine.score || '–'}</div>
+        <div class="linescore-quarters">${qtrs(awayLine)}</div>
+      </div>
+      <div class="linescore-team">
+        <div class="linescore-name">${homeTeam.team?.displayName || homeLine.team?.displayName || 'Home'}</div>
+        <div class="linescore-score">${homeTeam.score || homeLine.score || '–'}</div>
+        <div class="linescore-quarters">${qtrs(homeLine)}</div>
+      </div>
+    </div>`;
+
+    // Player stats
+    const players = boxscore.players || [];
+    players.forEach(teamPlayers => {
+      const teamName = teamPlayers.team?.displayName || 'Team';
+      const stats    = teamPlayers.statistics || [];
+      const mainStat = stats[0]; // usually the main box score stat group
+      if (!mainStat) return;
+
+      const cols    = mainStat.labels || [];
+      const colKeys = mainStat.keys   || cols;
+      const athletes = mainStat.athletes || [];
+
+      html += `<div class="bs-team-label">${teamName}</div>
+      <table class="bs-table">
+        <thead><tr>
+          <th>Player</th>
+          ${cols.map(c => `<th>${c}</th>`).join('')}
+        </tr></thead>
+        <tbody>`;
+
+      athletes.forEach(a => {
+        const isStarter = a.starter;
+        const name = a.athlete?.shortName || a.athlete?.displayName || '–';
+        const pos  = a.athlete?.position?.abbreviation || '';
+        const stats = a.stats || [];
+        html += `<tr class="${isStarter ? 'starter' : ''}">
+          <td>${name}${pos ? ' <span style="font-weight:300;color:var(--warm-gray);font-size:0.7rem">${pos}</span>' : ''}</td>
+          ${stats.map(s => `<td>${s}</td>`).join('')}
+        </tr>`;
+      });
+
+      html += `</tbody></table>`;
+    });
+
+    if (players.length === 0) {
+      html += `<div style="padding:1rem 0;color:var(--warm-gray);font-size:0.85rem">
+        Box score not available. 
+        <a href="https://www.espn.com/nba/" target="_blank" rel="noopener" style="color:var(--forest)">View on ESPN &rarr;</a>
+      </div>`;
+    }
+
+    modalBody.innerHTML = html;
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────────────
+  fetchScores();
+  </script>
+
 </body>
 </html>
