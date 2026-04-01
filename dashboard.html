@@ -113,7 +113,7 @@
 
     /* ── TICKER STRIP ── */
     .ticker-strip {
-      background: var(--charcoal);
+      background: var(--cream-dark);
       padding: 0 48px;
       display: flex;
       gap: 0;
@@ -125,7 +125,7 @@
       display: flex;
       flex-direction: column;
       padding: 14px 24px;
-      border-right: 1px solid rgba(244,239,224,0.12);
+      border-right: 1px solid rgba(28,26,22,0.12);
       min-width: fit-content;
       gap: 3px;
     }
@@ -135,14 +135,14 @@
       font-size: 8px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--cream);
+      color: var(--charcoal);
       opacity: 0.45;
     }
     .ticker-val {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 22px;
       letter-spacing: 0.04em;
-      color: var(--cream);
+      color: var(--charcoal);
       line-height: 1;
     }
     .ticker-chg {
@@ -363,7 +363,7 @@
     }
     .watchlist-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 12px;
     }
     .watchlist-item {
@@ -1030,56 +1030,37 @@
       </div>
 
       <div class="watchlist-section">
-        <span class="watchlist-label">MY WATCHLIST</span>
+        <span class="watchlist-label">MY POSITIONS</span>
         <div class="watchlist-grid">
-          <div class="watchlist-item">
-            <div class="symbol">NVDA</div>
-            <div class="company">Nvidia</div>
-            <div class="price">—</div>
-            <div class="change">Loading...</div>
-          </div>
-          <div class="watchlist-item">
-            <div class="symbol">AAPL</div>
-            <div class="company">Apple</div>
-            <div class="price">—</div>
-            <div class="change">Loading...</div>
-          </div>
-          <div class="watchlist-item">
-            <div class="symbol">AMZN</div>
-            <div class="company">Amazon</div>
-            <div class="price">—</div>
-            <div class="change">Loading...</div>
-          </div>
-          <div class="watchlist-item">
-            <div class="symbol">META</div>
-            <div class="company">Meta</div>
-            <div class="price">—</div>
-            <div class="change">Loading...</div>
-          </div>
-          <div class="watchlist-item">
-            <div class="symbol">MSFT</div>
-            <div class="company">Microsoft</div>
-            <div class="price">—</div>
-            <div class="change">Loading...</div>
-          </div>
-          <div class="watchlist-item">
-            <div class="symbol">SPY</div>
-            <div class="company">S&amp;P 500 ETF</div>
-            <div class="price">—</div>
-            <div class="change">Loading...</div>
-          </div>
-          <div class="watchlist-item">
-            <div class="symbol">QQQ</div>
-            <div class="company">Nasdaq ETF</div>
-            <div class="price">—</div>
-            <div class="change">Loading...</div>
-          </div>
-          <div class="watchlist-item">
-            <div class="symbol">BTC</div>
-            <div class="company">Bitcoin</div>
-            <div class="price">—</div>
-            <div class="change">Loading...</div>
-          </div>
+          <div class="watchlist-item"><div class="symbol">SPY</div><div class="company">S&amp;P 500 ETF</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">QQQ</div><div class="company">Nasdaq 100 ETF</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">SMH</div><div class="company">VanEck Semiconductor ETF</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">GOOGL</div><div class="company">Alphabet</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">AMZN</div><div class="company">Amazon</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">MSFT</div><div class="company">Microsoft</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">UBER</div><div class="company">Uber</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">GLD</div><div class="company">SPDR Gold Shares</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">BX</div><div class="company">Blackstone</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">VXUS</div><div class="company">Vanguard Total Intl</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">COHR</div><div class="company">Coherent Corp</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">SCHD</div><div class="company">Schwab Dividend ETF</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">NLR</div><div class="company">VanEck Uranium+Nuclear</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">STX</div><div class="company">Seagate Technology</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">META</div><div class="company">Meta Platforms</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">AAPL</div><div class="company">Apple</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">PLTR</div><div class="company">Palantir</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">CRWV</div><div class="company">CoreWeave</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">XLU</div><div class="company">Utilities Select SPDR</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">GFS</div><div class="company">GlobalFoundries</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">BABA</div><div class="company">Alibaba</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">SOFI</div><div class="company">SoFi Technologies</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">APLD</div><div class="company">Applied Digital</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">ORCL</div><div class="company">Oracle</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">QCOM</div><div class="company">Qualcomm</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">UUUU</div><div class="company">Energy Fuels</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">BLK</div><div class="company">BlackRock</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">ARKQ</div><div class="company">ARK Autonomous Tech ETF</div><div class="price">—</div><div class="change">—</div></div>
+          <div class="watchlist-item"><div class="symbol">VUG</div><div class="company">Vanguard Growth ETF</div><div class="price">—</div><div class="change">—</div></div>
         </div>
       </div>
 
