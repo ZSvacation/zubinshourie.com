@@ -1136,34 +1136,34 @@
     <div class="brief-section">
       <div class="section-label teal">Markets</div>
       <div class="markets-row">
-        <div class="market-card">
+        <div class="market-card" data-mktid="^GSPC">
           <div class="name">S&amp;P 500</div>
           <div class="value">6,528</div>
           <div class="delta">&#9658; Prior Close</div>
         </div>
-        <div class="market-card">
+        <div class="market-card" data-mktid="^NDX">
           <div class="name">Nasdaq</div>
           <div class="value">21,590</div>
           <div class="delta">&#9658; Prior Close</div>
         </div>
-        <div class="market-card">
+        <div class="market-card" data-mktid="BTC-USD">
           <div class="name">Bitcoin</div>
           <div class="value">$68,577</div>
           <div class="delta up">&#9650; +2.8%</div>
         </div>
-        <div class="market-card">
+        <div class="market-card" data-mktid="GC=F">
           <div class="name">Gold</div>
           <div class="value">$4,719</div>
           <div class="delta up">&#9650; +3.5%</div>
         </div>
       </div>
       <div class="markets-row">
-        <div class="market-card">
+        <div class="market-card" data-mktid="CL=F">
           <div class="name">WTI Crude</div>
           <div class="value">$98.04</div>
           <div class="delta down">&#9660; -4.3%</div>
         </div>
-        <div class="market-card">
+        <div class="market-card" data-mktid="BZ=F">
           <div class="name">Brent</div>
           <div class="value">$101.36</div>
           <div class="delta down">&#9660; -2.5%</div>
@@ -1173,7 +1173,7 @@
           <div class="value">3.75%</div>
           <div class="delta down">&#9660; -8bp</div>
         </div>
-        <div class="market-card">
+        <div class="market-card" data-mktid="^TNX">
           <div class="name">10Y Yield</div>
           <div class="value">4.29%</div>
           <div class="delta up">&#9650; +8bp</div>
@@ -1185,7 +1185,7 @@
           <div class="value">+54bp</div>
           <div class="delta up">&#9650; Steepening</div>
         </div>
-        <div class="market-card">
+        <div class="market-card" data-mktid="^VIX">
           <div class="name">VIX</div>
           <div class="value">—</div>
           <div class="delta">Elevated</div>
@@ -1693,6 +1693,122 @@
   }
 
   fetchPositionPrices();
+
+  // ── Live market card prices ──
+  async function fetchMarketCards() {
+    const MKT_SYMS = ['^GSPC', '^NDX', 'BTC-USD', 'GC=F', 'CL=F', 'BZ=F', '^TNX', '^VIX'];
+    const param    = MKT_SYMS.join(',');
+    const yhooUrl  = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(param)}`;
+
+    let results = [];
+    try {
+      const res = await fetch(`/api/prices?symbols=${encodeURIComponent(param)}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error('api failed');
+      results = (await res.json()).quoteResponse?.result || [];
+    } catch {
+      try {
+        const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(yhooUrl)}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error();
+        results = (await res.json()).quoteResponse?.result || [];
+      } catch {
+        try {
+          const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(yhooUrl)}`, { cache: 'no-store' });
+          if (!res.ok) throw new Error();
+          results = JSON.parse((await res.json()).contents).quoteResponse?.result || [];
+        } catch { results = []; }
+      }
+    }
+
+    const qmap = {};
+    results.forEach(q => { if (q.symbol) qmap[q.symbol] = q; });
+
+    // Symbols that are bond yields (use bp for delta, show % for value)
+    const YIELD_SYMS = new Set(['^TNX']);
+
+    document.querySelectorAll('.market-card[data-mktid]').forEach(card => {
+      const sym = card.dataset.mktid;
+      const q   = qmap[sym];
+      if (!q) return;
+
+      const price  = q.regularMarketPrice;
+      const chgPct = q.regularMarketChangePercent;
+      const chgAbs = q.regularMarketChange;
+      if (price == null) return;
+
+      const valueDiv = card.querySelector('.value');
+      const deltaDiv = card.querySelector('.delta');
+      if (!valueDiv || !deltaDiv) return;
+
+      // Format value
+      if (sym === '^GSPC' || sym === '^NDX') {
+        valueDiv.textContent = price.toLocaleString('en-US', { maximumFractionDigits: 0 });
+      } else if (sym === 'BTC-USD' || sym === 'GC=F') {
+        valueDiv.textContent = '$' + price.toLocaleString('en-US', { maximumFractionDigits: 0 });
+      } else if (sym === 'CL=F' || sym === 'BZ=F') {
+        valueDiv.textContent = '$' + price.toFixed(2);
+      } else if (YIELD_SYMS.has(sym)) {
+        valueDiv.textContent = price.toFixed(2) + '%';
+      } else if (sym === '^VIX') {
+        valueDiv.textContent = price.toFixed(1);
+      } else {
+        valueDiv.textContent = price.toFixed(2);
+      }
+
+      // Format delta
+      if (chgPct == null) return;
+      const up = chgPct >= 0;
+      let txt;
+      if (YIELD_SYMS.has(sym)) {
+        const bp = Math.round((chgAbs || 0) * 100);
+        txt = `${up ? '▲' : '▼'} ${up && bp > 0 ? '+' : ''}${bp}bp`;
+      } else {
+        txt = `${up ? '▲' : '▼'} ${up ? '+' : ''}${chgPct.toFixed(2)}%`;
+      }
+      deltaDiv.textContent = txt;
+      deltaDiv.className   = 'delta ' + (up ? 'up' : 'down');
+    });
+
+    // Also refresh matching ticker-strip items with live data
+    const TICKER_SYM_MAP = {
+      'S&P 500': '^GSPC', 'Nasdaq': '^NDX', 'BTC': 'BTC-USD',
+      'Gold': 'GC=F', 'WTI': 'CL=F', 'Brent': 'BZ=F', '10-Yr': '^TNX'
+    };
+    document.querySelectorAll('.ticker-item').forEach(item => {
+      const label = item.querySelector('.ticker-sym')?.textContent.trim();
+      const sym   = TICKER_SYM_MAP[label];
+      if (!sym) return;
+      const q = qmap[sym];
+      if (!q) return;
+      const price  = q.regularMarketPrice;
+      const chgPct = q.regularMarketChangePercent;
+      const chgAbs = q.regularMarketChange;
+      if (price == null) return;
+      const valEl = item.querySelector('.ticker-val');
+      const chgEl = item.querySelector('.ticker-chg');
+      if (!valEl || !chgEl) return;
+      if (sym === '^GSPC' || sym === '^NDX') {
+        valEl.textContent = price.toLocaleString('en-US', { maximumFractionDigits: 0 });
+      } else if (sym === 'BTC-USD' || sym === 'GC=F') {
+        valEl.textContent = '$' + price.toLocaleString('en-US', { maximumFractionDigits: 0 });
+      } else if (sym === 'CL=F' || sym === 'BZ=F') {
+        valEl.textContent = '$' + price.toFixed(2);
+      } else if (YIELD_SYMS.has(sym)) {
+        valEl.textContent = price.toFixed(2) + '%';
+      }
+      if (chgPct != null) {
+        const up = chgPct >= 0;
+        if (YIELD_SYMS.has(sym)) {
+          const bp = Math.round((chgAbs || 0) * 100);
+          chgEl.textContent = `${up ? '▲' : '▼'} ${up && bp > 0 ? '+' : ''}${bp}bp`;
+        } else {
+          chgEl.textContent = `${up ? '▲' : '▼'} ${up ? '+' : ''}${chgPct.toFixed(2)}%`;
+        }
+        chgEl.className = 'ticker-chg ' + (up ? 'up' : 'down');
+      }
+    });
+  }
+
+  fetchMarketCards();
 
   // ── Stock click modal ──
   document.querySelectorAll('.watchlist-item').forEach(item => {
