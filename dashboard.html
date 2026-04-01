@@ -377,6 +377,9 @@
     }
     .market-card .delta.up   { color: var(--teal); }
     .market-card .delta.down { color: var(--coral); }
+    .market-card .delta .delta-arrow { font-size: 10px; }
+    .market-card .delta.up   .delta-arrow { color: #27ae60; }
+    .market-card .delta.down .delta-arrow { color: #c0392b; }
 
     /* ── WATCHLIST ── */
     .watchlist-section {
@@ -1129,41 +1132,41 @@
         <div class="market-card" data-mktid="BTC-USD">
           <div class="name">Bitcoin</div>
           <div class="value">$68,577</div>
-          <div class="delta up">&#9650; +2.8%</div>
+          <div class="delta up"><span class="delta-arrow">&#9650;</span> +2.8%</div>
         </div>
         <div class="market-card" data-mktid="GC=F">
           <div class="name">Gold</div>
           <div class="value">$4,719</div>
-          <div class="delta up">&#9650; +3.5%</div>
+          <div class="delta up"><span class="delta-arrow">&#9650;</span> +3.5%</div>
         </div>
       </div>
       <div class="markets-row">
         <div class="market-card" data-mktid="CL=F">
           <div class="name">WTI Crude</div>
           <div class="value">$98.04</div>
-          <div class="delta down">&#9660; -4.3%</div>
+          <div class="delta down"><span class="delta-arrow">&#9660;</span> -4.3%</div>
         </div>
         <div class="market-card" data-mktid="BZ=F">
           <div class="name">Brent</div>
           <div class="value">$101.36</div>
-          <div class="delta down">&#9660; -2.5%</div>
+          <div class="delta down"><span class="delta-arrow">&#9660;</span> -2.5%</div>
         </div>
         <div class="market-card">
           <div class="name">2Y Yield</div>
           <div class="value">3.75%</div>
-          <div class="delta down">&#9660; -8bp</div>
+          <div class="delta down"><span class="delta-arrow">&#9660;</span> -8bp</div>
         </div>
         <div class="market-card" data-mktid="^TNX">
           <div class="name">10Y Yield</div>
           <div class="value">4.29%</div>
-          <div class="delta up">&#9650; +8bp</div>
+          <div class="delta up"><span class="delta-arrow">&#9650;</span> +8bp</div>
         </div>
       </div>
       <div class="markets-row">
         <div class="market-card">
           <div class="name">2s/10s Spread</div>
           <div class="value">+54bp</div>
-          <div class="delta up">&#9650; Steepening</div>
+          <div class="delta up"><span class="delta-arrow">&#9650;</span> Steepening</div>
         </div>
         <div class="market-card" data-mktid="^VIX">
           <div class="name">VIX</div>
@@ -1173,7 +1176,7 @@
         <div class="market-card">
           <div class="name">IG Spread</div>
           <div class="value">~88bp</div>
-          <div class="delta up">&#9650; Tightening</div>
+          <div class="delta up"><span class="delta-arrow">&#9650;</span> Tightening</div>
         </div>
         <div class="market-card">
           <div class="name">HY Spread</div>
@@ -1739,15 +1742,15 @@
       // Format delta
       if (chgPct == null) return;
       const up = chgPct >= 0;
-      let txt;
+      let pct;
       if (YIELD_SYMS.has(sym)) {
         const bp = Math.round((chgAbs || 0) * 100);
-        txt = `${up ? '▲' : '▼'} ${up && bp > 0 ? '+' : ''}${bp}bp`;
+        pct = `${up && bp > 0 ? '+' : ''}${bp}bp`;
       } else {
-        txt = `${up ? '▲' : '▼'} ${up ? '+' : ''}${chgPct.toFixed(2)}%`;
+        pct = `${up ? '+' : ''}${chgPct.toFixed(2)}%`;
       }
-      deltaDiv.textContent = txt;
-      deltaDiv.className   = 'delta ' + (up ? 'up' : 'down');
+      deltaDiv.innerHTML = `<span class="delta-arrow">${up ? '▲' : '▼'}</span> ${pct}`;
+      deltaDiv.className = 'delta ' + (up ? 'up' : 'down');
     });
 
     // Also refresh matching ticker-strip items with live data
