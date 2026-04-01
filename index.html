@@ -790,10 +790,9 @@
     .headshot-wrap {
       position: relative;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      height: 100%;
-      padding: 48px 0 48px 32px;
+      padding: 64px 0 48px 32px;
     }
     .headshot-frame {
       position: relative;
@@ -984,7 +983,12 @@
     @media (max-width: 900px) {
       nav { padding: 0 20px; }
       .nav-links { display: none; }
-      .hero { grid-template-columns: 1fr; padding: 40px 24px; min-height: auto; }
+      .hero { grid-template-columns: 58% 42%; padding: 40px 24px; min-height: auto; }
+      .hero-visual { display: block; }
+      .headshot-frame { max-width: 240px; }
+    }
+    @media (max-width: 640px) {
+      .hero { grid-template-columns: 1fr; }
       .hero-visual { display: none; }
       .hero-headline { font-size: clamp(72px, 18vw, 120px); }
       .section-work, .section-about, .section-photo, .section-contact { padding: 60px 24px; }
