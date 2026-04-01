@@ -8,21 +8,21 @@ module.exports = async function handler(req, res) {
 
   const symList = symbols.split(',').map(s => s.trim()).filter(Boolean);
 
-  // Map Yahoo Finance symbol format → Stooq symbol format
+  // Map Yahoo Finance symbol format → Stooq symbol format (null = not available, skip)
   const STOOQ_MAP = {
     '^GSPC':   '^SPX',
     '^NDX':    '^NDX',
-    'BTC-USD': 'BTC.V.USD',
-    'ETH-USD': 'ETH.V.USD',
-    'GC=F':    'GC.F',
-    'CL=F':    'CL.F',
-    'BZ=F':    'BZ.F',
-    '^TNX':    'TNX.B',
-    '^VIX':    '^VIX',
+    'BTC-USD': 'BTCUSD',
+    'ETH-USD': 'ETHUSD',
+    'GC=F':    'XAUUSD',  // spot gold — close proxy for gold futures
+    'CL=F':    'CL.F',    // WTI crude oil futures
+    'BZ=F':    null,      // Brent crude — not on Stooq
+    '^TNX':    null,      // 10Y yield — not on Stooq
+    '^VIX':    null,      // VIX — not on Stooq
   };
 
   function toStooqSym(sym) {
-    if (STOOQ_MAP[sym]) return STOOQ_MAP[sym];
+    if (sym in STOOQ_MAP) return STOOQ_MAP[sym]; // null = skip
     // US-listed stocks and ETFs: append .US
     if (!sym.includes('.') && !sym.startsWith('^') && !sym.includes('=') && !sym.includes('-')) {
       return sym + '.US';
@@ -32,6 +32,8 @@ module.exports = async function handler(req, res) {
 
   async function fetchSymbol(sym) {
     const stooqSym = toStooqSym(sym);
+    if (!stooqSym) return null; // explicitly skipped
+
     // JSON quote endpoint — close = last price, open = today's open (used as prev close proxy)
     const url = `https://stooq.com/q/l/?s=${encodeURIComponent(stooqSym)}&f=sd2t2ohlcvn&h&e=json`;
     try {
@@ -42,7 +44,12 @@ module.exports = async function handler(req, res) {
         },
       });
       if (!r.ok) return null;
-      const data = await r.json();
+
+      // Stooq sometimes returns malformed JSON (e.g. "volume":, with empty value) — repair it
+      const text = await r.text();
+      const fixed = text.replace(/:,/g, ':null,').replace(/:}/g, ':null}');
+      const data = JSON.parse(fixed);
+
       const s = data?.symbols?.[0];
       if (!s || !s.close || s.close === 'N/D') return null;
 
@@ -65,8 +72,22 @@ module.exports = async function handler(req, res) {
     }
   }
 
+  // Fetch in batches of 6 with 150ms pause to avoid Stooq rate-limiting
+  async function fetchBatched(syms, batchSize = 6, delayMs = 150) {
+    const results = [];
+    for (let i = 0; i < syms.length; i += batchSize) {
+      const batch = syms.slice(i, i + batchSize);
+      const batchResults = await Promise.all(batch.map(fetchSymbol));
+      results.push(...batchResults);
+      if (i + batchSize < syms.length) {
+        await new Promise(r => setTimeout(r, delayMs));
+      }
+    }
+    return results;
+  }
+
   try {
-    const results      = await Promise.all(symList.map(fetchSymbol));
+    const results      = await fetchBatched(symList);
     const validResults = results.filter(Boolean);
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120');
     return res.status(200).json({ quoteResponse: { result: validResults, error: null } });
