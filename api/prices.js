@@ -30,21 +30,23 @@ module.exports = async function handler(req, res) {
     return sym;
   }
 
-  // CBOE public delayed-quote API — intraday during market hours, daily otherwise
+  // VIX: tries Stooq, then CBOE quotes, then CBOE historical chart
   async function fetchVIX() {
     const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
 
-    // 1. Try intraday chart (live ticks during market hours)
+    // 1. Stooq — ^VIX may work now that fetches are sequential (prior failure was under rate-limiting)
     try {
-      const r = await fetch('https://cdn.cboe.com/api/global/delayed_quotes/charts/intraday/%5EVIX.json', {
+      const r = await fetch('https://stooq.com/q/l/?s=%5EVIX&f=sd2t2ohlcvn&h&e=json', {
         headers: { 'User-Agent': UA, 'Accept': 'application/json' },
       });
       if (r.ok) {
-        const d = await r.json();
-        const closes = d?.data?.close;
-        if (Array.isArray(closes) && closes.length >= 2) {
-          const price     = parseFloat(closes[closes.length - 1]);
-          const prevClose = parseFloat(closes[0]); // first tick = day open proxy
+        const text  = await r.text();
+        const fixed = text.replace(/:,/g, ':null,').replace(/:}/g, ':null}');
+        const data  = JSON.parse(fixed);
+        const s     = data?.symbols?.[0];
+        if (s && s.close && s.close !== 'N/D') {
+          const price     = parseFloat(s.close);
+          const prevClose = parseFloat(s.open);
           if (!isNaN(price) && !isNaN(prevClose) && prevClose > 0 && price > 0) {
             const change    = price - prevClose;
             const changePct = (change / prevClose) * 100;
@@ -54,14 +56,35 @@ module.exports = async function handler(req, res) {
       }
     } catch {}
 
-    // 2. Fallback: daily historical chart (prev close = yesterday's close)
+    // 2. CBOE delayed quotes endpoint — _VIX is CBOE's own underscore format
     try {
-      const r = await fetch('https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/%5EVIX.json', {
+      const r = await fetch('https://cdn.cboe.com/api/global/delayed_quotes/quotes/_VIX.json', {
         headers: { 'User-Agent': UA, 'Accept': 'application/json' },
       });
       if (r.ok) {
-        const d = await r.json();
-        const closes = d?.data?.close;
+        const d     = await r.json();
+        const data  = d?.data;
+        // Handle multiple possible field names across API versions
+        const price     = parseFloat(data?.last_trade_price ?? data?.close ?? data?.price);
+        const prevClose = parseFloat(data?.close ?? data?.prev_close ?? data?.previous_close);
+        const change    = parseFloat(data?.change);
+        const changePct = parseFloat(data?.change_percent ?? data?.change_pct);
+        if (!isNaN(price) && price > 0) {
+          const c  = !isNaN(change) ? change : (!isNaN(prevClose) ? price - prevClose : 0);
+          const cp = !isNaN(changePct) ? changePct : (prevClose > 0 ? (c / prevClose) * 100 : 0);
+          return { symbol: '^VIX', regularMarketPrice: price, regularMarketChange: c, regularMarketChangePercent: cp, regularMarketPreviousClose: isNaN(prevClose) ? price - c : prevClose };
+        }
+      }
+    } catch {}
+
+    // 3. CBOE historical chart — last two closes give price + prev close
+    try {
+      const r = await fetch('https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/_VIX.json', {
+        headers: { 'User-Agent': UA, 'Accept': 'application/json' },
+      });
+      if (r.ok) {
+        const d      = await r.json();
+        const closes = d?.data?.close ?? d?.data?.chart?.close ?? d?.data?.series?.close;
         if (Array.isArray(closes) && closes.length >= 2) {
           const price     = parseFloat(closes[closes.length - 1]);
           const prevClose = parseFloat(closes[closes.length - 2]);
