@@ -3,139 +3,438 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sales Playbook — Zubin Shourie</title>
+  <title>Sales Playbook: Selling Yourself and Selling Salesforce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+    :root {
+      --cream: #F4EFE0;
+      --cream-dark: #E8E0CC;
+      --charcoal: #1C1A16;
+      --coral: #D94F2B;
+      --amber: #E8971A;
+      --teal: #2A8A7E;
+      --purple: #5C3F7A;
+    }
 
-    :root { --cream: #F4F1EB; --warm-white: #FAF8F5; --tan: #E5DDD0; --sand: #D4C9B8; --charcoal: #2A2A2A; --soft-black: #1A1A1A; --forest: #3D5A47; --forest-light: #4A6B55; --forest-dark: #2E4536; --warm-gray: #8C8578; --faded-coral: #D4A08F; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Sora', -apple-system, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-    .article-nav { padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; }
-    .article-nav a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); text-decoration: none; transition: color 0.3s; }
-    .article-nav a:hover { color: var(--soft-black); }
+    body {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-family: Sora, sans-serif;
+      overflow-x: hidden;
+    }
 
-    .article-header { max-width: 800px; margin: 0 auto; padding: 4rem 3rem 2rem; }
-    .article-header .category { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin-bottom: 1.25rem; }
-    .article-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.15; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 1.25rem; }
-    .article-header .dek { font-family: 'Lora', serif; font-style: italic; font-size: 1.15rem; color: var(--warm-gray); line-height: 1.6; margin-bottom: 2rem; }
-    .article-meta { display: flex; gap: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--tan); }
-    .article-meta span { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.18;
+      mix-blend-mode: multiply;
+    }
 
-    .article-hero { max-width: 900px; margin: 2rem auto; padding: 0 3rem; }
-    .article-hero img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 4px; filter: saturate(0.85) contrast(1.05); }
+    #progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--coral);
+      z-index: 100;
+      width: 0;
+    }
 
-    .article-body { max-width: 680px; margin: 0 auto; padding: 2rem 3rem 4rem; }
-    .article-body p { font-family: 'Lora', serif; font-size: 1.05rem; line-height: 1.85; color: var(--charcoal); margin-bottom: 1.75rem; }
-    .article-body p:first-of-type::first-letter { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; float: left; line-height: 1; padding-right: 0.5rem; padding-top: 0.15rem; color: var(--soft-black); }
-    .article-body h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--soft-black); margin-top: 2.5rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: var(--cream-dark);
+      border-bottom: 2px solid var(--charcoal);
+      height: 56px;
+      padding: 0 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-    .pullquote { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; line-height: 1.4; color: var(--forest); text-align: center; padding: 2.5rem 2rem; margin: 2.5rem 0; border-top: 2px solid var(--tan); border-bottom: 2px solid var(--tan); letter-spacing: -0.02em; }
+    .nav-logo {
+      font-family: Bebas Neue, sans-serif;
+      font-size: 24px;
+      border: 2px solid var(--charcoal);
+      padding: 2px 12px;
+      text-decoration: none;
+      color: var(--charcoal);
+      position: relative;
+      display: inline-block;
+    }
 
-    .metrics-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2.5rem 0; }
-    .metric-box { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.5rem; text-align: center; }
-    .metric-box .val { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--soft-black); margin-bottom: 0.25rem; }
-    .metric-box .label { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
-    .metric-box .sub { font-family: 'Sora', sans-serif; font-size: 0.75rem; font-weight: 300; color: var(--warm-gray); margin-top: 0.25rem; }
+    .nav-logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 100%;
+      height: 100%;
+      background: var(--amber);
+      z-index: -1;
+    }
 
-    .takeaway { background: var(--forest-dark); border-radius: 6px; padding: 2rem; margin: 2.5rem 0; color: var(--cream); }
-    .takeaway .takeaway-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest-light); margin-bottom: 1rem; }
-    .takeaway p { font-family: 'Sora', sans-serif !important; font-size: 0.9rem !important; font-weight: 300; line-height: 1.7 !important; color: var(--sand) !important; }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
 
-    .article-footer { max-width: 680px; margin: 0 auto; padding: 0 3rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--tan); padding-top: 2rem; }
-    .article-footer a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-decoration: none; }
-    .article-footer a:hover { color: var(--soft-black); }
+    .nav-links a {
+      font-family: Space Mono, monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--charcoal);
+      letter-spacing: 0.05em;
+    }
 
-    .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--forest); z-index: 100; transition: width 0.1s linear; }
+    .nav-links a:hover {
+      color: var(--coral);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .article-header {
+      padding: 4rem 0 2rem;
+    }
+
+    .article-label {
+      font-family: Space Mono, monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: Bebas Neue, sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 0.95;
+      color: var(--charcoal);
+      margin-bottom: 1.5rem;
+    }
+
+    .article-dek {
+      font-family: Sora, sans-serif;
+      font-size: 1rem;
+      line-height: 1.7;
+      opacity: 0.65;
+      border-left: 3px solid var(--amber);
+      padding-left: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .article-meta {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .article-meta span {
+      font-family: Space Mono, monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .article-hero {
+      width: 100%;
+      margin-bottom: 3rem;
+      display: block;
+      border: 2px solid var(--charcoal);
+    }
+
+    .article-body {
+      padding: 3rem 0;
+    }
+
+    .article-body p {
+      font-family: Sora, sans-serif;
+      font-size: 15px;
+      line-height: 1.78;
+      margin-bottom: 1.5rem;
+    }
+
+    .article-body h2 {
+      font-family: Bebas Neue, sans-serif;
+      font-size: 1.6rem;
+      border-bottom: 2px solid var(--coral);
+      padding-bottom: 4px;
+      display: inline-block;
+      margin: 2.5rem 0 1.5rem;
+    }
+
+    .article-body h2:first-of-type {
+      margin-top: 0;
+    }
+
+    .article-body p:first-of-type::first-letter {
+      font-family: Bebas Neue, sans-serif;
+      font-size: 4rem;
+      float: left;
+      color: var(--coral);
+      line-height: 3rem;
+      padding-right: 8px;
+      padding-top: 3px;
+    }
+
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin: 2.5rem 0;
+    }
+
+    .metric-box {
+      background: var(--cream-dark);
+      border: 2px solid var(--charcoal);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .metric-box::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 100%;
+      height: 100%;
+      background: var(--amber);
+      z-index: -1;
+    }
+
+    .metric-box .val {
+      font-family: Bebas Neue, sans-serif;
+      font-size: 2.2rem;
+      color: var(--coral);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-box .label {
+      font-family: Space Mono, monospace;
+      font-size: 8px;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-box .sub {
+      font-family: Sora, sans-serif;
+      font-size: 11px;
+      color: var(--charcoal);
+      opacity: 0.7;
+    }
+
+    .pullquote {
+      border-left: 4px solid var(--amber);
+      padding: 1.5rem 2rem;
+      background: var(--cream-dark);
+      margin: 2.5rem 0;
+      border-top: 0;
+      border-right: 0;
+      border-bottom: 0;
+    }
+
+    .pullquote-text {
+      font-family: Sora, sans-serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--charcoal);
+    }
+
+    .takeaway {
+      background: var(--charcoal);
+      padding: 2rem;
+      margin: 2.5rem 0;
+      position: relative;
+      border: 2px solid var(--charcoal);
+    }
+
+    .takeaway::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: radial-gradient(circle, rgba(232, 151, 26, 0.1) 1px, transparent 1px);
+      background-size: 4px 4px;
+      pointer-events: none;
+    }
+
+    .takeaway-label {
+      font-family: Space Mono, monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .takeaway-text {
+      font-family: Sora, sans-serif;
+      font-size: 14px;
+      color: var(--cream);
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-nav {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 3rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      border-top: 2px solid var(--cream-dark);
+    }
+
+    .footer-nav a {
+      font-family: Space Mono, monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--charcoal);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-nav a:hover {
+      color: var(--coral);
+    }
 
     @media (max-width: 768px) {
-      .article-nav, .article-header, .article-hero, .article-body, .article-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
-      .article-meta { flex-direction: column; gap: 0.5rem; }
-      .metrics-row { grid-template-columns: 1fr; }
+      .container {
+        padding: 0 24px;
+      }
+
+      nav {
+        padding: 0 24px;
+      }
+
+      .article-header {
+        padding: 2rem 0 1rem;
+      }
+
+      .article-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .metrics-row {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
+  <div id="progress"></div>
 
-  <div class="progress-bar" id="progress"></div>
+  <nav>
+    <a href="index.html" class="nav-logo">ZS</a>
+    <ul class="nav-links">
+      <li><a href="index.html#work">← Work</a></li>
+    </ul>
+  </nav>
 
-  <div class="article-nav">
-    <a href="index.html">&larr; Back to portfolio</a>
-    <a href="index.html#work">All work</a>
+  <div class="container">
+    <article>
+      <header class="article-header">
+        <div class="article-label">Sales Strategy · Salesforce CRM</div>
+        <h1>Sales Playbook: Selling Yourself and Selling Salesforce</h1>
+        <p class="article-dek">A dual-product sales playbook applying SPIN methodology, objection handling, and quantifiable value propositions to two very different "products" — a marketing professional and an enterprise CRM.</p>
+        <div class="article-meta">
+          <span>Sales & Professional Selling</span>
+          <span>Fall 2025</span>
+          <span>6 min read</span>
+        </div>
+      </header>
+
+      <img src="img/work/sales-playbook-hero.jpg" alt="Sales playbook hero" class="article-hero">
+
+      <section class="article-body">
+        <p>The Sales Playbook assignment asked us to build a comprehensive sales strategy for two products: ourselves (as candidates entering the job market) and a mentor product (I chose Salesforce). The exercise covered the entire sales process — prospecting, SPIN-based discovery, capability presentation, objection handling, and closing — and forced a level of quantitative rigor that changed how I think about selling anything.</p>
+
+        <p>The most valuable part wasn't the Salesforce analysis. It was treating my own professional value as a product and building a genuine quantifiable value proposition for it.</p>
+
+        <div class="metrics-row">
+          <div class="metric-box">
+            <div class="val">$93K</div>
+            <div class="label">Personal QVP (Annual)</div>
+            <div class="sub">Time mgmt + creative ROI + collaboration</div>
+          </div>
+          <div class="metric-box">
+            <div class="val">$1.92M</div>
+            <div class="label">Salesforce QVP (Annual)</div>
+            <div class="sub">CRM + automation + analytics + cloud</div>
+          </div>
+        </div>
+
+        <h2>Prospecting: The Numbers Behind the Job Search</h2>
+
+        <p>I applied the same prospecting math to my job search that a sales team would use for pipeline management. Target: 3 job offers within 6 months. Assumed hit rate: 10% (1 offer per 10 applications). Probability of success through interview stages: 20%. That means 150 total applications needed — a number that makes the task feel less abstract and more like a pipeline to manage.</p>
+
+        <p>Prospecting sources included university career services, LinkedIn networking, and direct company career pages. The plan called for 30 minutes of daily LinkedIn engagement, 3–5 tailored applications per week, and at least 2 career events per month.</p>
+
+        <h2>SPIN Selling: Discovery That Actually Works</h2>
+
+        <p>The SPIN framework (Situation, Problem, Implication, Need-Payoff) structured the discovery process for both products. For the personal brand, situation questions explored the company's marketing challenges and team structure. Problem questions identified gaps in creative thinking or time management. Implication questions pushed the buyer to consider what those gaps cost them. Need-payoff questions asked them to imagine the improvement.</p>
+
+        <p>For Salesforce, the same framework applied at enterprise scale: understanding current CRM performance, identifying data silos and collaboration breakdowns, quantifying the cost of those inefficiencies, and projecting the ROI of fixing them.</p>
+
+        <div class="pullquote">
+          <p class="pullquote-text">The QVP exercise taught me that every professional skill has a dollar value — the question is whether you've done the math to articulate it.</p>
+        </div>
+
+        <h2>Objection Handling</h2>
+
+        <p>Both products faced five objection categories: time, need, product, source, and money. For the personal brand, the hardest objection was product-related: "Your experience seems too focused on academics with not enough real-world applications." The response framework acknowledged the concern, provided evidence of hands-on experience with marketing tools, and redirected to the specific value the role needed.</p>
+
+        <p>For Salesforce, the money objection was the most common: "The subscription cost is too high compared to other CRM options." The response led with ROI math — automation tools and advanced analytics typically saving hundreds of thousands in annual efficiency gains — and offered a tailored ROI calculation to make the value concrete.</p>
+
+        <div class="takeaway">
+          <div class="takeaway-label">What I Took From This</div>
+          <p class="takeaway-text">The playbook forced me to quantify things I'd always described qualitatively. Creative thinking isn't just "a strength" — it's a potential 10% improvement in marketing ROI on a given campaign budget. Time management isn't a soft skill — it's an estimated $5,000 in annual cost savings from reduced supervision. The discipline of building a QVP applies to any context where you're trying to demonstrate value, whether you're selling software or selling yourself in an interview.</p>
+        </div>
+      </section>
+    </article>
   </div>
 
-  <header class="article-header">
-    <div class="category">Sales Strategy &middot; Salesforce CRM</div>
-    <h1>Sales Playbook: Selling Yourself and Selling Salesforce</h1>
-    <p class="dek">A dual-product sales playbook applying SPIN methodology, objection handling, and quantifiable value propositions to two very different "products" — a marketing professional and an enterprise CRM.</p>
-    <div class="article-meta">
-      <span>Sales &amp; Professional Selling</span>
-      <span>Fall 2025</span>
-      <span>6 min read</span>
-    </div>
-  </header>
-
-  <div class="article-hero">
-    <img src="img/work/sales-playbook-hero.jpg" alt="CRM dashboard and analytics">
-  </div>
-
-  <article class="article-body">
-    <p>The Sales Playbook assignment asked us to build a comprehensive sales strategy for two products: ourselves (as candidates entering the job market) and a mentor product (I chose Salesforce). The exercise covered the entire sales process — prospecting, SPIN-based discovery, capability presentation, objection handling, and closing — and forced a level of quantitative rigor that changed how I think about selling anything.</p>
-
-    <p>The most valuable part wasn't the Salesforce analysis. It was treating my own professional value as a product and building a genuine quantifiable value proposition for it.</p>
-
-    <div class="metrics-row">
-      <div class="metric-box">
-        <div class="val">$93K</div>
-        <div class="label">Personal QVP (Annual)</div>
-        <div class="sub">Time mgmt + creative ROI + collaboration</div>
-      </div>
-      <div class="metric-box">
-        <div class="val">$1.92M</div>
-        <div class="label">Salesforce QVP (Annual)</div>
-        <div class="sub">CRM + automation + analytics + cloud</div>
-      </div>
-    </div>
-
-    <h2>Prospecting: The Numbers Behind the Job Search</h2>
-
-    <p>I applied the same prospecting math to my job search that a sales team would use for pipeline management. Target: 3 job offers within 6 months. Assumed hit rate: 10% (1 offer per 10 applications). Probability of success through interview stages: 20%. That means 150 total applications needed — a number that makes the task feel less abstract and more like a pipeline to manage.</p>
-
-    <p>Prospecting sources included university career services, LinkedIn networking, and direct company career pages. The plan called for 30 minutes of daily LinkedIn engagement, 3–5 tailored applications per week, and at least 2 career events per month.</p>
-
-    <h2>SPIN Selling: Discovery That Actually Works</h2>
-
-    <p>The SPIN framework (Situation, Problem, Implication, Need-Payoff) structured the discovery process for both products. For the personal brand, situation questions explored the company's marketing challenges and team structure. Problem questions identified gaps in creative thinking or time management. Implication questions pushed the buyer to consider what those gaps cost them. Need-payoff questions asked them to imagine the improvement.</p>
-
-    <p>For Salesforce, the same framework applied at enterprise scale: understanding current CRM performance, identifying data silos and collaboration breakdowns, quantifying the cost of those inefficiencies, and projecting the ROI of fixing them.</p>
-
-    <div class="pullquote">The QVP exercise taught me that every professional skill has a dollar value — the question is whether you've done the math to articulate it.</div>
-
-    <h2>Objection Handling</h2>
-
-    <p>Both products faced five objection categories: time, need, product, source, and money. For the personal brand, the hardest objection was product-related: "Your experience seems too focused on academics with not enough real-world applications." The response framework acknowledged the concern, provided evidence of hands-on experience with marketing tools, and redirected to the specific value the role needed.</p>
-
-    <p>For Salesforce, the money objection was the most common: "The subscription cost is too high compared to other CRM options." The response led with ROI math — automation tools and advanced analytics typically saving hundreds of thousands in annual efficiency gains — and offered a tailored ROI calculation to make the value concrete.</p>
-
-    <div class="takeaway">
-      <div class="takeaway-label">What I Took From This</div>
-      <p>The playbook forced me to quantify things I'd always described qualitatively. Creative thinking isn't just "a strength" — it's a potential 10% improvement in marketing ROI on a given campaign budget. Time management isn't a soft skill — it's an estimated $5,000 in annual cost savings from reduced supervision. The discipline of building a QVP applies to any context where you're trying to demonstrate value, whether you're selling software or selling yourself in an interview.</p>
-    </div>
-  </article>
-
-  <div class="article-footer">
-    <a href="work-celite.html">&larr; Previous project</a>
-    <a href="dashboard.html">View today's brief &rarr;</a>
+  <div class="container">
+    <nav class="footer-nav">
+      <a href="work-celite.html">← C-Elite</a>
+      <a href="dashboard.html">View today's brief →</a>
+    </nav>
   </div>
 
   <script>
     window.addEventListener('scroll', () => {
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / docHeight) * 100;
-      document.getElementById('progress').style.width = `${progress}%`;
+      document.getElementById('progress').style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100) + '%';
     });
   </script>
-
 </body>
 </html>

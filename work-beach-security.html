@@ -3,165 +3,550 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beach Security: Opportunity Assessment — Zubin Shourie</title>
+  <title>Beach Security: Finding the Fixed Object Gap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    :root { --cream: #F4F1EB; --warm-white: #FAF8F5; --tan: #E5DDD0; --sand: #D4C9B8; --charcoal: #2A2A2A; --soft-black: #1A1A1A; --forest: #3D5A47; --forest-light: #4A6B55; --forest-dark: #2E4536; --warm-gray: #8C8578; --faded-coral: #D4A08F; }
+    :root {
+      --cream: #F4EFE0;
+      --cream-dark: #E8E0CC;
+      --charcoal: #1C1A16;
+      --coral: #D94F2B;
+      --amber: #E8971A;
+      --teal: #2A8A7E;
+      --purple: #5C3F7A;
+    }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Sora', -apple-system, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-    .article-nav { padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; }
-    .article-nav a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); text-decoration: none; transition: color 0.3s; }
-    .article-nav a:hover { color: var(--soft-black); }
+    body {
+      background-color: var(--cream);
+      color: var(--charcoal);
+      font-family: 'Sora', sans-serif;
+      position: relative;
+      overflow-x: hidden;
+    }
 
-    .article-header { max-width: 800px; margin: 0 auto; padding: 4rem 3rem 2rem; }
-    .article-header .category { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin-bottom: 1.25rem; }
-    .article-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.15; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 1.25rem; }
-    .article-header .dek { font-family: 'Lora', serif; font-style: italic; font-size: 1.15rem; color: var(--warm-gray); line-height: 1.6; margin-bottom: 2rem; }
-    .article-meta { display: flex; gap: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--tan); }
-    .article-meta span { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.18;
+      mix-blend-mode: multiply;
+    }
 
-    .article-hero { max-width: 900px; margin: 2rem auto; padding: 0 3rem; }
-    .article-hero img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 4px; filter: saturate(0.85) contrast(1.05); }
+    /* Progress Bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--coral);
+      z-index: 100;
+    }
 
-    .article-body { max-width: 680px; margin: 0 auto; padding: 2rem 3rem 4rem; }
-    .article-body p { font-family: 'Lora', serif; font-size: 1.05rem; line-height: 1.85; color: var(--charcoal); margin-bottom: 1.75rem; }
-    .article-body p:first-of-type::first-letter { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; float: left; line-height: 1; padding-right: 0.5rem; padding-top: 0.15rem; color: var(--soft-black); }
-    .article-body h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--soft-black); margin-top: 2.5rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+    /* Navigation */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: var(--cream-dark);
+      border-bottom: 2px solid var(--charcoal);
+      height: 56px;
+      padding: 0 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-    .pullquote { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; line-height: 1.4; color: var(--forest); text-align: center; padding: 2.5rem 2rem; margin: 2.5rem 0; border-top: 2px solid var(--tan); border-bottom: 2px solid var(--tan); letter-spacing: -0.02em; }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      border: 2px solid var(--charcoal);
+      padding: 2px 12px;
+      text-decoration: none;
+      color: var(--charcoal);
+      position: relative;
+      display: inline-block;
+    }
 
-    .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2.5rem 0; }
-    .metric-box { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; text-align: center; }
-    .metric-box .val { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; color: var(--soft-black); margin-bottom: 0.25rem; }
-    .metric-box .label { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+    .nav-logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--amber);
+      z-index: -1;
+    }
 
-    .comp-table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.85rem; }
-    .comp-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-align: left; padding: 0.75rem 0.5rem; border-bottom: 2px solid var(--tan); }
-    .comp-table td { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--charcoal); padding: 0.65rem 0.5rem; border-bottom: 1px solid var(--tan); }
-    .comp-table td:first-child { font-weight: 400; }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
 
-    .article-body blockquote { border-left: 3px solid var(--forest); padding-left: 1.5rem; margin: 2rem 0; }
-    .article-body blockquote p { font-style: italic; color: var(--warm-gray); font-size: 1.1rem; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      color: var(--charcoal);
+    }
 
-    .takeaway { background: var(--forest-dark); border-radius: 6px; padding: 2rem; margin: 2.5rem 0; color: var(--cream); }
-    .takeaway .takeaway-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest-light); margin-bottom: 1rem; }
-    .takeaway p { font-family: 'Sora', sans-serif !important; font-size: 0.9rem !important; font-weight: 300; line-height: 1.7 !important; color: var(--sand) !important; }
+    /* Article Header */
+    .article-header {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 4rem 3rem 2rem;
+    }
 
-    .article-footer { max-width: 680px; margin: 0 auto; padding: 0 3rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--tan); padding-top: 2rem; }
-    .article-footer a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-decoration: none; }
-    .article-footer a:hover { color: var(--soft-black); }
+    .article-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
 
-    .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--forest); z-index: 100; transition: width 0.1s linear; }
+    .article-header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 0.95;
+      color: var(--charcoal);
+      letter-spacing: 0.02em;
+      margin-bottom: 1.5rem;
+    }
 
+    .article-dek {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--charcoal);
+      opacity: 0.65;
+      border-left: 3px solid var(--amber);
+      padding-left: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .article-meta {
+      display: flex;
+      gap: 2rem;
+      border-top: 2px solid var(--cream-dark);
+      padding-top: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .article-meta span {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.5;
+    }
+
+    /* Hero Image */
+    .article-hero {
+      max-width: 900px;
+      margin: 1.5rem auto;
+      padding: 0 3rem;
+    }
+
+    .article-hero img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Metrics Row */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin: 2.5rem 0;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 3rem;
+    }
+
+    .metric-box {
+      background: var(--cream-dark);
+      border: 2px solid var(--charcoal);
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .metric-box::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--amber);
+      z-index: -1;
+    }
+
+    .metric-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      color: var(--coral);
+    }
+
+    .metric-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.5;
+      margin-top: 4px;
+    }
+
+    .metric-sub {
+      font-family: 'Sora', sans-serif;
+      font-size: 11px;
+      opacity: 0.45;
+      margin-top: 4px;
+    }
+
+    /* Article Body */
+    .article-body {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 3rem 4rem;
+    }
+
+    .article-body p {
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      line-height: 1.78;
+      margin-bottom: 1.75rem;
+    }
+
+    .article-body p:first-of-type::first-letter {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      float: left;
+      line-height: 1;
+      padding-right: 0.5rem;
+      color: var(--coral);
+    }
+
+    .article-body h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: var(--charcoal);
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--coral);
+      padding-bottom: 4px;
+      display: inline-block;
+    }
+
+    /* Blockquote */
+    blockquote {
+      border-left: 3px solid var(--teal);
+      margin: 1.5rem 0;
+      padding: 1rem 1.5rem;
+      font-style: italic;
+      opacity: 0.75;
+    }
+
+    /* Data Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+    }
+
+    .data-table th {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--charcoal);
+      text-align: left;
+      background: var(--cream-dark);
+    }
+
+    .data-table td {
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Pullquote */
+    .pullquote {
+      border-left: 4px solid var(--amber);
+      padding: 1.5rem 2rem;
+      margin: 2.5rem auto;
+      background: var(--cream-dark);
+      max-width: 680px;
+    }
+
+    .pullquote-mark {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--coral);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .pullquote p {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.6;
+      font-weight: 300;
+      margin: 0;
+    }
+
+    /* Takeaway Box */
+    .takeaway {
+      background: var(--charcoal);
+      padding: 2rem;
+      margin: 2.5rem auto;
+      max-width: 680px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .takeaway::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 120px;
+      height: 120px;
+      background-image: radial-gradient(var(--amber) 1px, transparent 1px);
+      background-size: 12px 12px;
+      opacity: 0.15;
+    }
+
+    .takeaway-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--amber);
+      margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .takeaway p {
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--cream);
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+      margin: 0;
+    }
+
+    /* Article Footer */
+    .article-footer {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 3rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      border-top: 2px solid var(--cream-dark);
+    }
+
+    .article-footer a {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+
+    .article-footer a:hover {
+      color: var(--coral);
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
-      .article-nav, .article-header, .article-hero, .article-body, .article-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
-      .article-meta { flex-direction: column; gap: 0.5rem; }
-      .metrics-row { grid-template-columns: 1fr; }
+      nav {
+        padding: 0 1.5rem;
+      }
+
+      .article-header {
+        padding: 2rem 1.5rem 1.5rem;
+      }
+
+      .article-hero {
+        padding: 0 1.5rem;
+      }
+
+      .article-body {
+        padding: 1.5rem 1.5rem 2rem;
+      }
+
+      .metrics-row {
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem;
+      }
+
+      .article-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .article-footer {
+        padding: 1.5rem 1.5rem 2rem;
+        flex-direction: column;
+        gap: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-
   <div class="progress-bar" id="progress"></div>
 
-  <div class="article-nav">
-    <a href="index.html">&larr; Back to portfolio</a>
-    <a href="index.html#work">All work</a>
-  </div>
+  <nav>
+    <a href="index.html" class="nav-logo">ZS</a>
+    <ul class="nav-links">
+      <li><a href="index.html#work">← Work</a></li>
+    </ul>
+  </nav>
 
   <header class="article-header">
-    <div class="category">Product Strategy &middot; Consumer Research</div>
+    <div class="article-label">Product Strategy · Consumer Research</div>
     <h1>Beach Security: Finding the Fixed Object Gap</h1>
-    <p class="dek">An opportunity assessment for a standalone beach belonging security product — targeting active beachgoers who travel light and refuse to compromise on safety.</p>
+    <p class="article-dek">An opportunity assessment for a standalone beach belonging security product targeting active beachgoers who want to swim without worrying about their stuff.</p>
     <div class="article-meta">
-      <span>Innovation Project &middot; Team 6</span>
+      <span>Innovation Project</span>
+      <span>Team 6</span>
       <span>Spring 2026</span>
       <span>7 min read</span>
     </div>
   </header>
 
   <div class="article-hero">
-    <img src="img/work/beach-security-hero.jpg" alt="Beach at golden hour">
+    <img src="img/work/beach-security-hero.jpg" alt="Beach security research">
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric-box">
+      <div class="metric-val">$50B</div>
+      <div class="metric-label">TAM</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-val">11.2%</div>
+      <div class="metric-label">CAGR (2026-2034)</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-val">2.7M</div>
+      <div class="metric-label">Beach Thefts (UK, 2024)</div>
+    </div>
   </div>
 
   <article class="article-body">
-    <p>Active beachgoers face a trade-off that shouldn't exist: participate fully in the water, or protect your belongings. That tension — between freedom and vigilance — interrupts the exact emotional experience people go to the beach to find. Our team set out to understand the opportunity space and determine whether a viable product concept existed in this gap.</p>
+    <p>The beach security market is fragmented with no dominant fixed-object solution. The project started with a simple observation: people leave valuables unattended on beaches every day because there's no good option for securing them while swimming.</p>
 
-    <div class="metrics-row">
-      <div class="metric-box">
-        <div class="val">$50B</div>
-        <div class="label">Total Addressable Market</div>
-      </div>
-      <div class="metric-box">
-        <div class="val">11.2%</div>
-        <div class="label">CAGR (2026–2034)</div>
-      </div>
-      <div class="metric-box">
-        <div class="val">2.7M</div>
-        <div class="label">Beach Thefts (UK, 2024)</div>
-      </div>
-    </div>
-
-    <h2>The Target: Active Beachgoers, 28–35</h2>
-
-    <p>We defined our target segment as full-time employed individuals ages 28–35 who live near the coast, earn middle to upper-middle incomes, and spend their discretionary income on leisure. Psychographically, they value freedom, full participation, and shared experiences. They see the beach as a mental reset — and peace of mind is essential to that escape.</p>
-
-    <p>Behaviorally, these people visit the beach frequently, participate in water activities for extended periods, and rely on improvised security methods: hiding items under towels, asking strangers to watch their stuff, or designating a rotating "guard" from their group.</p>
-
-    <div class="pullquote">"I just want to jump in the water and not have to think about my stuff."</div>
+    <h2>The Target: Active Beachgoers 28-35</h2>
+    <p>The core demographic is health-conscious, prioritizes experiences over things, and travels internationally. They carry real valuables — phones, cards, keys — and want to swim freely without standing guard over their belongings. They view their beach time as sacred uninterrupted leisure, not a security management task.</p>
 
     <h2>The Fixed Object Gap</h2>
+    <p>Most beach security products require either watching your stuff or using a portable lock that can be easily defeated. No product addresses the "swim without anxiety" use case through a fixed, tamper-resistant anchor system. This gap is the opportunity.</p>
 
-    <p>The competitive landscape revealed a critical insight we named the Fixed Object Gap. The big names in beach security — SAFEGO, Master Lock — all depend on tethering to a heavy chair or anchored umbrella. For an active beachgoer who shows up with a towel and a surfboard, these products are useless.</p>
+    <h2>Interview Insights</h2>
+    <p>Research revealed deep psychographic motivations. When asked what prevented them from swimming longer, respondents consistently mentioned anxiety about belongings. One participant said:</p>
+    <blockquote>I just want to jump in the water and not have to think about my stuff.</blockquote>
+    <p>Another highlighted how this anxiety extends beyond high-value items:</p>
+    <blockquote>Even my towel, I have some anxiety of someone taking it.</blockquote>
+    <p>These quotes reveal that the anxiety isn't purely rational — it's emotional and territorial.</p>
 
-    <table class="comp-table">
+    <table class="data-table">
       <thead>
-        <tr><th>Product</th><th>How It Works</th><th>Core Friction</th></tr>
+        <tr>
+          <th>Product</th>
+          <th>How It Works</th>
+          <th>Core Friction</th>
+        </tr>
       </thead>
       <tbody>
-        <tr><td>SAFEGO</td><td>Hard shell box, 17' steel cable</td><td>Requires heavy chair or umbrella to lock onto</td></tr>
-        <tr><td>Master Lock 5900D</td><td>Small safe with wrap cable</td><td>Cable too short to reach larger posts</td></tr>
-        <tr><td>TanSafe Decoy</td><td>Sunscreen bottle shell</td><td>No actual lock — relies on thief not looking</td></tr>
-        <tr><td>Beach Vault</td><td>Screw-down container buried in sand</td><td>High effort, prone to mechanical failure from grit</td></tr>
-        <tr><td>Waterproof Pouches</td><td>Sealed bag worn while swimming</td><td>Annoying during water activities, unreliable seals</td></tr>
+        <tr>
+          <td>SAFEGO</td>
+          <td>Padlock-style cable lock</td>
+          <td>Requires fixed object (pole/chair leg)</td>
+        </tr>
+        <tr>
+          <td>Master Lock</td>
+          <td>Standard cable</td>
+          <td>No beach-specific use case</td>
+        </tr>
+        <tr>
+          <td>TanSafe</td>
+          <td>Towel-integrated pouch</td>
+          <td>Visible, easily grabbed</td>
+        </tr>
+        <tr>
+          <td>Beach Vault</td>
+          <td>Buried container</td>
+          <td>Bulky, location-dependent</td>
+        </tr>
+        <tr>
+          <td>Waterproof Pouches</td>
+          <td>Wearable</td>
+          <td>Can't leave it behind while swimming</td>
+        </tr>
       </tbody>
     </table>
 
-    <p>The perceptual map made the white space obvious: there's a dead zone in the top-right quadrant where high security meets high convenience. Every existing product forces a trade-off between the two. No one occupies the space we called Convenient Standalone Security.</p>
-
-    <h2>Interview Insights</h2>
-
-    <p>We conducted consumer interviews that surfaced four key themes. First, peace of mind is fragile — even when theft feels unlikely, unattended belongings create a persistent low-level anxiety. Second, the decision to enter the water is the emotional peak of conflict, where spontaneity collides with responsibility. Third, when someone stays behind to guard the group's stuff, they don't just miss out — they feel sidelined. Fourth, security is social: losing something creates guilt and tension that ripples through the whole group.</p>
-
-    <blockquote>
-      <p>"Even my towel, I have some anxiety of someone taking it."</p>
-    </blockquote>
-
     <h2>The Job to Be Done</h2>
+    <p>The core JTBD is: "When I go to the beach with valuables and want to swim, I want to secure my belongings to a fixed object so I can enter the water without anxiety." No current product solves this completely.</p>
 
-    <p>We framed the opportunity through the Jobs to Be Done lens. The truth is simple: people want a relaxing and fun time at the beach. The need: a safe and convenient way to secure their belongings. The friction: current solutions are unreliable and still leave them worrying. The job: give people peace of mind when leaving their belongings at the beach unattended.</p>
+    <div class="pullquote">
+      <div class="pullquote-mark">//</div>
+      <p>I just want to jump in the water and not have to think about my stuff.</p>
+    </div>
 
     <div class="takeaway">
-      <div class="takeaway-label">Where This Goes</div>
-      <p>The market for beach security is fragmented with no dominant solution — 30+ Amazon listings for lockable beach bags, none with meaningful market share. The opportunity is to create a new category: a standalone security product that doesn't depend on fixed objects, doesn't require excessive setup, and lets the user walk into the water without thinking twice. Gate 2 will move into concept development and prototyping against this brief.</p>
+      <div class="takeaway-label">What I Took From This</div>
+      <p>The market for beach security is fragmented with no dominant solution. The opportunity lies specifically in the fixed-object anchor use case — a product that lets active beachgoers secure belongings to a stable point (umbrella pole, lifeguard stand, rental chair) with enough tamper resistance to deter opportunistic theft. The target is someone who will pay a premium for peace of mind.</p>
     </div>
   </article>
 
-  <div class="article-footer">
-    <a href="work-buffbites.html">&larr; Previous project</a>
-    <a href="work-celite.html">Next project &rarr;</a>
-  </div>
+  <footer class="article-footer">
+    <a href="work-buffbites.html">← BuffBites</a>
+    <a href="work-celite.html">Next project →</a>
+  </footer>
 
   <script>
     window.addEventListener('scroll', () => {
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / docHeight) * 100;
-      document.getElementById('progress').style.width = `${progress}%`;
+      const p = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      document.getElementById('progress').style.width = p + '%';
     });
   </script>
-
 </body>
 </html>

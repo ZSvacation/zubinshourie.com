@@ -5,86 +5,513 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sports Franchise Debt — Zubin Shourie</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
     :root {
-      --cream: #F4F1EB; --warm-white: #FAF8F5; --tan: #E5DDD0; --sand: #D4C9B8;
-      --charcoal: #2A2A2A; --soft-black: #1A1A1A; --forest: #3D5A47;
-      --forest-light: #4A6B55; --forest-dark: #2E4536; --warm-gray: #8C8578;
-      --navy: #0a1628; --navy-mid: #1a3a5a; --gold: #b8922a;
-      --sport-green: #1a3a28; --sport-accent: #2d6a4f;
+      --cream: #F4EFE0;
+      --cream-dark: #E8E0CC;
+      --charcoal: #1C1A16;
+      --coral: #D94F2B;
+      --amber: #E8971A;
+      --teal: #2A8A7E;
+      --purple: #5C3F7A;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Sora', -apple-system, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--forest); z-index: 100; transition: width 0.1s linear; }
+    body {
+      font-family: 'Sora', -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      -webkit-font-smoothing: antialiased;
+    }
 
-    .article-nav { padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; }
-    .article-nav a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); text-decoration: none; transition: color 0.3s; }
-    .article-nav a:hover { color: var(--soft-black); }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.18;
+      mix-blend-mode: multiply;
+    }
 
-    .article-header { max-width: 800px; margin: 0 auto; padding: 4rem 3rem 2rem; }
-    .article-header .category { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin-bottom: 1.25rem; }
-    .article-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.15; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 1.25rem; }
-    .article-header .dek { font-family: 'Lora', serif; font-style: italic; font-size: 1.15rem; color: var(--warm-gray); line-height: 1.6; margin-bottom: 2rem; }
-    .article-meta { display: flex; gap: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--tan); flex-wrap: wrap; }
-    .article-meta span { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--coral);
+      z-index: 100;
+      transition: width 0.1s linear;
+    }
 
-    .article-hero { max-width: 900px; margin: 2rem auto; padding: 0 3rem; }
-    .hero-visual { width: 100%; aspect-ratio: 16/7; border-radius: 4px; background: var(--sport-green); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.85rem; }
-    .hero-visual .hero-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: #4a8a60; }
-    .hero-visual .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 3.5vw, 2.75rem); color: #c8e8d0; letter-spacing: -0.02em; line-height: 1; text-align: center; }
-    .hero-visual .hero-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: #2a5a3a; margin-top: 0.25rem; }
+    /* Navigation */
+    .article-nav {
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-    .article-body { max-width: 680px; margin: 0 auto; padding: 2rem 3rem 4rem; }
-    .article-body p { font-family: 'Lora', serif; font-size: 1.05rem; line-height: 1.85; color: var(--charcoal); margin-bottom: 1.75rem; }
-    .article-body p:first-of-type::first-letter { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; float: left; line-height: 1; padding-right: 0.5rem; padding-top: 0.15rem; color: var(--soft-black); }
-    .article-body h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.65rem; color: var(--soft-black); margin-top: 2.75rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
-    .article-body h3 { font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--forest); margin-top: 2rem; margin-bottom: 0.75rem; }
-    .article-body ul { margin: 0 0 1.75rem 1.25rem; }
-    .article-body ul li { font-family: 'Lora', serif; font-size: 1rem; line-height: 1.75; color: var(--charcoal); margin-bottom: 0.5rem; }
-    .article-body ul li strong { font-weight: 600; color: var(--soft-black); }
+    .article-nav a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--charcoal);
+      text-decoration: none;
+      transition: color 0.3s;
+      position: relative;
+    }
 
-    .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2.5rem 0; }
-    .metric-box { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; text-align: center; }
-    .metric-box .val { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; color: var(--soft-black); margin-bottom: 0.25rem; }
-    .metric-box .label { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+    .article-nav a:hover {
+      color: var(--amber);
+    }
 
-    .pullquote { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; line-height: 1.4; color: var(--forest); text-align: center; padding: 2.5rem 2rem; margin: 2.5rem 0; border-top: 2px solid var(--tan); border-bottom: 2px solid var(--tan); letter-spacing: -0.02em; }
+    /* ZS Logo with amber offset shadow */
+    .article-nav a:first-child {
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
 
-    .comp-table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.85rem; }
-    .comp-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-align: left; padding: 0.75rem 0.5rem; border-bottom: 2px solid var(--tan); }
-    .comp-table td { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--charcoal); padding: 0.65rem 0.5rem; border-bottom: 1px solid var(--tan); vertical-align: top; }
-    .comp-table td:first-child { font-weight: 500; }
-    .comp-table tr:last-child td { border-bottom: none; }
-    .tag-up { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; background: #e8f4ec; color: var(--forest); padding: 0.2rem 0.5rem; border-radius: 3px; }
-    .tag-mid { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; background: #f4f0e4; color: #8a7040; padding: 0.2rem 0.5rem; border-radius: 3px; }
-    .tag-down { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; background: #f4e8e8; color: #8a3030; padding: 0.2rem 0.5rem; border-radius: 3px; }
+    .article-nav a:first-child::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--amber);
+      opacity: 0.15;
+      transform: translate(2px, 2px);
+      z-index: -1;
+    }
 
-    .risk-table { width: 100%; border-collapse: collapse; margin: 2rem 0; }
-    .risk-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); text-align: left; padding: 0.75rem 0.75rem; border-bottom: 2px solid var(--tan); }
-    .risk-table td { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--charcoal); padding: 0.75rem 0.75rem; border-bottom: 1px solid var(--tan); vertical-align: top; line-height: 1.5; }
-    .risk-table td:first-child { font-weight: 500; color: var(--soft-black); }
-    .risk-table tr:last-child td { border-bottom: none; }
+    /* Article Header */
+    .article-header {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4rem 3rem 2rem;
+    }
 
-    .takeaway { background: var(--sport-green); border-radius: 6px; padding: 2rem; margin: 2.5rem 0; }
-    .takeaway .takeaway-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: #4a8a60; margin-bottom: 1rem; }
-    .takeaway p { font-family: 'Sora', sans-serif !important; font-size: 0.9rem !important; font-weight: 300; line-height: 1.7 !important; color: var(--sand) !important; margin-bottom: 0 !important; }
+    .article-header .category {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--teal);
+      margin-bottom: 1.25rem;
+    }
 
-    .thesis-block { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 6px; padding: 1.5rem; margin-bottom: 1rem; }
-    .thesis-block .num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--tan); line-height: 1; margin-bottom: 0.5rem; }
-    .thesis-block .point { font-family: 'Sora', sans-serif; font-size: 0.875rem; font-weight: 600; color: var(--soft-black); margin-bottom: 0.4rem; }
-    .thesis-block .support { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.6; }
+    .article-header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 1.15;
+      color: var(--charcoal);
+      letter-spacing: 0.02em;
+      margin-bottom: 1.25rem;
+    }
 
-    .context-note { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--warm-gray); background: var(--warm-white); border: 1px solid var(--tan); border-left: 3px solid var(--forest); border-radius: 0 4px 4px 0; padding: 1rem 1.25rem; margin: 2rem 0; line-height: 1.6; }
-    .context-note strong { color: var(--charcoal); }
+    .article-header .dek {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      color: var(--charcoal);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      border-left: 3px solid var(--amber);
+      padding-left: 1.25rem;
+      opacity: 0.65;
+    }
 
-    .placeholder { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #aaa; background: #f5f5f0; border: 1px dashed #ccc; border-radius: 4px; padding: 1.5rem; margin: 1.5rem 0; text-align: center; letter-spacing: 0.05em; }
+    .article-meta {
+      display: flex;
+      gap: 2rem;
+      padding-top: 1.5rem;
+      border-top: 2px solid var(--cream-dark);
+      flex-wrap: wrap;
+    }
 
+    .article-meta span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--charcoal);
+      opacity: 0.5;
+    }
+
+    /* Article Hero - Dark Panel */
+    .article-hero {
+      max-width: 900px;
+      margin: 1.5rem auto;
+      padding: 0 3rem;
+    }
+
+    .article-hero-dark {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-hero-dark .hero-dark-content {
+      background: var(--charcoal);
+      padding: 4rem 3rem;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid var(--charcoal);
+    }
+
+    .article-hero-dark .hero-dark-content::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--amber) 1px, transparent 1px);
+      background-size: 15px 15px;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .hero-dark-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+
+    .hero-dark-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      color: var(--cream);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+    }
+
+    .hero-dark-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--amber);
+      opacity: 0.8;
+      margin-top: 0.75rem;
+    }
+
+    /* Article Body */
+    .article-body {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 3rem 4rem;
+    }
+
+    .article-body p {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--charcoal);
+      margin-bottom: 1.75rem;
+    }
+
+    .article-body h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--charcoal);
+      margin-top: 2.75rem;
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.02em;
+    }
+
+    .article-body h3 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--teal);
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-body ul {
+      margin: 0 0 1.75rem 1.25rem;
+    }
+
+    .article-body ul li {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--charcoal);
+      margin-bottom: 0.5rem;
+    }
+
+    .article-body ul li strong {
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+
+    /* Metrics Row */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 2.5rem 0;
+    }
+
+    .metric-box {
+      background: var(--cream-dark);
+      border: 2px solid var(--charcoal);
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .metric-box .val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.75rem;
+      color: var(--charcoal);
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.02em;
+    }
+
+    .metric-box .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--charcoal);
+      opacity: 0.65;
+    }
+
+    /* Thesis Blocks */
+    .thesis-block {
+      border-left: 4px solid var(--amber);
+      padding: 1.25rem 1.5rem;
+      background: var(--cream-dark);
+      margin: 1rem 0;
+      border: 2px solid var(--charcoal);
+      border-left: 4px solid var(--amber);
+    }
+
+    .thesis-block .num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--amber);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .thesis-block .point {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .thesis-block .support {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1.6;
+      opacity: 0.8;
+    }
+
+    /* Context Note */
+    .context-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--charcoal);
+      background: var(--cream-dark);
+      border: 2px solid var(--charcoal);
+      border-left: 3px solid var(--teal);
+      padding: 1rem 1.25rem;
+      margin: 2rem 0;
+      line-height: 1.6;
+      opacity: 0.7;
+    }
+
+    .context-note strong {
+      color: var(--charcoal);
+      opacity: 1;
+    }
+
+    /* Placeholder Spans */
+    .placeholder {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--amber);
+      background: var(--cream-dark);
+      border: 1px dashed var(--amber);
+      padding: 2px 6px;
+      margin: 0;
+      display: inline-block;
+    }
+
+    /* Large Placeholder Divs */
+    .article-body .placeholder {
+      display: block;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    /* Tag Styles */
+    .tag-up {
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    .tag-mid {
+      color: var(--amber);
+      font-weight: 600;
+    }
+
+    .tag-down {
+      color: var(--coral);
+      font-weight: 600;
+    }
+
+    /* Tables */
+    .comp-table,
+    .risk-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+    }
+
+    .comp-table th,
+    .risk-table th {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--charcoal);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--charcoal);
+      background: var(--cream-dark);
+      border: 2px solid var(--charcoal);
+    }
+
+    .comp-table td,
+    .risk-table td {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--charcoal);
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--cream-dark);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .comp-table td:first-child,
+    .risk-table td:first-child {
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+
+    .comp-table tr:last-child td,
+    .risk-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Pullquote */
+    .pullquote {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      line-height: 1.6;
+      color: var(--charcoal);
+      text-align: center;
+      padding: 2.5rem 2rem;
+      margin: 2.5rem 0;
+      border-top: 2px solid var(--cream-dark);
+      border-bottom: 2px solid var(--cream-dark);
+      letter-spacing: 0.01em;
+    }
+
+    /* Takeaway / Bottom Line */
+    .takeaway {
+      background: var(--charcoal);
+      border: 2px solid var(--charcoal);
+      padding: 2rem;
+      margin: 2.5rem 0;
+    }
+
+    .takeaway .takeaway-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+
+    .takeaway p {
+      font-family: 'Sora', sans-serif !important;
+      font-size: 1rem !important;
+      font-weight: 300;
+      line-height: 1.8 !important;
+      color: var(--cream) !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* Article Footer */
+    .article-footer {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 3rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 2px solid var(--cream-dark);
+    }
+
+    .article-footer a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--charcoal);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .article-footer a:hover {
+      color: var(--amber);
+    }
+
+    /* Responsive */
     @media (max-width: 640px) {
-      .article-nav, .article-header, .article-hero, .article-body { padding-left: 1.5rem; padding-right: 1.5rem; }
-      .metrics-row { grid-template-columns: 1fr; }
+      .article-nav,
+      .article-header,
+      .article-hero,
+      .article-body,
+      .article-footer {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+
+      .metrics-row {
+        grid-template-columns: 1fr;
+      }
+
+      .article-footer {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -98,9 +525,9 @@
 </nav>
 
 <header class="article-header">
-  <div class="category">Investment Analysis &middot; Alternative Assets &middot; Sports &amp; Media</div>
+  <div class="article-label">Investment Analysis · Alternative Assets · Sports & Media</div>
   <h1>Sports Franchise Debt:<br>A Private Credit Opportunity for UHNW Investors</h1>
-  <p class="dek"><!-- YOUR DEK: 1–2 sentences capturing your core argument. Write this last. --></p>
+  <p class="article-dek"><!-- YOUR DEK: 1–2 sentences capturing your core argument. Write this last. --></p>
   <div class="article-meta">
     <span>Asset Class — Private Credit</span>
     <span>Client Tier — UHNW ($25M+)</span>
@@ -109,10 +536,12 @@
 </header>
 
 <div class="article-hero">
-  <div class="hero-visual">
-    <div class="hero-label">Private Credit</div>
-    <div class="hero-title">Sports Franchise Debt</div>
-    <div class="hero-sub">UHNW Opportunity Evaluation</div>
+  <div class="article-hero-dark">
+    <div class="hero-dark-content">
+      <div class="hero-dark-label">Investment Thesis</div>
+      <div class="hero-dark-title">Sports Franchise Debt</div>
+      <div class="hero-dark-sub">Private Credit · UHNW ($25M+) · March 2026</div>
+    </div>
   </div>
 </div>
 
@@ -289,6 +718,11 @@
     <!-- Brief: what sources you used, what framework you applied, what you'd do with more time/access. Honest, not defensive. -->
   </div>
 
+</div>
+
+<div class="article-footer">
+  <a href="work-sales-playbook.html">← Sales Playbook</a>
+  <a href="index.html#work">All work →</a>
 </div>
 
 <script>

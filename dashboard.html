@@ -310,7 +310,7 @@
       border: 2px solid var(--charcoal);
       padding: 18px 16px;
       position: relative;
-      background: var(--cream);
+      background: var(--cream-dark);
     }
     .market-card::after {
       content: '';
@@ -347,6 +347,74 @@
     }
     .market-card .delta.up   { color: var(--teal); }
     .market-card .delta.down { color: var(--coral); }
+
+    /* ── WATCHLIST ── */
+    .watchlist-section {
+      margin: 28px 0;
+    }
+    .watchlist-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .watchlist-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .watchlist-item {
+      border: 2px solid var(--charcoal);
+      padding: 14px 12px;
+      position: relative;
+      background: var(--cream-dark);
+    }
+    .watchlist-item::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--amber);
+      z-index: -1;
+    }
+    .watchlist-item .symbol {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .watchlist-item .company {
+      font-family: 'Sora', sans-serif;
+      font-size: 11px;
+      line-height: 1.4;
+      color: var(--charcoal);
+      opacity: 0.65;
+      margin-bottom: 8px;
+    }
+    .watchlist-item .price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.03em;
+      line-height: 1;
+      color: var(--charcoal);
+      margin-bottom: 3px;
+    }
+    .watchlist-item .change {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: var(--charcoal);
+      opacity: 0.5;
+    }
+
 
     /* ── MARKET NOTE ── */
     .market-note {
@@ -958,6 +1026,60 @@
           <div class="name">HY Spread</div>
           <div class="value">~342bp</div>
           <div class="delta down">&#9660; Near Normal</div>
+        </div>
+      </div>
+
+      <div class="watchlist-section">
+        <span class="watchlist-label">MY WATCHLIST</span>
+        <div class="watchlist-grid">
+          <div class="watchlist-item">
+            <div class="symbol">NVDA</div>
+            <div class="company">Nvidia</div>
+            <div class="price">—</div>
+            <div class="change">Loading...</div>
+          </div>
+          <div class="watchlist-item">
+            <div class="symbol">AAPL</div>
+            <div class="company">Apple</div>
+            <div class="price">—</div>
+            <div class="change">Loading...</div>
+          </div>
+          <div class="watchlist-item">
+            <div class="symbol">AMZN</div>
+            <div class="company">Amazon</div>
+            <div class="price">—</div>
+            <div class="change">Loading...</div>
+          </div>
+          <div class="watchlist-item">
+            <div class="symbol">META</div>
+            <div class="company">Meta</div>
+            <div class="price">—</div>
+            <div class="change">Loading...</div>
+          </div>
+          <div class="watchlist-item">
+            <div class="symbol">MSFT</div>
+            <div class="company">Microsoft</div>
+            <div class="price">—</div>
+            <div class="change">Loading...</div>
+          </div>
+          <div class="watchlist-item">
+            <div class="symbol">SPY</div>
+            <div class="company">S&amp;P 500 ETF</div>
+            <div class="price">—</div>
+            <div class="change">Loading...</div>
+          </div>
+          <div class="watchlist-item">
+            <div class="symbol">QQQ</div>
+            <div class="company">Nasdaq ETF</div>
+            <div class="price">—</div>
+            <div class="change">Loading...</div>
+          </div>
+          <div class="watchlist-item">
+            <div class="symbol">BTC</div>
+            <div class="company">Bitcoin</div>
+            <div class="price">—</div>
+            <div class="change">Loading...</div>
+          </div>
         </div>
       </div>
 
