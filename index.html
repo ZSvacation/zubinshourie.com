@@ -997,10 +997,11 @@
     }
     @media (max-width: 640px) {
       .hero { grid-template-columns: 1fr; display: flex; flex-direction: column; padding: 32px 24px 24px; gap: 0; }
-      .hero-visual { display: flex; justify-content: center; order: -1; margin-bottom: 24px; }
-      .headshot-wrap { padding: 0; flex-direction: row; align-items: center; gap: 12px; justify-content: center; }
-      .headshot-frame { max-width: 120px; flex-shrink: 0; }
-      .hero-orbital { display: block; max-width: 110px; opacity: 0.75; flex-shrink: 0; }
+      .hero-visual { display: flex; order: -1; margin-bottom: 28px; width: 100%; }
+      .headshot-wrap { padding: 0; flex-direction: row; align-items: center; width: 100%; gap: 0; }
+      .headshot-frame { flex: 1; max-width: none; display: flex; justify-content: center; align-items: center; order: 0; }
+      .headshot-frame img { max-width: 140px; width: 100%; }
+      .hero-orbital { display: block; flex: 1; max-width: 150px; width: 100%; opacity: 0.8; order: 1; align-self: center; margin: 0 auto; }
       .hero-headline { font-size: clamp(72px, 18vw, 120px); }
       .section-work, .section-about, .section-photo, .section-contact { padding: 60px 24px; }
       .work-grid { grid-template-columns: 1fr; }
