@@ -3,398 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Photography – ZS</title>
-
-  <!-- Fonts -->
+  <title>Photography — Zubin Shourie</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    /* Design System */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --cream: #F4EFE0;
-      --cream-dark: #E8E0CC;
-      --charcoal: #1C1A16;
-      --coral: #D94F2B;
-      --amber: #E8971A;
-      --teal: #2A8A7E;
-      --purple: #5C3F7A;
+      --cream: #F4EFE0; --cream-dark: #E8E0CC; --charcoal: #1C1A16;
+      --coral: #D94F2B; --amber: #E8971A; --teal: #2A8A7E;
     }
-
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-    }
-
-    body {
-      background-color: var(--cream);
-      color: var(--charcoal);
-      font-family: 'Sora', sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      position: relative;
-    }
-
-    /* Grain Overlay */
+    body { background: var(--cream); color: var(--charcoal); font-family: 'Sora', sans-serif; overflow-x: hidden; }
     body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' seed='2' /%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.18;
-      mix-blend-mode: multiply;
-      z-index: 9999;
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.18; mix-blend-mode: multiply;
     }
-
-    /* Navigation */
     nav {
-      position: sticky;
-      top: 0;
-      background-color: var(--cream-dark);
-      border-bottom: 2px solid var(--charcoal);
-      height: 56px;
-      padding: 0 48px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 1000;
-      gap: 48px;
+      position: sticky; top: 0; z-index: 500;
+      background: var(--cream-dark); border-bottom: 2px solid var(--charcoal);
+      padding: 0 48px; display: flex; align-items: center; justify-content: space-between; height: 56px;
     }
-
     .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--charcoal);
-      text-decoration: none;
-      border: 2px solid var(--charcoal);
-      padding: 4px 8px;
-      position: relative;
-      white-space: nowrap;
-      flex-shrink: 0;
+      font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.1em;
+      color: var(--charcoal); border: 2px solid var(--charcoal); padding: 2px 12px 0;
+      text-decoration: none; position: relative; display: inline-block; transition: background 0.2s, color 0.2s;
     }
-
     .nav-logo::after {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 100%;
-      height: 100%;
-      background-color: var(--amber);
-      z-index: -1;
+      content: ''; position: absolute; bottom: -5px; right: -5px;
+      width: 100%; height: 100%; border: 2px solid var(--amber); z-index: -1;
     }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 32px;
-      flex: 1;
-    }
-
+    .nav-logo:hover { background: var(--charcoal); color: var(--cream); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
     .nav-links a {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--charcoal);
-      text-decoration: none;
-      transition: color 0.2s ease;
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--charcoal); text-decoration: none;
     }
-
-    .nav-links a:hover {
-      color: var(--coral);
-    }
-
     .nav-cta {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--charcoal);
-      text-decoration: none;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: color 0.2s ease;
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.15em;
+      text-transform: uppercase; background: var(--charcoal); color: var(--cream);
+      border: 2px solid var(--charcoal); padding: 9px 18px; text-decoration: none;
     }
-
-    .nav-cta:hover {
-      color: var(--coral);
-    }
-
-    /* Main Content */
-    main {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 64px 0;
-    }
-
-    .page-header {
-      padding: 0 48px 48px;
-    }
-
+    .page-header { padding: 56px 48px 32px; border-bottom: 2px solid var(--charcoal); }
     .page-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 72px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: var(--charcoal);
-      margin-bottom: 16px;
-      text-transform: uppercase;
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 7vw, 80px);
+      letter-spacing: 0.04em; line-height: 0.9; color: var(--charcoal); margin-bottom: 12px;
     }
-
     .page-subtitle {
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.5px;
-      color: var(--charcoal);
-      text-transform: uppercase;
+      font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--teal); opacity: 0.75;
     }
-
-    /* Gallery Sections */
-    .gallery-section {
-      margin-bottom: 64px;
-    }
-
+    .gallery { padding: 0 48px 80px; }
     .gallery-section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--teal);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin: 48px 0 24px;
-      padding: 0 48px;
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--teal);
+      display: flex; align-items: center; gap: 16px;
+      margin: 48px 0 20px; padding-bottom: 8px;
+      border-bottom: 1px solid rgba(232,151,26,0.22);
     }
-
-    .gallery-section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--amber);
-      opacity: 0.3;
-    }
-
-    .gallery-section:first-child .gallery-section-label {
-      margin-top: 32px;
-    }
-
-    /* Gallery Grid */
-    .gallery {
-      padding: 0 48px 0;
-      columns: 3;
-      column-gap: 14px;
-    }
-
-    .gallery-item {
-      break-inside: avoid;
-      margin-bottom: 14px;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .gallery-item-wrapper {
-      position: relative;
-      overflow: hidden;
-      border: 2px solid var(--charcoal);
-    }
-
+    .gallery-section-label:first-child { margin-top: 40px; }
+    .gallery-grid { columns: 3; column-gap: 14px; }
+    .gallery-item { break-inside: avoid; margin-bottom: 14px; position: relative; cursor: pointer; }
+    .gallery-item-wrapper { position: relative; overflow: hidden; border: 2px solid var(--charcoal); }
     .gallery-item-wrapper img {
-      width: 100%;
-      display: block;
-      filter: saturate(0.9) contrast(1.04);
+      width: 100%; display: block; filter: saturate(0.9) contrast(1.04);
       transition: transform 0.4s ease, filter 0.3s;
     }
-
-    .gallery-item:hover .gallery-item-wrapper img {
-      transform: scale(1.03);
-      filter: saturate(1) contrast(1.06);
-    }
-
+    .gallery-item:hover img { transform: scale(1.03); filter: saturate(1) contrast(1.06); }
     .gallery-label {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(to top, rgba(28, 26, 22, 0.75), transparent);
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(28,26,22,0.75), transparent);
       padding: 20px 12px 10px;
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--cream);
-      opacity: 0;
-      transition: opacity 0.25s;
+      font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--cream);
+      opacity: 0; transition: opacity 0.25s;
     }
-
-    .gallery-item:hover .gallery-label {
-      opacity: 1;
-    }
-
-    .gallery-item::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      right: -4px;
-      width: 100%;
-      height: 100%;
-      border: 2px solid var(--amber);
-      z-index: -1;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .gallery-item:hover::after {
-      opacity: 1;
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .gallery {
-        columns: 2;
-      }
-
-      main {
-        padding: 48px 0;
-      }
-
-      .page-header {
-        padding: 0 32px 48px;
-      }
-
-      .gallery-section-label {
-        padding: 0 32px;
-      }
-
-      .gallery {
-        padding: 0 32px 0;
-      }
-
-      nav {
-        padding: 0 32px;
-        gap: 32px;
-      }
-
-      .page-title {
-        font-size: 56px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .gallery {
-        columns: 1;
-      }
-
-      nav {
-        flex-wrap: wrap;
-        height: auto;
-        min-height: 56px;
-        padding: 12px 24px;
-      }
-
-      .nav-links {
-        order: 3;
-        flex-basis: 100%;
-        margin-top: 12px;
-        gap: 24px;
-      }
-
-      .nav-cta {
-        order: 2;
-      }
-
-      main {
-        padding: 32px 0;
-      }
-
-      .page-header {
-        padding: 0 24px 48px;
-      }
-
-      .gallery-section-label {
-        padding: 0 24px;
-        margin: 40px 0 20px;
-      }
-
-      .gallery {
-        padding: 0 24px 0;
-      }
-
-      .page-title {
-        font-size: 48px;
-      }
-
-      .page-subtitle {
-        font-size: 11px;
-      }
-
-      .gallery-item {
-        margin-bottom: 12px;
-      }
-
-      .gallery {
-        column-gap: 12px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      nav {
-        padding: 12px 16px;
-      }
-
-      .nav-links {
-        gap: 16px;
-      }
-
-      main {
-        padding: 24px 0;
-      }
-
-      .page-header {
-        padding: 0 16px 32px;
-      }
-
-      .gallery-section-label {
-        padding: 0 16px;
-        margin: 32px 0 16px;
-        font-size: 9px;
-        letter-spacing: 0.24em;
-      }
-
-      .gallery {
-        padding: 0 16px 0;
-      }
-
-      .page-title {
-        font-size: 40px;
-        margin-bottom: 12px;
-      }
-
-      .gallery-item {
-        margin-bottom: 10px;
-      }
-
-      .gallery {
-        column-gap: 10px;
-      }
-    }
+    .gallery-item:hover .gallery-label { opacity: 1; }
+    @media (max-width: 900px) { .gallery-grid { columns: 2; } nav { padding: 0 24px; } .gallery, .page-header { padding-left: 24px; padding-right: 24px; } }
+    @media (max-width: 640px) { .gallery-grid { columns: 1; } .nav-links { display: none; } }
   </style>
 </head>
 <body>
@@ -407,342 +93,306 @@
     </ul>
     <a href="index.html" class="nav-cta">← Back</a>
   </nav>
-
-  <main>
-    <div class="page-header">
-      <h1 class="page-title">PHOTOGRAPHY</h1>
-      <p class="page-subtitle">Fujifilm X-T5 · Morocco · Iceland · Italy · New York · Colorado · Spain</p>
+  <header class="page-header">
+    <h1 class="page-title">PHOTOGRAPHY</h1>
+    <p class="page-subtitle">Fujifilm X-T5 · Morocco · Iceland · Italy · New York · Colorado · Spain</p>
+  </header>
+  <div class="gallery">
+    
+    <p class="gallery-section-label">Morocco</p>
+    <div class="gallery-grid">
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/camel-caravan.jpg" alt="Camel Caravan" loading="lazy">
+          <span class="gallery-label">Camel Caravan</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/arch-alcove-morocco.jpg" alt="Arch Alcove Morocco" loading="lazy">
+          <span class="gallery-label">Arch Alcove Morocco</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/camel-close.jpg" alt="Camel Close" loading="lazy">
+          <span class="gallery-label">Camel Close</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/desert-kasbah.jpg" alt="Desert Kasbah" loading="lazy">
+          <span class="gallery-label">Desert Kasbah</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/artisan-loom.jpg" alt="Artisan Loom" loading="lazy">
+          <span class="gallery-label">Artisan Loom</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/desert-silhouette.jpg" alt="Desert Silhouette" loading="lazy">
+          <span class="gallery-label">Desert Silhouette</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/morocco-canyon.jpg" alt="Morocco Canyon" loading="lazy">
+          <span class="gallery-label">Morocco Canyon</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/237e6344-584f-42fb-91dc-ee89b5cbb9ef-1-105-c.jpg" alt="237e6344 584f 42fb 91dc Ee89b5cbb9ef 1 105 C" loading="lazy">
+          <span class="gallery-label">237e6344 584f 42fb 91dc Ee89b5cbb9ef 1 105 C</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/sahara-camp.jpg" alt="Sahara Camp" loading="lazy">
+          <span class="gallery-label">Sahara Camp</span>
+        </div>
+      </article>
     </div>
 
-    <!-- Morocco -->
-    <section class="gallery-section">
-      <h2 class="gallery-section-label">Morocco</h2>
-      <div class="gallery">
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/arch-alcove-morocco.jpg" alt="Arch Alcove Morocco">
-            <span class="gallery-label">Arch Alcove Morocco</span>
-          </div>
-        </article>
+    <p class="gallery-section-label">Iceland</p>
+    <div class="gallery-grid">
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/ice-cave.jpg" alt="Ice Cave" loading="lazy">
+          <span class="gallery-label">Ice Cave</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/iceland-beach-sunset.jpg" alt="Iceland Beach Sunset" loading="lazy">
+          <span class="gallery-label">Iceland Beach Sunset</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/iceland-dock.jpg" alt="Iceland Dock" loading="lazy">
+          <span class="gallery-label">Iceland Dock</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/iceland-horses.jpg" alt="Iceland Horses" loading="lazy">
+          <span class="gallery-label">Iceland Horses</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/iceland-beach.jpg" alt="Iceland Beach" loading="lazy">
+          <span class="gallery-label">Iceland Beach</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/iceland-coast.jpg" alt="Iceland Coast" loading="lazy">
+          <span class="gallery-label">Iceland Coast</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/iceland-geothermal.jpg" alt="Iceland Geothermal" loading="lazy">
+          <span class="gallery-label">Iceland Geothermal</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/iceland-bridge-sunset.jpg" alt="Iceland Bridge Sunset" loading="lazy">
+          <span class="gallery-label">Iceland Bridge Sunset</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/6eeaf821-eabe-4bd2-906c-896a0cd69b47-1.jpg" alt="6eeaf821 Eabe 4bd2 906c 896a0cd69b47 1" loading="lazy">
+          <span class="gallery-label">6eeaf821 Eabe 4bd2 906c 896a0cd69b47 1</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/PNG image.jpeg" alt="PNG Image.Jpeg" loading="lazy">
+          <span class="gallery-label">PNG Image.Jpeg</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/iceland-lighthouse.jpg" alt="Iceland Lighthouse" loading="lazy">
+          <span class="gallery-label">Iceland Lighthouse</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/ravens-ice.jpg" alt="Ravens Ice" loading="lazy">
+          <span class="gallery-label">Ravens Ice</span>
+        </div>
+      </article>
+    </div>
 
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/artisan-loom.jpg" alt="Artisan Loom">
-            <span class="gallery-label">Artisan Loom</span>
-          </div>
-        </article>
+    <p class="gallery-section-label">Italy</p>
+    <div class="gallery-grid">
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/colosseum-arch.jpg" alt="Colosseum Arch" loading="lazy">
+          <span class="gallery-label">Colosseum Arch</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/rome-gelato-vendor.jpg" alt="Rome Gelato Vendor" loading="lazy">
+          <span class="gallery-label">Rome Gelato Vendor</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/st-peters-rome.jpg" alt="St Peters Rome" loading="lazy">
+          <span class="gallery-label">St Peters Rome</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/c56e34e9-c143-4a0b-8326-0f30117fd9f4-1-105-c.jpg" alt="C56e34e9 C143 4a0b 8326 0f30117fd9f4 1 105 C" loading="lazy">
+          <span class="gallery-label">C56e34e9 C143 4a0b 8326 0f30117fd9f4 1 105 C</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/venice-canal.jpg" alt="Venice Canal" loading="lazy">
+          <span class="gallery-label">Venice Canal</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/museum-sculptures.jpg" alt="Museum Sculptures" loading="lazy">
+          <span class="gallery-label">Museum Sculptures</span>
+        </div>
+      </article>
+    </div>
 
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/camel-caravan.jpg" alt="Camel Caravan">
-            <span class="gallery-label">Camel Caravan</span>
-          </div>
-        </article>
+    <p class="gallery-section-label">Spain</p>
+    <div class="gallery-grid">
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/gibraltar-monkey.jpg" alt="Gibraltar Monkey" loading="lazy">
+          <span class="gallery-label">Gibraltar Monkey</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/montserrat-monastery.jpg" alt="Montserrat Monastery" loading="lazy">
+          <span class="gallery-label">Montserrat Monastery</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/montserrat-rooftops.jpg" alt="Montserrat Rooftops" loading="lazy">
+          <span class="gallery-label">Montserrat Rooftops</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/montserrat-valley.jpg" alt="Montserrat Valley" loading="lazy">
+          <span class="gallery-label">Montserrat Valley</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/tunnel-couple.jpg" alt="Tunnel Couple" loading="lazy">
+          <span class="gallery-label">Tunnel Couple</span>
+        </div>
+      </article>
+    </div>
 
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/camel-close.jpg" alt="Camel Close">
-            <span class="gallery-label">Camel Close</span>
-          </div>
-        </article>
+    <p class="gallery-section-label">New York</p>
+    <div class="gallery-grid">
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/nyc-bar.jpg" alt="Nyc Bar" loading="lazy">
+          <span class="gallery-label">Nyc Bar</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/nyc-street-dusk.jpg" alt="Nyc Street Dusk" loading="lazy">
+          <span class="gallery-label">Nyc Street Dusk</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/dscf1954.jpg" alt="Dscf1954" loading="lazy">
+          <span class="gallery-label">Dscf1954</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/dscf1907.jpg" alt="Dscf1907" loading="lazy">
+          <span class="gallery-label">Dscf1907</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/dscf1896-2.jpg" alt="Dscf1896 2" loading="lazy">
+          <span class="gallery-label">Dscf1896 2</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/nyc-sunset.jpg" alt="Nyc Sunset" loading="lazy">
+          <span class="gallery-label">Nyc Sunset</span>
+        </div>
+      </article>
+    </div>
 
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/desert-kasbah.jpg" alt="Desert Kasbah">
-            <span class="gallery-label">Desert Kasbah</span>
-          </div>
-        </article>
+    <p class="gallery-section-label">Colorado</p>
+    <div class="gallery-grid">
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/boulder-hillside.jpg" alt="Boulder Hillside" loading="lazy">
+          <span class="gallery-label">Boulder Hillside</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/colorado-mountain-mist.jpg" alt="Colorado Mountain Mist" loading="lazy">
+          <span class="gallery-label">Colorado Mountain Mist</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/ski-lift-colorado.jpg" alt="Ski Lift Colorado" loading="lazy">
+          <span class="gallery-label">Ski Lift Colorado</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/dscf2260.jpg" alt="Dscf2260" loading="lazy">
+          <span class="gallery-label">Dscf2260</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/flatirons-sunset.jpg" alt="Flatirons Sunset" loading="lazy">
+          <span class="gallery-label">Flatirons Sunset</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/park-path-nyc.jpg" alt="Park Path Nyc" loading="lazy">
+          <span class="gallery-label">Park Path Nyc</span>
+        </div>
+      </article>
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/IMG_2477.jpeg" alt="IMG_2477.Jpeg" loading="lazy">
+          <span class="gallery-label">IMG_2477.Jpeg</span>
+        </div>
+      </article>
+    </div>
 
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/desert-silhouette.jpg" alt="Desert Silhouette">
-            <span class="gallery-label">Desert Silhouette</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/morocco-canyon.jpg" alt="Morocco Canyon">
-            <span class="gallery-label">Morocco Canyon</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/sahara-camp.jpg" alt="Sahara Camp">
-            <span class="gallery-label">Sahara Camp</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/sahara-dunes-sunset.jpg" alt="Sahara Dunes Sunset">
-            <span class="gallery-label">Sahara Dunes Sunset</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/moped-path.jpg" alt="Moped Path">
-            <span class="gallery-label">Moped Path</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- Iceland -->
-    <section class="gallery-section">
-      <h2 class="gallery-section-label">Iceland</h2>
-      <div class="gallery">
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/ice-cave.jpg" alt="Ice Cave">
-            <span class="gallery-label">Ice Cave</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/iceland-beach-sunset.jpg" alt="Iceland Beach Sunset">
-            <span class="gallery-label">Iceland Beach Sunset</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/iceland-beach.jpg" alt="Iceland Beach">
-            <span class="gallery-label">Iceland Beach</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/iceland-bridge-sunset.jpg" alt="Iceland Bridge Sunset">
-            <span class="gallery-label">Iceland Bridge Sunset</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/iceland-coast.jpg" alt="Iceland Coast">
-            <span class="gallery-label">Iceland Coast</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/iceland-dock.jpg" alt="Iceland Dock">
-            <span class="gallery-label">Iceland Dock</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/iceland-geothermal.jpg" alt="Iceland Geothermal">
-            <span class="gallery-label">Iceland Geothermal</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/iceland-horses.jpg" alt="Iceland Horses">
-            <span class="gallery-label">Iceland Horses</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/iceland-lighthouse.jpg" alt="Iceland Lighthouse">
-            <span class="gallery-label">Iceland Lighthouse</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/ravens-ice.jpg" alt="Ravens Ice">
-            <span class="gallery-label">Ravens Ice</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- Italy -->
-    <section class="gallery-section">
-      <h2 class="gallery-section-label">Italy</h2>
-      <div class="gallery">
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/colosseum-arch.jpg" alt="Colosseum Arch">
-            <span class="gallery-label">Colosseum Arch</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/colosseum.jpg" alt="Colosseum">
-            <span class="gallery-label">Colosseum</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/rome-gelato-vendor.jpg" alt="Rome Gelato Vendor">
-            <span class="gallery-label">Rome Gelato Vendor</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/st-peters-rome.jpg" alt="St Peters Rome">
-            <span class="gallery-label">St Peters Rome</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/venice-canal.jpg" alt="Venice Canal">
-            <span class="gallery-label">Venice Canal</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/museum-sculptures.jpg" alt="Museum Sculptures">
-            <span class="gallery-label">Museum Sculptures</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- Spain -->
-    <section class="gallery-section">
-      <h2 class="gallery-section-label">Spain</h2>
-      <div class="gallery">
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/gibraltar-monkey.jpg" alt="Gibraltar Monkey">
-            <span class="gallery-label">Gibraltar Monkey</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/montserrat-monastery.jpg" alt="Montserrat Monastery">
-            <span class="gallery-label">Montserrat Monastery</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/montserrat-rooftops.jpg" alt="Montserrat Rooftops">
-            <span class="gallery-label">Montserrat Rooftops</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/montserrat-valley.jpg" alt="Montserrat Valley">
-            <span class="gallery-label">Montserrat Valley</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/tunnel-couple.jpg" alt="Tunnel Couple">
-            <span class="gallery-label">Tunnel Couple</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- New York -->
-    <section class="gallery-section">
-      <h2 class="gallery-section-label">New York</h2>
-      <div class="gallery">
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/nyc-bar.jpg" alt="Nyc Bar">
-            <span class="gallery-label">Nyc Bar</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/nyc-street-dusk.jpg" alt="Nyc Street Dusk">
-            <span class="gallery-label">Nyc Street Dusk</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/nyc-sunset.jpg" alt="Nyc Sunset">
-            <span class="gallery-label">Nyc Sunset</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/park-path-nyc.jpg" alt="Park Path Nyc">
-            <span class="gallery-label">Park Path Nyc</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/soho-dusk.jpg" alt="Soho Dusk">
-            <span class="gallery-label">Soho Dusk</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- Colorado -->
-    <section class="gallery-section">
-      <h2 class="gallery-section-label">Colorado</h2>
-      <div class="gallery">
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/boulder-hillside.jpg" alt="Boulder Hillside">
-            <span class="gallery-label">Boulder Hillside</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/colorado-mountain-mist.jpg" alt="Colorado Mountain Mist">
-            <span class="gallery-label">Colorado Mountain Mist</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/colorado-peaks.jpg" alt="Colorado Peaks">
-            <span class="gallery-label">Colorado Peaks</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/flatirons-sunset.jpg" alt="Flatirons Sunset">
-            <span class="gallery-label">Flatirons Sunset</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/golden-vista-colorado.jpg" alt="Golden Vista Colorado">
-            <span class="gallery-label">Golden Vista Colorado</span>
-          </div>
-        </article>
-
-        <article class="gallery-item">
-          <div class="gallery-item-wrapper">
-            <img src="img/photos/ski-lift-colorado.jpg" alt="Ski Lift Colorado">
-            <span class="gallery-label">Ski Lift Colorado</span>
-          </div>
-        </article>
-      </div>
-    </section>
-  </main>
+  </div>
 </body>
 </html>
