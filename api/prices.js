@@ -1,4 +1,4 @@
-// Vercel serverless — Yahoo Finance chart API, no external dependencies
+// Vercel serverless — Stooq financial data, no API key required
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
@@ -8,35 +8,61 @@ module.exports = async function handler(req, res) {
 
   const symList = symbols.split(',').map(s => s.trim()).filter(Boolean);
 
+  // Map Yahoo Finance symbol format → Stooq symbol format
+  const STOOQ_MAP = {
+    '^GSPC':   '^SPX',
+    '^NDX':    '^NDX',
+    'BTC-USD': 'BTC.V.USD',
+    'ETH-USD': 'ETH.V.USD',
+    'GC=F':    'GC.F',
+    'CL=F':    'CL.F',
+    'BZ=F':    'BZ.F',
+    '^TNX':    'TNX.B',
+    '^VIX':    '^VIX',
+  };
+
+  function toStooqSym(sym) {
+    if (STOOQ_MAP[sym]) return STOOQ_MAP[sym];
+    // US-listed stocks and ETFs: append .US
+    if (!sym.includes('.') && !sym.startsWith('^') && !sym.includes('=') && !sym.includes('-')) {
+      return sym + '.US';
+    }
+    return sym;
+  }
+
   async function fetchSymbol(sym) {
-    const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=1d`;
-    const r = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        'Accept': 'application/json',
-        'Accept-Language': 'en-US,en;q=0.9',
-      },
-    });
-    if (!r.ok) return null;
-    const data = await r.json();
-    const result = data?.chart?.result?.[0];
-    if (!result) return null;
+    const stooqSym = toStooqSym(sym);
+    // JSON quote endpoint — close = last price, open = today's open (used as prev close proxy)
+    const url = `https://stooq.com/q/l/?s=${encodeURIComponent(stooqSym)}&f=sd2t2ohlcvn&h&e=json`;
+    try {
+      const r = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+          'Accept': 'application/json',
+        },
+      });
+      if (!r.ok) return null;
+      const data = await r.json();
+      const s = data?.symbols?.[0];
+      if (!s || !s.close || s.close === 'N/D') return null;
 
-    const meta      = result.meta;
-    const price     = meta.regularMarketPrice ?? meta.price;
-    const prevClose = meta.chartPreviousClose ?? meta.previousClose ?? meta.regularMarketPreviousClose;
-    if (price == null || prevClose == null) return null;
+      const price     = parseFloat(s.close);
+      const prevClose = parseFloat(s.open); // today's open ≈ yesterday's close
+      if (isNaN(price) || isNaN(prevClose) || prevClose === 0 || price === 0) return null;
 
-    const change    = price - prevClose;
-    const changePct = (change / prevClose) * 100;
+      const change    = price - prevClose;
+      const changePct = (change / prevClose) * 100;
 
-    return {
-      symbol:                       sym,
-      regularMarketPrice:           price,
-      regularMarketChange:          change,
-      regularMarketChangePercent:   changePct,
-      regularMarketPreviousClose:   prevClose,
-    };
+      return {
+        symbol:                     sym,
+        regularMarketPrice:         price,
+        regularMarketChange:        change,
+        regularMarketChangePercent: changePct,
+        regularMarketPreviousClose: prevClose,
+      };
+    } catch {
+      return null;
+    }
   }
 
   try {

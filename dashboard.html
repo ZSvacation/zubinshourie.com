@@ -1649,6 +1649,7 @@
       if (!res.ok) throw new Error('api failed');
       const data = await res.json();
       results = data.quoteResponse?.result || [];
+      if (results.length === 0) throw new Error('empty results');
     } catch {
       try {
         // Fallback 1: corsproxy.io
@@ -1705,6 +1706,7 @@
       const res = await fetch(`/api/prices?symbols=${encodeURIComponent(param)}`, { cache: 'no-store' });
       if (!res.ok) throw new Error('api failed');
       results = (await res.json()).quoteResponse?.result || [];
+      if (results.length === 0) throw new Error('empty results');
     } catch {
       try {
         const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(yhooUrl)}`, { cache: 'no-store' });
