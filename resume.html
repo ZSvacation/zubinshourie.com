@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume — Zubin Shourie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:      #F4EFE0;
+      --cream-dark: #E8E0CC;
+      --charcoal:   #1C1A16;
+      --coral:      #D94F2B;
+      --amber:      #E8971A;
+      --teal:       #2A8A7E;
+      --purple:     #5C3F7A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-family: 'Sora', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.18;
+      pointer-events: none;
+      mix-blend-mode: multiply;
+      z-index: 9999;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 56px;
+      background: rgba(244,239,224,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(28,26,22,0.08);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a.active { opacity: 1; color: var(--coral); }
+
+    /* ── PAGE WRAPPER ── */
+    .page { padding-top: 56px; }
+
+    /* ── HERO HEADER ── */
+    .resume-header {
+      padding: 72px 80px 56px;
+      border-bottom: 2px solid var(--charcoal);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: end;
+      position: relative;
+      overflow: hidden;
+    }
+    .resume-header::before {
+      content: 'RESUME';
+      position: absolute;
+      top: -20px; right: -20px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(120px, 18vw, 240px);
+      letter-spacing: -0.02em;
+      color: var(--cream-dark);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .header-left { position: relative; z-index: 1; }
+    .header-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 12px;
+    }
+    .header-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 9vw, 120px);
+      letter-spacing: 0.02em;
+      line-height: 0.9;
+      color: var(--charcoal);
+      margin-bottom: 20px;
+    }
+    .header-bio {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      opacity: 0.65;
+      max-width: 560px;
+    }
+    .header-right {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .contact-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      opacity: 0.55;
+      text-decoration: none;
+      transition: opacity 0.2s, color 0.2s;
+    }
+    .contact-item:hover { opacity: 1; color: var(--coral); }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 2px solid var(--charcoal);
+    }
+    .stat-cell {
+      padding: 28px 32px;
+      border-right: 1px solid rgba(28,26,22,0.12);
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      color: var(--charcoal);
+    }
+    .stat-num span { color: var(--coral); }
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      opacity: 0.4;
+      margin-top: 5px;
+    }
+
+    /* ── CONTENT GRID ── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      border-right: 1px solid rgba(28,26,22,0.12);
+      padding: 48px 32px;
+      position: sticky;
+      top: 56px;
+      height: calc(100vh - 56px);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .sidebar-section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 7px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      opacity: 0.35;
+      margin-bottom: 12px;
+    }
+    .skill-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border: 1px solid rgba(28,26,22,0.18);
+      border-radius: 2px;
+      margin: 3px 3px 3px 0;
+      color: var(--charcoal);
+      opacity: 0.7;
+    }
+    .skill-tag.amber { border-color: var(--amber); color: var(--amber); opacity: 1; }
+    .skill-tag.teal  { border-color: var(--teal);  color: var(--teal);  opacity: 1; }
+    .sidebar-edu {
+      border-left: 3px solid var(--amber);
+      padding-left: 14px;
+    }
+    .edu-school {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.04em;
+      color: var(--charcoal);
+      line-height: 1.1;
+    }
+    .edu-degree {
+      font-size: 10px;
+      line-height: 1.5;
+      color: var(--charcoal);
+      opacity: 0.55;
+      margin-top: 5px;
+    }
+    .edu-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-top: 6px;
+    }
+    .cert-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.08em;
+      color: var(--charcoal);
+      opacity: 0.55;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(28,26,22,0.06);
+      line-height: 1.5;
+    }
+    .cert-item:last-child { border-bottom: none; }
+    .lang-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(28,26,22,0.06);
+    }
+    .lang-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+    }
+    .lang-level {
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      opacity: 0.38;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main-content {
+      padding: 48px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    /* Section */
+    .resume-section {}
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 32px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(28,26,22,0.1);
+    }
+    .section-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      color: var(--coral);
+      opacity: 0.7;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.06em;
+      color: var(--charcoal);
+    }
+
+    /* Experience entry */
+    .exp-entry {
+      position: relative;
+      padding: 24px 24px 24px 28px;
+      margin-bottom: 4px;
+      border-left: 3px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+      border-radius: 0 4px 4px 0;
+    }
+    .exp-entry:hover {
+      border-left-color: var(--teal);
+      background: rgba(42,138,126,0.04);
+    }
+    .exp-entry:last-child { margin-bottom: 0; }
+    .exp-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+    .exp-role {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.04em;
+      color: var(--charcoal);
+      line-height: 1;
+    }
+    .exp-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      opacity: 0.38;
+      white-space: nowrap;
+      padding-top: 4px;
+    }
+    .exp-org {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+    .exp-org span {
+      color: var(--charcoal);
+      opacity: 0.35;
+      margin-left: 8px;
+    }
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .exp-bullets li {
+      font-size: 11.5px;
+      line-height: 1.65;
+      color: var(--charcoal);
+      opacity: 0.7;
+      padding-left: 16px;
+      position: relative;
+    }
+    .exp-bullets li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+      font-weight: 700;
+    }
+    .exp-bullets li strong {
+      color: var(--charcoal);
+      opacity: 1;
+      font-weight: 600;
+    }
+
+    /* Callout metric */
+    .metric-pill {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--charcoal);
+      color: var(--cream);
+      padding: 3px 8px;
+      border-radius: 2px;
+      margin-left: 6px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+    }
+    .metric-pill.amber { background: var(--amber); color: var(--charcoal); }
+    .metric-pill.teal  { background: var(--teal);  color: var(--cream); }
+    .metric-pill.coral { background: var(--coral); color: var(--cream); }
+
+    /* Project entry */
+    .proj-entry {
+      position: relative;
+      padding: 24px;
+      margin-bottom: 4px;
+      border: 1px solid rgba(28,26,22,0.1);
+      border-radius: 4px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .proj-entry:hover {
+      border-color: var(--amber);
+      background: rgba(232,151,26,0.03);
+    }
+    .proj-entry::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; right: -4px;
+      width: 100%; height: 100%;
+      border: 1px solid var(--amber);
+      border-radius: 4px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .proj-entry:hover::after { opacity: 1; }
+    .proj-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      color: var(--charcoal);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .proj-context {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 12px;
+    }
+
+    /* Print */
+    @media print {
+      nav { display: none; }
+      .page { padding-top: 0; }
+      .sidebar { position: static; height: auto; }
+      body::after { display: none; }
+      .exp-entry, .proj-entry { break-inside: avoid; }
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .resume-header { padding: 48px 32px 40px; grid-template-columns: 1fr; }
+      .header-right { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 16px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .content-grid { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid rgba(28,26,22,0.1); }
+      .main-content { padding: 40px 32px; }
+    }
+    @media (max-width: 640px) {
+      .resume-header { padding: 32px 24px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .stat-cell { padding: 20px; }
+      .main-content { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">ZS</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#work">Work</a>
+    <a href="dashboard.html">Daily Brief</a>
+    <a href="resume.html" class="active">Resume</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="resume-header">
+    <div class="header-left">
+      <div class="header-eyebrow">Marketing · Strategy · Creative</div>
+      <div class="header-name">Zubin<br>Shourie</div>
+      <p class="header-bio">Senior undergraduate at CU Boulder's Leeds School of Business studying Marketing, graduating December 2026. Interested in brand strategy, alternative investments, and media — with hands-on experience in luxury real estate, political communications, and large-scale event production.</p>
+    </div>
+    <div class="header-right">
+      <a href="tel:3109620976" class="contact-item">(310) 962-0976</a>
+      <a href="mailto:zubin.shourie@icloud.com" class="contact-item">zubin.shourie@icloud.com</a>
+      <a href="https://linkedin.com/in/zubinshourie" target="_blank" class="contact-item">linkedin / zubinshourie</a>
+      <a href="https://zubinshourie.com" target="_blank" class="contact-item">zubinshourie.com</a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-cell">
+      <div class="stat-num">46<span>.7%</span></div>
+      <div class="stat-label">Market share — C-Cycle sim</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">$56<span>K</span></div>
+      <div class="stat-label">Fundraised — Pike on a Bike</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">$40<span>K</span></div>
+      <div class="stat-label">Event budget managed</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">500<span>+</span></div>
+      <div class="stat-label">Ad leads researched &amp; qualified</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content-grid">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div>
+        <div class="sidebar-section-label">Education</div>
+        <div class="sidebar-edu">
+          <div class="edu-school">University of Colorado Boulder</div>
+          <div class="edu-degree">B.S. Business Administration<br>Marketing Concentration<br>Leeds School of Business</div>
+          <div class="edu-date">Expected May 2026</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-label">Certifications</div>
+        <div class="cert-item">Google Analytics GA4<br><span style="color:var(--teal);opacity:1;">2024</span></div>
+        <div class="cert-item">Google Ads — Search<br><span style="color:var(--teal);opacity:1;">2024</span></div>
+        <div class="cert-item">Google Ads — Display &amp; Measurement<br><span style="color:var(--teal);opacity:1;">2024</span></div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-label">Languages</div>
+        <div class="lang-row">
+          <span class="lang-name">English</span>
+          <span class="lang-level">Native</span>
+        </div>
+        <div class="lang-row" style="border-bottom:none;">
+          <span class="lang-name">Spanish</span>
+          <span class="lang-level">Conversational</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-label">Tools</div>
+        <span class="skill-tag amber">Google Analytics</span>
+        <span class="skill-tag amber">Google Ads</span>
+        <span class="skill-tag">Excel</span>
+        <span class="skill-tag">Canva</span>
+        <span class="skill-tag">Photoshop</span>
+        <span class="skill-tag">Illustrator</span>
+        <span class="skill-tag teal">DaVinci Resolve</span>
+        <span class="skill-tag">SEO / SEM</span>
+        <span class="skill-tag">A/B Testing</span>
+      </div>
+
+      <div>
+        <div class="sidebar-section-label">Interests</div>
+        <div style="font-size:10px;line-height:1.9;color:var(--charcoal);opacity:0.45;font-family:'Space Mono',monospace;letter-spacing:0.06em;">
+          Personal Investing<br>
+          Photography / Film<br>
+          Tennis · Basketball · Golf<br>
+          Music
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <!-- EXPERIENCE -->
+      <section class="resume-section">
+        <div class="section-header">
+          <span class="section-num">01</span>
+          <span class="section-title">Experience</span>
+        </div>
+
+        <div class="exp-entry">
+          <div class="exp-meta">
+            <div class="exp-role">Marketing Intern</div>
+            <div class="exp-date">Jul – Aug 2025</div>
+          </div>
+          <div class="exp-org">YellowScene Magazine <span>Boulder, CO</span></div>
+          <ul class="exp-bullets">
+            <li>Researched, qualified, and organized <strong>500+ advertising leads</strong> supporting the sales pipeline for Boulder County's largest independent publication <span class="metric-pill">75,000+ readers</span></li>
+            <li>Streamlined lead research workflows saving the sales team <strong>2–5 hours weekly</strong>; supported client meetings and in-person partner outreach</li>
+          </ul>
+        </div>
+
+        <div class="exp-entry">
+          <div class="exp-meta">
+            <div class="exp-role">Summer Associate</div>
+            <div class="exp-date">Jun – Aug 2024</div>
+          </div>
+          <div class="exp-org">Dan Urbach Luxury Real Estate <span>Pacific Palisades, CA</span></div>
+          <ul class="exp-bullets">
+            <li>Supported marketing for <strong>50+ active listings</strong> valued at $5M–$20M each; prepared <strong>100+ CMAs</strong> used directly in client presentations for Pacific Palisades' <span class="metric-pill amber">#1 Ranked Broker</span></li>
+            <li>Produced social media content and weekly newsletters for a luxury brand serving high-net-worth clientele; assisted with open houses and client-facing events</li>
+          </ul>
+        </div>
+
+        <div class="exp-entry">
+          <div class="exp-meta">
+            <div class="exp-role">Social &amp; Philanthropy Chairman</div>
+            <div class="exp-date">Oct 2023 – Aug 2024</div>
+          </div>
+          <div class="exp-org">Pi Kappa Alpha, CU Boulder <span>Boulder, CO</span></div>
+          <ul class="exp-bullets">
+            <li>Managed <strong>$40,000+ event budget</strong> across 15+ large-scale events drawing <strong>1,000+ attendees each</strong>; oversaw vendor contracts, venue negotiations, and full logistics execution</li>
+            <li>Raised <strong>$56,000</strong> for road safety through Pike-on-a-Bike, a branded live-stream fundraiser <span class="metric-pill teal">Branded Fundraiser</span>; built sponsorship decks and managed partner relationships from outreach through execution</li>
+          </ul>
+        </div>
+
+        <div class="exp-entry">
+          <div class="exp-meta">
+            <div class="exp-role">Policy Associate</div>
+            <div class="exp-date">May 2021 – Jun 2022</div>
+          </div>
+          <div class="exp-org">Dulce Vasquez for LA City Council, District 9 <span>Los Angeles, CA</span></div>
+          <ul class="exp-bullets">
+            <li>Conducted <strong>200+ bilingual (English/Spanish)</strong> stakeholder conversations across a 40,000+ constituent base, synthesizing community feedback into policy briefs adopted into the campaign platform</li>
+            <li>Drafted housing and homelessness policy proposals; coordinated a <strong>40-person volunteer team</strong> on community outreach operations</li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- PROJECTS -->
+      <section class="resume-section">
+        <div class="section-header">
+          <span class="section-num">02</span>
+          <span class="section-title">Projects</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+
+          <div class="proj-entry">
+            <div class="proj-title">VP of Marketing — C-Cycle Business Simulation</div>
+            <div class="proj-context">CU Boulder Leeds School of Business · 2025</div>
+            <ul class="exp-bullets">
+              <li>Achieved <strong>46.7% market share</strong> — highest in cohort <span class="metric-pill coral">93rd Percentile Profit</span> — through data-driven pricing, segmentation, and competitive positioning across a six-product portfolio</li>
+            </ul>
+          </div>
+
+          <div class="proj-entry">
+            <div class="proj-title">Brand Background Review — Honey Nut Cheerios</div>
+            <div class="proj-context">Brand Strategy · Leeds School of Business · Fall 2025</div>
+            <ul class="exp-bullets">
+              <li>Conducted a 14-section brand audit using Simmons, Circana, Mintel, and Vivvix; analyzed the <strong>$11B RTE cereal market</strong>, 3-year share trends, and ad spend trajectory across General Mills' portfolio</li>
+              <li>Identified Gen Z snack-occasion as the primary growth opportunity — supported by Circana data showing <strong>5% YoY increase</strong> in cereal consumption among 18–34 year olds; mapped competitive positioning vs. Cinnamon Toast Crunch, Frosted Flakes, and Honey Bunches of Oats</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- COURSEWORK -->
+      <section class="resume-section">
+        <div class="section-header">
+          <span class="section-num">03</span>
+          <span class="section-title">Relevant Coursework</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <span class="skill-tag">Statistical Analysis in Business</span>
+          <span class="skill-tag">Consumer Behavior</span>
+          <span class="skill-tag">Digital Marketing</span>
+          <span class="skill-tag">Advertising &amp; Promotion Management</span>
+          <span class="skill-tag">Communications Strategy</span>
+          <span class="skill-tag">Sports Management &amp; Marketing</span>
+          <span class="skill-tag">Brand Strategy</span>
+          <span class="skill-tag">Marketing Analytics</span>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+</div>
+
+</body>
+</html>

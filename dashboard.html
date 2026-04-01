@@ -1242,16 +1242,16 @@
       </div>
 
       <div class="market-stories">
-        <div class="market-story" data-story="q1close" style="cursor:pointer;">
-          <div class="story-source">Equities &middot; March 31 &middot; Q1 Close</div>
-          <div class="story-headline">Stocks Post Best Day Since May — S&amp;P +2.91%, Nasdaq +3.83% on Iran Peace Hopes</div>
-          <div class="story-summary">All three major indexes closed sharply higher, driven by optimism that the Iran conflict could wind down. Tech and semiconductors led the Nasdaq surge. Still, the indexes closed out their worst quarter in four years.</div>
+        <div class="market-story" data-story="iran-rally" style="cursor:pointer;">
+          <div class="story-source">Equities &middot; April 1 &middot; Peace Trade</div>
+          <div class="story-headline">Oil Below $100 as Markets Price In Iran Deal — S&amp;P Pushes Further Into Q2 Rally Mode</div>
+          <div class="story-summary">WTI crude broke below $100 for the first time since Operation Epic Fury began as Trump's "two to three weeks" comment triggered a broad peace-trade rotation. Energy stocks fell, tech and travel led the advance.</div>
           <div class="story-read-more">Read full story →</div>
         </div>
-        <div class="market-story" data-story="openai-ads" style="cursor:pointer;">
-          <div class="story-source">OpenAI &middot; Advertising &middot; March 31</div>
-          <div class="story-headline">OpenAI Scales ChatGPT Ads Pilot Globally — Self-Serve Tools and Global Expansion on the Roadmap</div>
-          <div class="story-summary">Early demand has stayed strong as OpenAI expands its ChatGPT advertising pilot beyond early partners, with global rollout and self-serve ad tools coming.</div>
+        <div class="market-story" data-story="google-ai-ads" style="cursor:pointer;">
+          <div class="story-source">Google &middot; Ad Tech &middot; April 1</div>
+          <div class="story-headline">Google Embeds Shopping &amp; Travel Ads Into AI Mode — The Biggest Search Ad Format Shift in a Decade</div>
+          <div class="story-summary">Sponsored retailer listings and travel placements now appear inside Google AI Mode conversational responses, not just beside them. It's contextual ad placement at a scale the industry hasn't seen since the mobile transition.</div>
           <div class="story-read-more">Read full story →</div>
         </div>
       </div>
@@ -1265,11 +1265,11 @@
       </div>
       <div class="upcoming">
         <div class="upcoming-label">Today / Upcoming</div>
-        <div class="upcoming-item">NBA — Full slate tonight, April 1, as teams jockey for playoff seeding in the final stretch of the regular season</div>
-        <div class="upcoming-item">The Boys Season 5 — Two-part premiere April 8 on Prime Video. Final season of the show.</div>
+        <div class="upcoming-item">NBA Tonight (April 1) — Thunder vs. Pelicans, Heat vs. Celtics, Warriors vs. Nuggets among the slate as playoff seeding tightens</div>
+        <div class="upcoming-item">The Boys Season 5 — One week away. Two-part premiere April 8 on Prime Video. Final season.</div>
       </div>
       <div class="market-note" style="border-left-color: var(--coral); background: rgba(217,79,43,0.05); margin-top: 24px;">
-        Shai Gilgeous-Alexander put on a clinic last night: 47 points on 12-of-19 shooting, 21-of-25 from the line, and 8 points in overtime as OKC turned away Detroit 114-110. SGA extended his NBA-record consecutive 20+ point game streak to 136. The Thunder are now the first team in the league to reach 60 wins this season — and the first in franchise history to hit 60 in back-to-back years. In Dallas, Minnesota stomped the Mavericks 124-94 as Julius Randle had 24 and Ayo Dosunmu put up a triple-double (16-15-12). The Western Conference is being sorted out in real time.
+        Luka was dialed in on Tuesday night — 42 points, 12 assists on efficient shooting as the Lakers dismantled Cleveland 127-113. The win is the Lakers&#x27; 50th of the season and officially clinches their playoff spot. Deandre Ayton added 18 points and 9 rebounds in a strong effort off the bench. Meanwhile in Dallas, the Bucks handled the Mavericks 123-99, sending Dallas to their fifth straight loss. Dallas is sliding at the worst time — their West playoff seeding is slipping and the team looks disconnected from two months ago. The Western Conference race is getting sharp.
       </div>
     </div>
 
@@ -1367,10 +1367,10 @@
   const ESPN_SUMMARY    = 'https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/summary';
 
   const STATIC_GAMES = [
-    { away:'Pistons', home:'Thunder', awayScore:110, homeScore:114, status:'Final (OT)',
-      note:'SGA: 47 pts — OKC 1st to 60 wins', espnId: '401810952' },
-    { away:'Timberwolves', home:'Mavericks', awayScore:124, homeScore:94, status:'Final',
-      note:'Randle: 24 pts — MIN dominates', espnId: '401810950' },
+    { away:'Cavaliers', home:'Lakers', awayScore:113, homeScore:127, status:'Final',
+      note:'Luka: 42 pts, 12 ast — LAL clinches playoff spot (50 wins)', espnId: '401810958' },
+    { away:'Bucks', home:'Mavericks', awayScore:123, homeScore:99, status:'Final',
+      note:'MIL dominant — DAL drops 5th straight', espnId: '401858694' },
   ];
 
   function renderCards(games) {
@@ -1644,12 +1644,11 @@
 
     let results = [];
     try {
-      // Try direct first (works on some networks)
-      const res = await fetch(yhooUrl, { cache: 'no-store' });
-      if (res.ok) {
-        const data = await res.json();
-        results = data.quoteResponse?.result || [];
-      } else throw new Error('direct failed');
+      // Primary: Vercel serverless proxy at /api/prices (no CORS issues)
+      const res = await fetch(`/api/prices?symbols=${symbolsParam}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error('api failed');
+      const data = await res.json();
+      results = data.quoteResponse?.result || [];
     } catch {
       try {
         // Fallback 1: corsproxy.io
