@@ -1635,54 +1635,62 @@
     const tickers = ['SPY', 'QQQ', 'SMH', 'GOOGL', 'AMZN', 'MSFT', 'UBER', 'GLD', 'BX', 'VXUS', 'COHR', 'SCHD', 'NLR', 'STX', 'META', 'AAPL', 'PLTR', 'CRWV', 'XLU', 'GFS', 'BABA', 'SOFI', 'APLD', 'ORCL', 'QCOM', 'UUUU', 'BLK', 'ARKQ', 'VUG'];
     const symbolsParam = tickers.join(',');
     const yhooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbolsParam}`;
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yhooUrl)}`;
-    try {
-      const res = await fetch(proxyUrl);
-      if (!res.ok) throw new Error('Proxy error');
-      const wrapper = await res.json();
-      const data = JSON.parse(wrapper.contents);
-      const results = data.quoteResponse?.result || [];
 
-      // Build a map of symbol to quote data
-      const quoteMap = {};
-      results.forEach(quote => {
-        if (quote.symbol) {
-          quoteMap[quote.symbol] = quote;
-        }
-      });
-
-      // Update each watchlist item by finding it by symbol text
-      document.querySelectorAll('.watchlist-item').forEach(item => {
-        const symbolDiv = item.querySelector('.symbol');
-        const priceDiv = item.querySelector('.price');
-        const changeDiv = item.querySelector('.change');
-
-        if (!symbolDiv || !priceDiv || !changeDiv) return;
-
-        const symbol = symbolDiv.textContent.trim();
-        const quote = quoteMap[symbol];
-
-        if (quote) {
-          // Format price with $ and 2 decimals
-          const price = quote.regularMarketPrice;
-          if (price !== undefined && price !== null) {
-            priceDiv.textContent = '$' + price.toFixed(2);
-          }
-
-          // Format change with arrow and % sign
-          const changePercent = quote.regularMarketChangePercent;
-          if (changePercent !== undefined && changePercent !== null) {
-            const isPositive = changePercent >= 0;
-            const arrow = isPositive ? '▲' : '▼';
-            const sign = isPositive ? '+' : '';
-            changeDiv.textContent = `${arrow} ${sign}${changePercent.toFixed(2)}%`;
-            changeDiv.className = 'change ' + (isPositive ? 'up' : 'down');
-          }
-        }
-      });
-    } catch(e) {
-      // Silently fail - leave '—' placeholders in place
+    async function tryFetch(proxyUrl, parseResponse) {
+      const res = await fetch(proxyUrl, { cache: 'no-store' });
+      if (!res.ok) throw new Error('fetch failed');
+      return parseResponse(await res.json());
     }
+
+    let results = [];
+    try {
+      // Try direct first (works on some networks)
+      const res = await fetch(yhooUrl, { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        results = data.quoteResponse?.result || [];
+      } else throw new Error('direct failed');
+    } catch {
+      try {
+        // Fallback 1: corsproxy.io
+        const data = await tryFetch(
+          `https://corsproxy.io/?${encodeURIComponent(yhooUrl)}`,
+          d => d
+        );
+        results = data.quoteResponse?.result || [];
+      } catch {
+        try {
+          // Fallback 2: allorigins
+          const data = await tryFetch(
+            `https://api.allorigins.win/get?url=${encodeURIComponent(yhooUrl)}`,
+            d => JSON.parse(d.contents)
+          );
+          results = data.quoteResponse?.result || [];
+        } catch { results = []; }
+      }
+    }
+
+    // Build a map of symbol to quote data
+    const quoteMap = {};
+    results.forEach(quote => { if (quote.symbol) quoteMap[quote.symbol] = quote; });
+
+    // Update each watchlist item
+    document.querySelectorAll('.watchlist-item').forEach(item => {
+      const symbolDiv = item.querySelector('.symbol');
+      const priceDiv  = item.querySelector('.price');
+      const changeDiv = item.querySelector('.change');
+      if (!symbolDiv || !priceDiv || !changeDiv) return;
+      const quote = quoteMap[symbolDiv.textContent.trim()];
+      if (!quote) return;
+      const price = quote.regularMarketPrice;
+      if (price != null) priceDiv.textContent = '$' + price.toFixed(2);
+      const chg = quote.regularMarketChangePercent;
+      if (chg != null) {
+        const up = chg >= 0;
+        changeDiv.textContent = `${up ? '▲' : '▼'} ${up ? '+' : ''}${chg.toFixed(2)}%`;
+        changeDiv.className = 'change ' + (up ? 'up' : 'down');
+      }
+    });
   }
 
   fetchPositionPrices();
@@ -1877,7 +1885,7 @@
     'DXY':     { sym: 'TVC:DXY',          label: 'US Dollar Index' },
   };
 
-  document.querySelector('.ticker-strip').addEventListener('click', function(e) {
+  document.addEventListener('click', function(e) {
     const item = e.target.closest('.ticker-item');
     if (!item) return;
     const symEl = item.querySelector('.ticker-sym');
