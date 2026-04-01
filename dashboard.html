@@ -1874,16 +1874,12 @@
     'DXY':     { sym: 'TVC:DXY',          label: 'US Dollar Index' },
   };
 
-  // Deduplicate — only bind first instance of each sym to avoid double-firing on duplicate set
-  const boundTickerSyms = new Set();
   document.querySelectorAll('.ticker-item').forEach(item => {
     const symEl = item.querySelector('.ticker-sym');
     const valEl = item.querySelector('.ticker-val');
     const chgEl = item.querySelector('.ticker-chg');
     if (!symEl) return;
     const label = symEl.textContent.trim();
-    if (boundTickerSyms.has(label)) return;
-    boundTickerSyms.add(label);
     const mapped = TICKER_MAP[label] || { sym: label, label: label };
     item.addEventListener('click', () => {
       const price  = valEl ? valEl.textContent.trim() : '—';
