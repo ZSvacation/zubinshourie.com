@@ -146,6 +146,9 @@
     .ticker-item {
       display: inline-flex;
       align-items: center;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-radius: 3px;
       gap: 6px;
       padding: 0 20px;
       border-right: 1px solid rgba(28,26,22,0.1);
@@ -174,6 +177,8 @@
     .ticker-chg.up   { color: var(--teal); }
     .ticker-chg.down { color: var(--coral); }
     .ticker-dot { color: var(--amber); font-size: 10px; opacity: 0.6; padding: 0 4px; }
+    .ticker-item:hover { background: rgba(28,26,22,0.08); }
+    .ticker-item:hover .ticker-sym { opacity: 0.8; }
 
     /* ── CONTENT WRAPPER ── */
     .brief-content {
@@ -1856,6 +1861,36 @@
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
+
+  // ── Ticker strip click → stock modal ──
+  const TICKER_MAP = {
+    'S&P 500': { sym: 'SP:SPX',          label: 'S&P 500 Index' },
+    'Nasdaq':  { sym: 'NASDAQ:NDX',       label: 'Nasdaq 100 Index' },
+    'BTC':     { sym: 'BITSTAMP:BTCUSD',  label: 'Bitcoin / USD' },
+    'Gold':    { sym: 'TVC:GOLD',         label: 'Gold Spot (XAU/USD)' },
+    'WTI':     { sym: 'TVC:USOIL',        label: 'WTI Crude Oil' },
+    'Brent':   { sym: 'TVC:UKOIL',        label: 'Brent Crude Oil' },
+    '10-Yr':   { sym: 'TVC:US10Y',        label: 'US 10-Year Treasury Yield' },
+    'DXY':     { sym: 'TVC:DXY',          label: 'US Dollar Index' },
+  };
+
+  // Deduplicate — only bind first instance of each sym to avoid double-firing on duplicate set
+  const boundTickerSyms = new Set();
+  document.querySelectorAll('.ticker-item').forEach(item => {
+    const symEl = item.querySelector('.ticker-sym');
+    const valEl = item.querySelector('.ticker-val');
+    const chgEl = item.querySelector('.ticker-chg');
+    if (!symEl) return;
+    const label = symEl.textContent.trim();
+    if (boundTickerSyms.has(label)) return;
+    boundTickerSyms.add(label);
+    const mapped = TICKER_MAP[label] || { sym: label, label: label };
+    item.addEventListener('click', () => {
+      const price  = valEl ? valEl.textContent.trim() : '—';
+      const change = chgEl ? chgEl.textContent.trim() : '—';
+      openStockModal(mapped.sym, mapped.label, price, change);
+    });
+  });
 
   function closeStockModal() {
     const modal = document.getElementById('stock-modal');
