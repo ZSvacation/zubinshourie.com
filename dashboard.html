@@ -444,9 +444,11 @@
       font-family: 'Space Mono', monospace;
       font-size: 9px;
       letter-spacing: 0.06em;
-      color: var(--charcoal);
-      opacity: 0.5;
+      color: rgba(28, 26, 22, 0.5); /* same visual as charcoal @ 0.5 opacity, but allows child override */
     }
+    .watchlist-item .change .change-arrow { font-size: 8px; }
+    .watchlist-item .change.up   .change-arrow { color: #27ae60; }
+    .watchlist-item .change.down .change-arrow { color: #c0392b; }
 
 
     /* ── MARKET NOTE ── */
@@ -1670,7 +1672,7 @@
       const chg = quote.regularMarketChangePercent;
       if (chg != null) {
         const up = chg >= 0;
-        changeDiv.textContent = `${up ? '▲' : '▼'} ${up ? '+' : ''}${chg.toFixed(2)}%`;
+        changeDiv.innerHTML = `<span class="change-arrow">${up ? '▲' : '▼'}</span> ${up ? '+' : ''}${chg.toFixed(2)}%`;
         changeDiv.className = 'change ' + (up ? 'up' : 'down');
       }
     });
