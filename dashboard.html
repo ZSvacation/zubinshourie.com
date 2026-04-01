@@ -114,33 +114,54 @@
     /* ── TICKER STRIP ── */
     .ticker-strip {
       background: var(--cream-dark);
-      padding: 0 48px;
-      display: flex;
-      gap: 0;
       border-bottom: 2px solid var(--charcoal);
-      overflow-x: auto;
+      overflow: hidden;
+      position: relative;
+      height: 38px;
     }
-    .ticker-strip::-webkit-scrollbar { display: none; }
-    .ticker-item {
+    .ticker-strip::before,
+    .ticker-strip::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 48px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .ticker-strip::before { left: 0; background: linear-gradient(to right, var(--cream-dark), transparent); }
+    .ticker-strip::after  { right: 0; background: linear-gradient(to left, var(--cream-dark), transparent); }
+    .ticker-track {
       display: flex;
-      flex-direction: column;
-      padding: 14px 24px;
-      border-right: 1px solid rgba(28,26,22,0.12);
-      min-width: fit-content;
-      gap: 3px;
+      white-space: nowrap;
+      animation: ticker-scroll 60s linear infinite;
+      width: max-content;
+      height: 100%;
+      align-items: center;
     }
-    .ticker-item:last-child { border-right: none; }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 20px;
+      border-right: 1px solid rgba(28,26,22,0.1);
+      height: 100%;
+    }
     .ticker-sym {
       font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.22em;
+      font-size: 9px;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--charcoal);
-      opacity: 0.45;
+      opacity: 0.5;
     }
     .ticker-val {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
+      font-size: 15px;
       letter-spacing: 0.04em;
       color: var(--charcoal);
       line-height: 1;
@@ -148,10 +169,11 @@
     .ticker-chg {
       font-family: 'Space Mono', monospace;
       font-size: 9px;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
     }
     .ticker-chg.up   { color: var(--teal); }
     .ticker-chg.down { color: var(--coral); }
+    .ticker-dot { color: var(--amber); font-size: 10px; opacity: 0.6; padding: 0 4px; }
 
     /* ── CONTENT WRAPPER ── */
     .brief-content {
@@ -885,45 +907,47 @@
 
   <!-- TICKER -->
   <div class="ticker-strip">
-    <div class="ticker-item">
-      <span class="ticker-sym">S&amp;P 500</span>
-      <span class="ticker-val">6,528</span>
-      <span class="ticker-chg up">&#9650; +2.91%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="ticker-sym">Nasdaq</span>
-      <span class="ticker-val">21,590</span>
-      <span class="ticker-chg up">&#9650; +3.83%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="ticker-sym">Bitcoin</span>
-      <span class="ticker-val">$66,710</span>
-      <span class="ticker-chg down">&#9660; ~flat</span>
-    </div>
-    <div class="ticker-item">
-      <span class="ticker-sym">Gold</span>
-      <span class="ticker-val">$4,578</span>
-      <span class="ticker-chg up">&#9650; +1.10%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="ticker-sym">WTI Crude</span>
-      <span class="ticker-val">$102.48</span>
-      <span class="ticker-chg down">&#9660; -0.39%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="ticker-sym">Brent</span>
-      <span class="ticker-val">$106.73</span>
-      <span class="ticker-chg down">&#9660; -0.61%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="ticker-sym">Q1 S&amp;P</span>
-      <span class="ticker-val">–5.3%</span>
-      <span class="ticker-chg down">&#9660; Worst since '22</span>
-    </div>
-    <div class="ticker-item">
-      <span class="ticker-sym">Gas / Gal</span>
-      <span class="ticker-val">$4.00+</span>
-      <span class="ticker-chg down">&#9660; Crosses $4</span>
+    <div class="ticker-track">
+      <!-- Set 1 -->
+      <div class="ticker-item"><span class="ticker-sym">S&amp;P 500</span><span class="ticker-val">6,528</span><span class="ticker-chg up">&#9650; +2.91%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">Nasdaq</span><span class="ticker-val">21,590</span><span class="ticker-chg up">&#9650; +3.83%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">BTC</span><span class="ticker-val">$66,710</span><span class="ticker-chg down">&#9660; flat</span></div>
+      <div class="ticker-item"><span class="ticker-sym">Gold</span><span class="ticker-val">$4,578</span><span class="ticker-chg up">&#9650; +1.10%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">WTI</span><span class="ticker-val">$102.48</span><span class="ticker-chg down">&#9660; -0.39%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">Brent</span><span class="ticker-val">$106.73</span><span class="ticker-chg down">&#9660; -0.61%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">10-Yr</span><span class="ticker-val">4.21%</span><span class="ticker-chg down">&#9660; -3bp</span></div>
+      <div class="ticker-item"><span class="ticker-sym">DXY</span><span class="ticker-val">104.2</span><span class="ticker-chg down">&#9660; -0.18%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">SPY</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">QQQ</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">NVDA</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">AAPL</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">META</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">PLTR</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">MSFT</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">AMZN</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">GLD</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">BABA</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <span class="ticker-dot">✦</span>
+      <!-- Set 2 (duplicate for seamless loop) -->
+      <div class="ticker-item"><span class="ticker-sym">S&amp;P 500</span><span class="ticker-val">6,528</span><span class="ticker-chg up">&#9650; +2.91%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">Nasdaq</span><span class="ticker-val">21,590</span><span class="ticker-chg up">&#9650; +3.83%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">BTC</span><span class="ticker-val">$66,710</span><span class="ticker-chg down">&#9660; flat</span></div>
+      <div class="ticker-item"><span class="ticker-sym">Gold</span><span class="ticker-val">$4,578</span><span class="ticker-chg up">&#9650; +1.10%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">WTI</span><span class="ticker-val">$102.48</span><span class="ticker-chg down">&#9660; -0.39%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">Brent</span><span class="ticker-val">$106.73</span><span class="ticker-chg down">&#9660; -0.61%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">10-Yr</span><span class="ticker-val">4.21%</span><span class="ticker-chg down">&#9660; -3bp</span></div>
+      <div class="ticker-item"><span class="ticker-sym">DXY</span><span class="ticker-val">104.2</span><span class="ticker-chg down">&#9660; -0.18%</span></div>
+      <div class="ticker-item"><span class="ticker-sym">SPY</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">QQQ</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">NVDA</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">AAPL</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">META</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">PLTR</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">MSFT</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">AMZN</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">GLD</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <div class="ticker-item"><span class="ticker-sym">BABA</span><span class="ticker-val">—</span><span class="ticker-chg">—</span></div>
+      <span class="ticker-dot">✦</span>
     </div>
   </div>
 
