@@ -1331,7 +1331,7 @@
 
   <div class="brief-teaser-inner reveal">
     <div>
-      <div class="brief-teaser-label">Morning Edition &middot; Tuesday, March 31, 2026</div>
+      <div class="brief-teaser-label" id="brief-edition-label">Morning Edition &middot; Tuesday, March 31, 2026</div>
       <div class="brief-teaser-title">THE <span>DAILY</span><br>BRIEF</div>
       <p class="brief-teaser-body">
         Markets, world news, sports, and culture — aggregated and written every morning. Q1 ends today down 5.3%, the worst quarter in four years. Trump escalates in Iran. SGA drops 47. The Boys final season in eight days.
@@ -1346,8 +1346,8 @@
     </div>
     <div class="brief-teaser-cta">
       <div class="brief-date-block">
-        <div class="day">31</div>
-        <div class="month">March 2026</div>
+        <div class="day" id="brief-day">31</div>
+        <div class="month" id="brief-month">March 2026</div>
       </div>
       <a href="dashboard.html" class="btn-brief">Read Today's Brief →</a>
     </div>
@@ -1517,6 +1517,25 @@
   window.addEventListener('scroll', () => {
     nav.style.borderBottomColor = window.scrollY > 20 ? 'var(--coral)' : 'var(--charcoal)';
   });
+</script>
+
+<script>
+  // Auto-update daily brief date block
+  (function() {
+    const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const now    = new Date();
+    const day    = now.getDate();
+    const month  = MONTHS[now.getMonth()];
+    const year   = now.getFullYear();
+    const dow    = DAYS[now.getDay()];
+    const label  = document.getElementById('brief-edition-label');
+    const dayEl  = document.getElementById('brief-day');
+    const monEl  = document.getElementById('brief-month');
+    if (label) label.textContent = `Morning Edition · ${dow}, ${month} ${day}, ${year}`;
+    if (dayEl)  dayEl.textContent  = day;
+    if (monEl)  monEl.textContent  = `${month} ${year}`;
+  })();
 </script>
 
 </body>
