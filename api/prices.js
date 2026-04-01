@@ -18,7 +18,7 @@ module.exports = async function handler(req, res) {
     'CL=F':    'CL.F',    // WTI crude oil futures
     'BZ=F':    null,      // Brent crude — not on Stooq
     '^TNX':    null,      // 10Y yield — not on Stooq
-    '^VIX':    null,      // VIX — not on Stooq
+    '^VIX':    '__VIX__', // handled by fetchVIX() via CBOE
   };
 
   function toStooqSym(sym) {
@@ -30,7 +30,57 @@ module.exports = async function handler(req, res) {
     return sym;
   }
 
+  // CBOE public delayed-quote API — intraday during market hours, daily otherwise
+  async function fetchVIX() {
+    const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
+
+    // 1. Try intraday chart (live ticks during market hours)
+    try {
+      const r = await fetch('https://cdn.cboe.com/api/global/delayed_quotes/charts/intraday/%5EVIX.json', {
+        headers: { 'User-Agent': UA, 'Accept': 'application/json' },
+      });
+      if (r.ok) {
+        const d = await r.json();
+        const closes = d?.data?.close;
+        if (Array.isArray(closes) && closes.length >= 2) {
+          const price     = parseFloat(closes[closes.length - 1]);
+          const prevClose = parseFloat(closes[0]); // first tick = day open proxy
+          if (!isNaN(price) && !isNaN(prevClose) && prevClose > 0 && price > 0) {
+            const change    = price - prevClose;
+            const changePct = (change / prevClose) * 100;
+            return { symbol: '^VIX', regularMarketPrice: price, regularMarketChange: change, regularMarketChangePercent: changePct, regularMarketPreviousClose: prevClose };
+          }
+        }
+      }
+    } catch {}
+
+    // 2. Fallback: daily historical chart (prev close = yesterday's close)
+    try {
+      const r = await fetch('https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/%5EVIX.json', {
+        headers: { 'User-Agent': UA, 'Accept': 'application/json' },
+      });
+      if (r.ok) {
+        const d = await r.json();
+        const closes = d?.data?.close;
+        if (Array.isArray(closes) && closes.length >= 2) {
+          const price     = parseFloat(closes[closes.length - 1]);
+          const prevClose = parseFloat(closes[closes.length - 2]);
+          if (!isNaN(price) && !isNaN(prevClose) && prevClose > 0 && price > 0) {
+            const change    = price - prevClose;
+            const changePct = (change / prevClose) * 100;
+            return { symbol: '^VIX', regularMarketPrice: price, regularMarketChange: change, regularMarketChangePercent: changePct, regularMarketPreviousClose: prevClose };
+          }
+        }
+      }
+    } catch {}
+
+    return null;
+  }
+
   async function fetchSymbol(sym) {
+    // VIX: route to CBOE instead of Stooq
+    if (sym === '^VIX') return fetchVIX();
+
     const stooqSym = toStooqSym(sym);
     if (!stooqSym) return null; // explicitly skipped
 
