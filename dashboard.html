@@ -566,7 +566,25 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
     }
-    .ent-card { text-decoration: none; color: inherit; display: block; }
+    .ent-card {
+      text-decoration: none; color: inherit; display: block;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.15s;
+    }
+    .ent-card:hover { transform: translateY(-2px); }
+    .ent-card::after {
+      content: 'READ MORE ↗';
+      position: absolute;
+      bottom: 0; right: 0;
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      color: var(--coral);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .ent-card:hover::after { opacity: 1; }
     .ent-card .ent-image {
       width: 100%;
       aspect-ratio: 16/10;
@@ -876,6 +894,112 @@
       opacity: 0.58;
     }
 
+    /* ── ENT MODAL ── */
+    #ent-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(28,26,22,0.72);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    #ent-modal.open { display: flex; }
+    #ent-inner {
+      background: var(--cream);
+      border: 2px solid var(--charcoal);
+      width: min(92vw, 680px);
+      max-height: 88vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    #ent-inner::after {
+      content: '';
+      position: absolute;
+      bottom: -7px; right: -7px;
+      width: 100%; height: 100%;
+      border: 2px solid var(--amber);
+      z-index: -1;
+    }
+    #ent-header {
+      padding: 20px 28px 16px;
+      border-bottom: 2px solid var(--charcoal);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: sticky;
+      top: 0;
+      background: var(--cream);
+      z-index: 10;
+    }
+    #ent-close {
+      background: none;
+      border: 2px solid var(--charcoal);
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--charcoal);
+      padding: 2px 10px;
+      line-height: 1.2;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.05em;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+    #ent-close:hover { background: var(--charcoal); color: var(--cream); }
+    #ent-body { padding: 24px 28px 32px; }
+    #ent-body .ent-modal-banner {
+      width: 100%;
+      aspect-ratio: 16/7;
+      border: 2px solid var(--charcoal);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      padding: 1rem;
+    }
+    #ent-body .ent-modal-type {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 10px;
+    }
+    #ent-body h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(20px, 3vw, 28px);
+      letter-spacing: 0.03em;
+      line-height: 1.1;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+    #ent-body p {
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      line-height: 1.78;
+      color: var(--charcoal);
+      opacity: 0.78;
+      margin-bottom: 14px;
+    }
+    #ent-body .ent-source-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--coral);
+      text-decoration: none;
+      border-bottom: 1px solid var(--coral);
+      padding-bottom: 2px;
+    }
+    #ent-body .ent-source-link:hover { opacity: 0.7; }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .dash-nav, .brief-header, .brief-content, .brief-footer { padding-left: 24px; padding-right: 24px; }
@@ -1126,7 +1250,7 @@
     <div class="brief-section">
       <div class="section-label">Culture &amp; Entertainment</div>
       <div class="ent-grid">
-        <div class="ent-card">
+        <div class="ent-card" data-ent="euphoria">
           <div class="ent-image" style="background: #1a1a2e;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;color:rgba(244,239,224,0.8);text-align:center;position:relative;z-index:1;">Euphoria S3</div>
             <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(92,63,122,0.9);margin-top:6px;position:relative;z-index:1;">HBO · April 2026</div>
@@ -1135,7 +1259,7 @@
           <h4>'Euphoria' Season 3 Is Finally Here — HBO's Gen Z Drama Returns After a Long Hiatus</h4>
           <p>Euphoria Season 3 is one of the most anticipated TV returns of the year, dropping on HBO Max this month. The show has been in limbo since Zendaya's schedule and production delays held things up — but it's back, and the cultural conversation is already picking back up.</p>
         </div>
-        <div class="ent-card">
+        <div class="ent-card" data-ent="theboys">
           <div class="ent-image" style="background: #1c0a0a;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;color:rgba(244,239,224,0.8);text-align:center;position:relative;z-index:1;">The Boys S5</div>
             <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(217,79,43,0.9);margin-top:6px;position:relative;z-index:1;">Prime Video · April 8</div>
@@ -1144,7 +1268,7 @@
           <h4>'The Boys' Season 5 Kicks Off April 8 — The Final Season Promises to Go Harder Than Ever</h4>
           <p>The final season of The Boys premieres with a two-episode drop on April 8. Amazon is treating this as a major event — the satirical superhero series has been one of Prime Video's biggest global hits. Expect the final season to go full send on the political commentary.</p>
         </div>
-        <div class="ent-card">
+        <div class="ent-card" data-ent="hailmary">
           <div class="ent-image" style="background: #0a1a12;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;color:rgba(244,239,224,0.8);text-align:center;position:relative;z-index:1;">Project Hail Mary</div>
             <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(42,138,126,0.9);margin-top:6px;position:relative;z-index:1;">Amazon · In Theaters</div>
@@ -1179,6 +1303,20 @@
   <div class="brief-footer">
     <p>Updated 7:00 AM MT &middot; March 31, 2026</p>
     <p><a href="index.html">← Back to site</a></p>
+  </div>
+
+  <!-- ENT MODAL -->
+  <div id="ent-modal" role="dialog" aria-modal="true">
+    <div id="ent-inner">
+      <div id="ent-header">
+        <div>
+          <div id="ent-modal-type" style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);margin-bottom:4px;"></div>
+          <div id="ent-modal-title" style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.04em;color:var(--charcoal);"></div>
+        </div>
+        <button id="ent-close" aria-label="Close">✕</button>
+      </div>
+      <div id="ent-body"></div>
+    </div>
   </div>
 
   <!-- BOX SCORE MODAL -->
@@ -1345,6 +1483,133 @@
   }
 
   fetchScores();
+
+  // ── Entertainment modal ──
+  const ENT_DATA = {
+    euphoria: {
+      type: 'TV · HBO Max · April 2026',
+      title: "Euphoria Season 3 Is Finally Here",
+      banner: { bg: '#1a1a2e', label: 'Euphoria S3', accent: 'rgba(92,63,122,0.9)', sub: 'HBO · April 2026' },
+      body: `
+        <p>Euphoria Season 3 is one of the most anticipated TV returns in recent memory — it's been three years since Season 2 wrapped. The show spent that time in development limbo while Zendaya's schedule (Dune, Challengers) and production issues held things up. It's back now, and the cultural noise is already building ahead of the April premiere.</p>
+        <p>Season 2 ended on a deliberately fragmented note — Rue narrating an ambiguous future for each character, Cassie and Nate's fallout, Lexi's play as a structural centerpiece. Season 3 is reportedly a time-jump, pushing the characters into early adulthood and exploring what that transition looks like for a generation raised on social media and chemical dependency.</p>
+        <p>Creator Sam Levinson has described it as a "new chapter" rather than a direct continuation. Whether that means a tighter narrative or more of the show's signature visual maximalism — or both — remains to be seen. What's clear is that Euphoria still has the most talked-about aesthetic of any show on television, and the HBO marketing machine will make sure no one misses the drop.</p>
+        <p><strong>Why it matters:</strong> Beyond the entertainment value, Euphoria is a case study in brand-building through cultural saturation. The show moves fashion cycles, drives music chart placements (its soundtrack approach is unusually deliberate), and generates earned media at a scale most advertisers can't buy. Watch how brands respond to Season 3 — and which ones stay away.</p>
+        <a href="https://www.hbo.com/euphoria" target="_blank" class="ent-source-link">Watch on HBO Max →</a>
+      `
+    },
+    theboys: {
+      type: 'TV · Prime Video · April 8',
+      title: "The Boys Season 5 — The Final Season",
+      banner: { bg: '#1c0a0a', label: 'The Boys S5', accent: 'rgba(217,79,43,0.9)', sub: 'Prime Video · April 8' },
+      body: `
+        <p>The Boys Season 5 premieres April 8 with a two-episode drop. This is the final season — showrunner Eric Kripke has been clear that the story ends here, and the marketing has leaned hard into the "no more holding back" framing. The show has run as one of Prime Video's most successful original series globally, and Amazon is treating this finale as a tent-pole event.</p>
+        <p>Season 4 escalated the political allegory to near-literal levels — Homelander as a MAGA stand-in was barely metaphorical by the end. Season 5 is expected to resolve the Homelander arc definitively, bring the CIA's role into full focus, and either complete or destroy the Supe-rebellion storyline that's been building since Season 2.</p>
+        <p>The show has also become one of the more interesting examples of how streaming platforms market prestige violence to a broad audience — it consistently threads the needle between mainstream accessibility and genuinely shocking content. From a media perspective, it's worth watching how Prime handles the finale campaign and whether they can convert the cultural moment into subscriber retention.</p>
+        <p><strong>Key question:</strong> Does The Boys end with a statement, or does it pull its punches the way a lot of "provocative" TV does when it finally has to commit? The finale season will reveal whether the show's political commentary was substantive or just aesthetic.</p>
+        <a href="https://www.amazon.com/primevideo" target="_blank" class="ent-source-link">Watch on Prime Video →</a>
+      `
+    },
+    hailmary: {
+      type: 'Film · Amazon/Theatrical · March 20',
+      title: "Project Hail Mary — Ryan Gosling's Best Film in Years",
+      banner: { bg: '#0a1a12', label: 'Project Hail Mary', accent: 'rgba(42,138,126,0.9)', sub: 'Amazon · In Theaters' },
+      body: `
+        <p>Project Hail Mary is still in theaters and building momentum. Ryan Gosling plays Ryland Grace, an amnesiac astronaut who wakes up alone on a spacecraft with no memory of why he's there — and has to piece together that he's on a solo mission to save Earth from an extinction-level energy crisis. Adapted from Andy Weir's novel (the same author who wrote The Martian), it's a hard sci-fi story with serious emotional ambition.</p>
+        <p>Critics have responded strongly. It's being called the best sci-fi film since Interstellar — high praise that's actually being backed up by audience scores. The film is technically rigorous without being cold; Gosling's performance does the heavy lifting of making orbital mechanics and alien biology feel personal and urgent.</p>
+        <p>What makes this worth paying attention to beyond the film itself: it's Amazon's biggest theatrical bet in years. The studio has historically struggled to convert its prestige content into genuine cultural moments. If Hail Mary sustains its box office run and crosses into award season conversation, it represents a meaningful shift in Amazon's content strategy — and a validation of the theory that audiences will show up for original, non-IP-based sci-fi if the quality is there.</p>
+        <p><strong>The Rocky connection:</strong> The alien friendship at the heart of the story is being discussed as one of the most effective non-human character arcs in recent sci-fi cinema. It's not a spoiler to say the film's emotional core is a relationship — the execution of that is what's generating the most conversation.</p>
+        <a href="https://a.co/hailmary" target="_blank" class="ent-source-link">Get Tickets / Watch on Amazon →</a>
+      `
+    }
+  };
+
+  const entModal  = document.getElementById('ent-modal');
+  const entClose  = document.getElementById('ent-close');
+  const entBody   = document.getElementById('ent-body');
+  const entTitle  = document.getElementById('ent-modal-title');
+  const entType   = document.getElementById('ent-modal-type');
+
+  document.querySelectorAll('.ent-card[data-ent]').forEach(card => {
+    card.addEventListener('click', () => {
+      const d = ENT_DATA[card.dataset.ent];
+      if (!d) return;
+      entType.textContent  = d.type;
+      entTitle.textContent = d.title;
+      entBody.innerHTML = `
+        <div class="ent-modal-banner" style="background:${d.banner.bg};">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:0.04em;color:rgba(244,239,224,0.85);text-align:center;">${d.banner.label}</div>
+          <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:${d.banner.accent};">${d.banner.sub}</div>
+        </div>
+        ${d.body}
+      `;
+      entModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  entClose.addEventListener('click', closeEntModal);
+  entModal.addEventListener('click', e => { if (e.target === entModal) closeEntModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEntModal(); });
+  function closeEntModal() {
+    entModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ── Fetch live stock prices ──
+  async function fetchPositionPrices() {
+    const tickers = ['SPY', 'QQQ', 'SMH', 'GOOGL', 'AMZN', 'MSFT', 'UBER', 'GLD', 'BX', 'VXUS', 'COHR', 'SCHD', 'NLR', 'STX', 'META', 'AAPL', 'PLTR', 'CRWV', 'XLU', 'GFS', 'BABA', 'SOFI', 'APLD', 'ORCL', 'QCOM', 'UUUU', 'BLK', 'ARKQ', 'VUG'];
+    const symbolsParam = tickers.join(',');
+    try {
+      const res = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbolsParam}`);
+      if (!res.ok) throw new Error('Yahoo Finance API error');
+      const data = await res.json();
+      const results = data.quoteResponse?.result || [];
+
+      // Build a map of symbol to quote data
+      const quoteMap = {};
+      results.forEach(quote => {
+        if (quote.symbol) {
+          quoteMap[quote.symbol] = quote;
+        }
+      });
+
+      // Update each watchlist item by finding it by symbol text
+      document.querySelectorAll('.watchlist-item').forEach(item => {
+        const symbolDiv = item.querySelector('.symbol');
+        const priceDiv = item.querySelector('.price');
+        const changeDiv = item.querySelector('.change');
+
+        if (!symbolDiv || !priceDiv || !changeDiv) return;
+
+        const symbol = symbolDiv.textContent.trim();
+        const quote = quoteMap[symbol];
+
+        if (quote) {
+          // Format price with $ and 2 decimals
+          const price = quote.regularMarketPrice;
+          if (price !== undefined && price !== null) {
+            priceDiv.textContent = '$' + price.toFixed(2);
+          }
+
+          // Format change with arrow and % sign
+          const changePercent = quote.regularMarketChangePercent;
+          if (changePercent !== undefined && changePercent !== null) {
+            const isPositive = changePercent >= 0;
+            const arrow = isPositive ? '▲' : '▼';
+            const sign = isPositive ? '+' : '';
+            changeDiv.textContent = `${arrow} ${sign}${changePercent.toFixed(2)}%`;
+            changeDiv.className = 'change ' + (isPositive ? 'up' : 'down');
+          }
+        }
+      });
+    } catch(e) {
+      // Silently fail - leave '—' placeholders in place
+    }
+  }
+
+  fetchPositionPrices();
+
   </script>
 
 </body>
