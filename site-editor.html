@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Layout Editor</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { overflow: hidden; background: #1C1A16; font-family: 'Space Mono', monospace, system-ui; }
+
+    #preview-frame {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      z-index: 1;
+    }
+
+    /* Transparent overlay — handles live here */
+    #overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* Outline boxes */
+    .outline {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 2px;
+    }
+    .outline-teal  { border: 2px solid rgba(42,138,126,0.8); background: rgba(42,138,126,0.06); }
+    .outline-amber { border: 2px dashed rgba(232,151,26,0.85); background: rgba(232,151,26,0.04); }
+    .outline-coral { border: 2px solid rgba(217,79,43,0.7); }
+
+    /* Drag handles */
+    .handle {
+      position: absolute;
+      pointer-events: all;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.9);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s;
+      z-index: 12;
+    }
+    .handle:hover { transform: translate(-50%,-50%) scale(1.25); }
+    .handle.teal  { background: #2A8A7E; cursor: nwse-resize; }
+    .handle.amber { background: #E8971A; cursor: nwse-resize; }
+    .handle.move  { background: #2A8A7E; cursor: move; border-radius: 4px; width: 22px; height: 22px; }
+    .handle.move::after {
+      content: '✥';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #fff;
+      line-height: 1;
+    }
+
+    /* Column divider line */
+    .col-divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 8px;
+      transform: translateX(-50%);
+      cursor: ew-resize;
+      pointer-events: all;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 11;
+    }
+    .col-divider::after {
+      content: '';
+      width: 2px;
+      height: 100%;
+      background: rgba(217,79,43,0.65);
+    }
+    /* little grip pill */
+    .col-grip {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #D94F2B;
+      color: #fff;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      padding: 4px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 13;
+    }
+
+    /* ── FLOATING PANEL ── */
+    .panel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 256px;
+      background: rgba(28,26,22,0.96);
+      border: 1px solid rgba(244,239,224,0.13);
+      border-radius: 6px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 20;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.55);
+      overflow: hidden;
+      user-select: none;
+    }
+    .panel-header {
+      padding: 11px 14px;
+      border-bottom: 1px solid rgba(244,239,224,0.09);
+      cursor: move;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .panel-title {
+      font-family: 'Bebas Neue', 'Impact', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.08em;
+      color: #F4EFE0;
+      line-height: 1;
+    }
+    .panel-sub {
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(244,239,224,0.3);
+      margin-top: 3px;
+    }
+
+    .panel-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+
+    .legend { display: flex; flex-direction: column; gap: 5px; }
+    .legend-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 9px; letter-spacing: 0.04em; color: rgba(244,239,224,0.5);
+      line-height: 1.4;
+    }
+    .legend-swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+    .divider { height: 1px; background: rgba(244,239,224,0.08); }
+
+    .info {
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: rgba(244,239,224,0.4);
+      min-height: 14px;
+      transition: color 0.2s;
+    }
+    .info.active { color: #E8971A; }
+
+    .css-label {
+      font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(244,239,224,0.3); margin-bottom: 5px;
+    }
+    .css-out {
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(244,239,224,0.07);
+      border-radius: 3px;
+      padding: 10px;
+      font-size: 9px;
+      line-height: 1.75;
+      color: rgba(244,239,224,0.5);
+      white-space: pre;
+      overflow-x: auto;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .btn-row { display: flex; gap: 8px; }
+    .btn {
+      flex: 1; font-family: inherit; font-size: 9px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 8px 0; border-radius: 3px; border: none; cursor: pointer;
+    }
+    .btn-amber { background: #E8971A; color: #1C1A16; font-weight: 700; }
+    .btn-ghost { background: transparent; color: rgba(244,239,224,0.4); border: 1px solid rgba(244,239,224,0.14); }
+    .btn-ghost:hover { color: #F4EFE0; }
+
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #2A8A7E; color: #F4EFE0;
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 10px 18px; border-radius: 3px;
+      opacity: 0; transform: translateY(6px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none; z-index: 99;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<iframe id="preview-frame" src="index.html" onload="onFrameLoad()"></iframe>
+<div id="overlay"></div>
+
+<div class="panel" id="panel">
+  <div class="panel-header" id="panel-drag">
+    <div>
+      <div class="panel-title">Layout Editor</div>
+      <div class="panel-sub">drag handles in preview · panel is movable</div>
+    </div>
+  </div>
+  <div class="panel-body">
+
+    <div class="legend">
+      <div class="legend-row">
+        <div class="legend-swatch" style="background:rgba(42,138,126,0.2);border:2px solid #2A8A7E;"></div>
+        Headshot — ✥ move · corner resize
+      </div>
+      <div class="legend-row">
+        <div class="legend-swatch" style="background:rgba(232,151,26,0.15);border:2px dashed #E8971A;"></div>
+        Orbital — corner to resize
+      </div>
+      <div class="legend-row">
+        <div class="legend-swatch" style="background:rgba(217,79,43,0.15);border:2px solid #D94F2B;"></div>
+        Red line — drag to split columns
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="info" id="info">Drag any handle to adjust layout.</div>
+    <div class="divider"></div>
+
+    <div>
+      <div class="css-label">Generated CSS — paste into index.html</div>
+      <pre class="css-out" id="css-out">/* drag to start */</pre>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="resetAll()">Reset</button>
+      <button class="btn btn-amber" onclick="copyCss()">Copy CSS →</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied ✓</div>
+
+<script>
+  const frame   = document.getElementById('preview-frame');
+  const overlay = document.getElementById('overlay');
+  let frameDoc  = null;
+  let dragging  = false;
+
+  // ── State (CSS values we control) ──
+  let S = {
+    gridLeft:     58,   // %
+    headshotW:    280,  // px
+    padTop:       64,   // px
+    padLeft:      32,   // px
+    orbitalW:     260,  // px
+  };
+  const DEFAULTS = { gridLeft:58, headshotW:280, padTop:64, padLeft:32, orbitalW:260 };
+
+  // ── Panel drag ──
+  (function(){
+    const panel  = document.getElementById('panel');
+    const header = document.getElementById('panel-drag');
+    let ox=0, oy=0, on=false;
+    header.addEventListener('mousedown', e=>{
+      on=true; const r=panel.getBoundingClientRect(); ox=e.clientX-r.left; oy=e.clientY-r.top; e.preventDefault();
+    });
+    document.addEventListener('mousemove', e=>{
+      if(!on) return;
+      let x=e.clientX-ox, y=e.clientY-oy;
+      x=Math.max(0,Math.min(window.innerWidth-panel.offsetWidth,x));
+      y=Math.max(0,Math.min(window.innerHeight-panel.offsetHeight,y));
+      panel.style.right='auto'; panel.style.left=x+'px'; panel.style.top=y+'px';
+    });
+    document.addEventListener('mouseup', ()=>{ on=false; });
+  })();
+
+  // ── Load ──
+  function onFrameLoad() {
+    try { frameDoc = frame.contentDocument; }
+    catch(e) { setInfo('⚠ Open via local server (not file://) for cross-frame access.'); return; }
+    readCurrentValues();
+    applyState();
+    drawAll();
+  }
+
+  function readCurrentValues() {
+    // Seed state from actual computed values in the iframe
+    const img = q('.headshot-frame img');
+    const orb = q('.hero-orbital');
+    const wrap = q('.headshot-wrap');
+    const grid = q('.hero-grid');
+    const win  = frameDoc.defaultView;
+    if (img)  S.headshotW = Math.round(img.getBoundingClientRect().width);
+    if (orb)  S.orbitalW  = Math.round(orb.getBoundingClientRect().width);
+    if (wrap) {
+      const cs = win.getComputedStyle(wrap);
+      S.padTop  = Math.round(parseFloat(cs.paddingTop))  || S.padTop;
+      S.padLeft = Math.round(parseFloat(cs.paddingLeft)) || S.padLeft;
+    }
+    if (grid) {
+      const cs = win.getComputedStyle(grid);
+      const cols = cs.gridTemplateColumns.split(' ');
+      const totalW = grid.getBoundingClientRect().width;
+      if (cols.length >= 2) S.gridLeft = Math.round((parseFloat(cols[0]) / totalW) * 100);
+    }
+    updateCss();
+  }
+
+  // ── Helpers ──
+  function q(sel) { return frameDoc && frameDoc.querySelector(sel); }
+
+  // Get element rect in PARENT (overlay) coordinates
+  // iframe is fixed at 0,0 so getBoundingClientRect() values from inside the frame
+  // equal parent-doc viewport coordinates directly.
+  function R(el) {
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    const sw = frameDoc.documentElement.scrollLeft || 0;
+    const sh = frameDoc.documentElement.scrollTop  || 0;
+    // For elements in the iframe, getBoundingClientRect gives iframe-viewport coords.
+    // Since iframe is fixed at 0,0 they equal parent viewport coords.
+    // But if the iframe is scrolled we still want the visual position (viewport relative),
+    // so we use the raw rect (no scroll adjustment needed for overlay positioning).
+    return { left: r.left, top: r.top, width: r.width, height: r.height, right: r.right, bottom: r.bottom };
+  }
+
+  function el(tag, cls, css, extra) {
+    const d = document.createElement(tag);
+    if (cls) d.className = cls;
+    if (css) Object.assign(d.style, css);
+    if (extra) Object.assign(d, extra);
+    return d;
+  }
+
+  function setInfo(text, active) {
+    const info = document.getElementById('info');
+    info.textContent = text;
+    info.className = 'info' + (active ? ' active' : '');
+  }
+
+  // ── Draw all handles ──
+  function drawAll() {
+    overlay.innerHTML = '';
+    if (!frameDoc) return;
+
+    drawHeadshot();
+    drawOrbital();
+    drawColDivider();
+  }
+
+  function drawHeadshot() {
+    const img  = q('.headshot-frame img');
+    const wrap = q('.headshot-wrap');
+    if (!img) return;
+
+    const r = R(img);
+
+    // Outline
+    const box = el('div', 'outline outline-teal', {
+      left: r.left+'px', top: r.top+'px', width: r.width+'px', height: r.height+'px'
+    });
+    overlay.appendChild(box);
+
+    // Move handle (center)
+    const moveH = el('div', 'handle move', {
+      left: (r.left + r.width/2)+'px',
+      top:  (r.top  + r.height/2)+'px',
+    });
+    overlay.appendChild(moveH);
+    bindMove(moveH, wrap);
+
+    // Resize handle (SE corner)
+    const seH = el('div', 'handle teal', {
+      left: r.right+'px',
+      top:  r.bottom+'px',
+    });
+    overlay.appendChild(seH);
+    bindHsResize(seH, img);
+  }
+
+  function drawOrbital() {
+    const orb = q('.hero-orbital');
+    if (!orb) return;
+    const r = R(orb);
+
+    const box = el('div', 'outline outline-amber', {
+      left: r.left+'px', top: r.top+'px', width: r.width+'px', height: r.height+'px'
+    });
+    overlay.appendChild(box);
+
+    const seH = el('div', 'handle amber', {
+      left: r.right+'px',
+      top:  r.bottom+'px',
+    });
+    overlay.appendChild(seH);
+    bindOrbResize(seH, orb);
+  }
+
+  function drawColDivider() {
+    const grid = q('.hero-grid');
+    if (!grid || grid.children.length < 2) return;
+    const r1 = grid.children[0].getBoundingClientRect();
+    const r2 = grid.children[1].getBoundingClientRect();
+    const midX = (r1.right + r2.left) / 2;
+
+    const line = el('div', 'col-divider', { left: midX+'px' });
+    const grip = el('div', 'col-grip');
+    grip.textContent = Math.round(S.gridLeft) + '% / ' + Math.round(100 - S.gridLeft) + '%';
+    line.appendChild(grip);
+    overlay.appendChild(line);
+    bindColDivider(line, grid);
+  }
+
+  // ── Drag binders ──
+  function bindMove(handle, wrap) {
+    let sx, sy, spt, spl;
+    handle.addEventListener('mousedown', e => {
+      if (dragging) return;
+      dragging = true;
+      e.stopPropagation(); e.preventDefault();
+      sx = e.clientX; sy = e.clientY;
+      const cs = frameDoc.defaultView.getComputedStyle(wrap);
+      spt = parseFloat(cs.paddingTop)  || S.padTop;
+      spl = parseFloat(cs.paddingLeft) || S.padLeft;
+      on('mousemove', mv); on('mouseup', up);
+    });
+    function mv(e) {
+      S.padTop  = Math.max(0, Math.min(160, Math.round(spt + (e.clientY - sy))));
+      S.padLeft = Math.max(0, Math.min(120, Math.round(spl + (e.clientX - sx))));
+      applyState(); updateCss();
+      setInfo(`pad-top: ${S.padTop}px  pad-left: ${S.padLeft}px`, true);
+    }
+    function up() {
+      dragging = false; off('mousemove', mv); off('mouseup', up); drawAll();
+    }
+  }
+
+  function bindHsResize(handle, img) {
+    let sx, sw;
+    handle.addEventListener('mousedown', e => {
+      if (dragging) return;
+      dragging = true;
+      e.stopPropagation(); e.preventDefault();
+      sx = e.clientX; sw = img.getBoundingClientRect().width;
+      on('mousemove', mv); on('mouseup', up);
+    });
+    function mv(e) {
+      S.headshotW = Math.max(80, Math.min(500, Math.round(sw + (e.clientX - sx))));
+      applyState(); updateCss();
+      setInfo(`headshot max-width: ${S.headshotW}px`, true);
+    }
+    function up() {
+      dragging = false; off('mousemove', mv); off('mouseup', up); drawAll();
+    }
+  }
+
+  function bindOrbResize(handle, orb) {
+    let sx, sw;
+    handle.addEventListener('mousedown', e => {
+      if (dragging) return;
+      dragging = true;
+      e.stopPropagation(); e.preventDefault();
+      sx = e.clientX; sw = orb.getBoundingClientRect().width;
+      on('mousemove', mv); on('mouseup', up);
+    });
+    function mv(e) {
+      S.orbitalW = Math.max(80, Math.min(420, Math.round(sw + (e.clientX - sx))));
+      applyState(); updateCss();
+      setInfo(`orbital max-width: ${S.orbitalW}px`, true);
+    }
+    function up() {
+      dragging = false; off('mousemove', mv); off('mouseup', up); drawAll();
+    }
+  }
+
+  function bindColDivider(line, grid) {
+    let sx, sg;
+    line.addEventListener('mousedown', e => {
+      if (dragging) return;
+      dragging = true;
+      e.stopPropagation(); e.preventDefault();
+      sx = e.clientX; sg = S.gridLeft;
+      on('mousemove', mv); on('mouseup', up);
+    });
+    function mv(e) {
+      const gw = grid.getBoundingClientRect().width;
+      S.gridLeft = Math.max(35, Math.min(75, sg + ((e.clientX - sx) / gw) * 100));
+      applyState();
+      // Move the line live
+      const r1 = grid.children[0].getBoundingClientRect();
+      const r2 = grid.children[1].getBoundingClientRect();
+      const mid = (r1.right + r2.left) / 2;
+      line.style.left = mid + 'px';
+      const grip = line.querySelector('.col-grip');
+      if (grip) grip.textContent = Math.round(S.gridLeft) + '% / ' + Math.round(100 - S.gridLeft) + '%';
+      updateCss();
+      setInfo(`grid: ${Math.round(S.gridLeft)}% / ${Math.round(100-S.gridLeft)}%`, true);
+    }
+    function up() {
+      dragging = false; off('mousemove', mv); off('mouseup', up); drawAll();
+    }
+  }
+
+  // ── Apply state to iframe ──
+  function applyState() {
+    if (!frameDoc) return;
+    let s = frameDoc.getElementById('_ed');
+    if (!s) { s = frameDoc.createElement('style'); s.id = '_ed'; frameDoc.head.appendChild(s); }
+    const gl = S.gridLeft.toFixed(1);
+    const gr = (100 - S.gridLeft).toFixed(1);
+    s.textContent = `
+      .hero-grid { grid-template-columns: ${gl}% ${gr}% !important; }
+      .headshot-wrap { padding-top: ${S.padTop}px !important; padding-left: ${S.padLeft}px !important; }
+      .headshot-frame img { max-width: ${S.headshotW}px !important; width: 100% !important; }
+      .hero-orbital { max-width: ${S.orbitalW}px !important; width: 100% !important; }
+    `;
+  }
+
+  function updateCss() {
+    const gl = Math.round(S.gridLeft);
+    document.getElementById('css-out').textContent =
+`.hero-grid {
+  grid-template-columns: ${gl}% ${100-gl}%;
+}
+
+.headshot-wrap {
+  padding-top: ${S.padTop}px;
+  padding-left: ${S.padLeft}px;
+}
+
+.headshot-frame img {
+  max-width: ${S.headshotW}px;
+  width: 100%;
+}
+
+.hero-orbital {
+  max-width: ${S.orbitalW}px;
+  width: 100%;
+}`;
+  }
+
+  function resetAll() {
+    Object.assign(S, DEFAULTS);
+    applyState(); updateCss(); drawAll();
+    setInfo('Reset to defaults.');
+  }
+
+  function copyCss() {
+    const text = document.getElementById('css-out').textContent;
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
+      .then(showToast)
+      .catch(() => { const t=document.createElement('textarea'); t.value=text; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); showToast(); });
+  }
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2000);
+  }
+
+  // Attach to both parent doc and iframe doc for seamless drag across boundary
+  function on(ev, fn)  { document.addEventListener(ev,fn); if(frameDoc) frameDoc.addEventListener(ev,fn); }
+  function off(ev, fn) { document.removeEventListener(ev,fn); if(frameDoc) frameDoc.removeEventListener(ev,fn); }
+</script>
+</body>
+</html>

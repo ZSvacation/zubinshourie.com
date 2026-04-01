@@ -456,17 +456,23 @@
     .market-story {
       padding: 18px 0;
       border-bottom: 1px solid rgba(28,26,22,0.1);
+      transition: background 0.15s;
+      border-radius: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      margin-left: -8px;
+      margin-right: -8px;
     }
     .market-story:last-child { border-bottom: none; }
-    .story-headline a {
+    .market-story:hover { background: rgba(28,26,22,0.04); }
+    .story-headline {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 18px;
       letter-spacing: 0.03em;
       line-height: 1.15;
       color: var(--charcoal);
-      text-decoration: none;
     }
-    .story-headline a:hover { color: var(--coral); }
+    .market-story:hover .story-headline { color: var(--coral); }
     .story-summary {
       font-family: 'Sora', sans-serif;
       font-size: 12px;
@@ -475,6 +481,17 @@
       opacity: 0.58;
       margin-top: 6px;
     }
+    .story-read-more {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-top: 8px;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .market-story:hover .story-read-more { opacity: 1; }
 
     /* ── SCORES ── */
     .scores-row {
@@ -1217,15 +1234,17 @@
       </div>
 
       <div class="market-stories">
-        <div class="market-story">
+        <div class="market-story" data-story="q1close" style="cursor:pointer;">
           <div class="story-source">Equities &middot; March 31 &middot; Q1 Close</div>
-          <div class="story-headline"><a href="https://www.cnbc.com/2026/03/30/stock-market-today-live-updates.html" target="_blank">Stocks Post Best Day Since May — S&amp;P +2.91%, Nasdaq +3.83% on Iran Peace Hopes</a></div>
-          <div class="story-summary">All three major indexes closed sharply higher, driven by optimism that the Iran conflict could wind down. Tech and semiconductors led the Nasdaq surge. Still, the indexes closed out their worst quarter in four years — the Iran-driven energy shock rippled into inflation expectations, freight costs, and growth forecasts all month.</div>
+          <div class="story-headline">Stocks Post Best Day Since May — S&amp;P +2.91%, Nasdaq +3.83% on Iran Peace Hopes</div>
+          <div class="story-summary">All three major indexes closed sharply higher, driven by optimism that the Iran conflict could wind down. Tech and semiconductors led the Nasdaq surge. Still, the indexes closed out their worst quarter in four years.</div>
+          <div class="story-read-more">Read full story →</div>
         </div>
-        <div class="market-story">
+        <div class="market-story" data-story="openai-ads" style="cursor:pointer;">
           <div class="story-source">OpenAI &middot; Advertising &middot; March 31</div>
-          <div class="story-headline"><a href="https://agilebrandguide.com/yesterdays-marketing-technology-news-march-31-2026/" target="_blank">OpenAI Scales ChatGPT Ads Pilot Globally — Self-Serve Tools and Global Expansion on the Roadmap</a></div>
-          <div class="story-summary">Early demand has stayed strong as OpenAI expands its ChatGPT advertising pilot beyond early partners, with global rollout and self-serve ad tools coming. This is a pivotal moment for AI-native advertising — ChatGPT now has the scale and intent-signal data to be a serious media buy for brands targeting engaged, high-intent users.</div>
+          <div class="story-headline">OpenAI Scales ChatGPT Ads Pilot Globally — Self-Serve Tools and Global Expansion on the Roadmap</div>
+          <div class="story-summary">Early demand has stayed strong as OpenAI expands its ChatGPT advertising pilot beyond early partners, with global rollout and self-serve ad tools coming.</div>
+          <div class="story-read-more">Read full story →</div>
         </div>
       </div>
     </div>
@@ -1556,14 +1575,64 @@
     document.body.style.overflow = '';
   }
 
+  // ── Market story modals ──
+  const STORY_DATA = {
+    'q1close': {
+      source: 'Equities · March 31 · Q1 Close',
+      title: 'Stocks Post Best Day Since May — S&P +2.91%, Nasdaq +3.83% on Iran Peace Hopes',
+      sourceUrl: 'https://www.cnbc.com/2026/03/30/stock-market-today-live-updates.html',
+      body: `
+        <p>All three major indexes closed sharply higher on March 31, driven by a wave of optimism around preliminary Iran-US back-channel talks suggesting a possible Strait of Hormuz deal. The S&P 500 finished up 2.91%, the Nasdaq jumped 3.83%, and the Dow added 2.14% — the best single-session performance across the board since May 2025.</p>
+        <p>The move was broad but tech-led. Semiconductors surged as AI infrastructure spending expectations got a reset — if oil stabilizes, freight and energy costs recede, and margin forecasts for capex-heavy names improve. Nvidia, AMD, and TSMC's US-listed ADRs all closed up more than 5%. The Nasdaq's jump was the most telegraphed trade of the day once the headlines broke around 2PM ET.</p>
+        <p>Despite the green close, Q1 ends as the worst quarter for the S&P since 2022, down roughly 5.3%. The Iran-driven energy shock was the dominant macro narrative all quarter — it spilled into inflation expectations, freight indexes, credit spreads, and corporate guidance across sectors. Airlines, consumer discretionary, and high-yield names got hit hardest.</p>
+        <p><strong>What to watch in Q2:</strong> The Iran situation remains the swing factor. A credible ceasefire or Hormuz agreement would flip energy, relieve inflation pressure, and likely extend the rally into mid-April. The opposite — escalation or breakdown — puts the Fed back in an impossible position. Oil's direction in the first two weeks of April will tell you most of what you need to know about how Q2 starts.</p>
+        <p>Bitcoin closed Q1 essentially flat at $66,710 — crypto traders have been sidelined watching geopolitics rather than leading the risk trade. Gold at $4,578 was the quarter's standout winner, up on every flight-to-safety bid the conflict produced. The 10-year yield at 4.41% is the number to keep watching.</p>
+      `
+    },
+    'openai-ads': {
+      source: 'OpenAI · Advertising · March 31',
+      title: 'OpenAI Scales ChatGPT Ads Pilot Globally — Self-Serve Tools and Global Expansion on the Roadmap',
+      sourceUrl: 'https://agilebrandguide.com/yesterdays-marketing-technology-news-march-31-2026/',
+      body: `
+        <p>OpenAI is expanding its ChatGPT advertising pilot beyond the small group of early U.S. partners it started with in Q4 2025. Global rollout is now on the roadmap, along with self-serve ad tools that would let any brand run campaigns inside ChatGPT without going through a managed sales process. The move puts OpenAI squarely in competition with Google and Meta for performance ad dollars.</p>
+        <p>Early demand from the pilot has reportedly exceeded OpenAI's initial projections. The core value proposition for advertisers: ChatGPT users are in an active information-seeking state, which creates intent signals that are qualitatively different from social feed impressions. A user asking ChatGPT about "best noise-canceling headphones under $200" is much closer to a purchase decision than someone scrolling past a banner ad.</p>
+        <p>The format being tested is native — responses that integrate branded information or product mentions contextually rather than display ad units. OpenAI has been careful about how it frames this to avoid the perception that answers are being bought, but the line between "sponsored context" and "paid answer" will be one of the central trust questions the product has to navigate.</p>
+        <p><strong>Why this matters for marketing:</strong> If ChatGPT becomes a significant media buy, it reshapes how search and discovery budgets get allocated. Brands that have built SEO and Google Ads moats are suddenly exposed — ChatGPT answers don't rank organic results, they synthesize them. A strong position in traditional search doesn't automatically translate. The brands that figure out how to show up credibly in AI-generated responses — through PR, content strategy, and early ad partnerships — will have a structural advantage.</p>
+        <p>OpenAI also announced expanded access to its fine-tuning API for enterprise advertising use cases, allowing brands to customize model behavior for specific campaign objectives. That's a meaningful capability that doesn't exist anywhere else in the current ad tech stack.</p>
+      `
+    }
+  };
+
+  document.querySelectorAll('.market-story[data-story]').forEach(card => {
+    card.addEventListener('click', () => {
+      const d = STORY_DATA[card.dataset.story];
+      if (!d) return;
+      entType.textContent  = d.source;
+      entTitle.textContent = d.title;
+      entBody.innerHTML = `
+        <div class="ent-modal-banner" style="background:#1C1A16;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;color:rgba(244,239,224,0.85);text-align:center;line-height:1.1;">${d.title}</div>
+          <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--amber);margin-top:8px;">${d.source}</div>
+        </div>
+        ${d.body}
+        <a href="${d.sourceUrl}" target="_blank" class="ent-source-link">View Original Source →</a>
+      `;
+      entModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
   // ── Fetch live stock prices ──
   async function fetchPositionPrices() {
     const tickers = ['SPY', 'QQQ', 'SMH', 'GOOGL', 'AMZN', 'MSFT', 'UBER', 'GLD', 'BX', 'VXUS', 'COHR', 'SCHD', 'NLR', 'STX', 'META', 'AAPL', 'PLTR', 'CRWV', 'XLU', 'GFS', 'BABA', 'SOFI', 'APLD', 'ORCL', 'QCOM', 'UUUU', 'BLK', 'ARKQ', 'VUG'];
     const symbolsParam = tickers.join(',');
+    const yhooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbolsParam}`;
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yhooUrl)}`;
     try {
-      const res = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbolsParam}`);
-      if (!res.ok) throw new Error('Yahoo Finance API error');
-      const data = await res.json();
+      const res = await fetch(proxyUrl);
+      if (!res.ok) throw new Error('Proxy error');
+      const wrapper = await res.json();
+      const data = JSON.parse(wrapper.contents);
       const results = data.quoteResponse?.result || [];
 
       // Build a map of symbol to quote data
@@ -1704,16 +1773,71 @@
     // TradingView chart
     const chartWrap = document.getElementById('stock-chart-wrap');
     chartWrap.innerHTML = '';
-    const iframe = document.createElement('iframe');
-    iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;';
-    iframe.src = `https://s.tradingview.com/widgetembed/?frameElementId=tv_${sym}&symbol=${sym}&interval=D&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=F4EFE0&studies=[]&theme=light&style=1&timezone=America%2FDenver&withdateranges=1&showpopupbutton=0&studies_overrides=%7B%7D&overrides=%7B%22mainSeriesProperties.candleStyle.upColor%22%3A%222A8A7E%22%2C%22mainSeriesProperties.candleStyle.downColor%22%3A%22D94F2B%22%7D&enabled_features=[]&disabled_features=%5B%22use_localstorage_for_settings%22%5D&locale=en`;
-    chartWrap.appendChild(iframe);
+    const containerId = 'tv_chart_' + sym + '_' + Date.now();
+    const chartDiv = document.createElement('div');
+    chartDiv.id = containerId;
+    chartDiv.style.cssText = 'width:100%;height:100%;';
+    chartWrap.appendChild(chartDiv);
+
+    function initTVWidget() {
+      new TradingView.widget({
+        autosize: true,
+        symbol: sym,
+        interval: 'D',
+        timezone: 'America/Denver',
+        theme: 'light',
+        style: '1',
+        locale: 'en',
+        toolbar_bg: '#F4EFE0',
+        enable_publishing: false,
+        hide_side_toolbar: true,
+        hide_legend: false,
+        allow_symbol_change: false,
+        save_image: false,
+        container_id: containerId,
+        overrides: {
+          'mainSeriesProperties.candleStyle.upColor': '#2A8A7E',
+          'mainSeriesProperties.candleStyle.downColor': '#D94F2B',
+          'mainSeriesProperties.candleStyle.borderUpColor': '#2A8A7E',
+          'mainSeriesProperties.candleStyle.borderDownColor': '#D94F2B',
+          'mainSeriesProperties.candleStyle.wickUpColor': '#2A8A7E',
+          'mainSeriesProperties.candleStyle.wickDownColor': '#D94F2B',
+          'paneProperties.background': '#F4EFE0',
+          'paneProperties.vertGridProperties.color': 'rgba(28,26,22,0.06)',
+          'paneProperties.horzGridProperties.color': 'rgba(28,26,22,0.06)',
+        }
+      });
+    }
+
+    if (window.TradingView && window.TradingView.widget) {
+      initTVWidget();
+    } else {
+      const existing = document.getElementById('tv-js-lib');
+      if (!existing) {
+        const s = document.createElement('script');
+        s.id = 'tv-js-lib';
+        s.src = 'https://s3.tradingview.com/tv.js';
+        s.onload = initTVWidget;
+        document.head.appendChild(s);
+      } else {
+        // Script tag exists but may still be loading — poll briefly
+        const poll = setInterval(() => {
+          if (window.TradingView && window.TradingView.widget) {
+            clearInterval(poll);
+            initTVWidget();
+          }
+        }, 100);
+      }
+    }
 
     // News via Yahoo Finance RSS proxy
     const newsEl = document.getElementById('stock-news');
     newsEl.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--charcoal);opacity:0.35;padding:16px 0;text-align:center;">Loading news…</div>';
-    fetch(`https://query1.finance.yahoo.com/v1/finance/search?q=${sym}&newsCount=6&quotesCount=0`)
+    const newsApiUrl = `https://query1.finance.yahoo.com/v1/finance/search?q=${sym}&newsCount=6&quotesCount=0`;
+    const newsProxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(newsApiUrl)}`;
+    fetch(newsProxyUrl)
       .then(r => r.json())
+      .then(wrapper => JSON.parse(wrapper.contents))
       .then(d => {
         const news = d.news || [];
         if (!news.length) { newsEl.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--charcoal);opacity:0.35;padding:16px 0;text-align:center;">No recent news found</div>'; return; }
