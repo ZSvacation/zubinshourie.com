@@ -72,16 +72,13 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  // Fetch in batches of 6 with 150ms pause to avoid Stooq rate-limiting
-  async function fetchBatched(syms, batchSize = 6, delayMs = 150) {
+  // Fully sequential with 80ms gap — prevents Stooq rate-limiting even when
+  // multiple API calls fire simultaneously from the browser
+  async function fetchBatched(syms, delayMs = 80) {
     const results = [];
-    for (let i = 0; i < syms.length; i += batchSize) {
-      const batch = syms.slice(i, i + batchSize);
-      const batchResults = await Promise.all(batch.map(fetchSymbol));
-      results.push(...batchResults);
-      if (i + batchSize < syms.length) {
-        await new Promise(r => setTimeout(r, delayMs));
-      }
+    for (const sym of syms) {
+      results.push(await fetchSymbol(sym));
+      await new Promise(r => setTimeout(r, delayMs));
     }
     return results;
   }
