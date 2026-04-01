@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/prices.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
