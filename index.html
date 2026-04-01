@@ -998,10 +998,9 @@
     @media (max-width: 640px) {
       .hero { grid-template-columns: 1fr; display: flex; flex-direction: column; padding: 32px 24px 24px; gap: 0; }
       .hero-visual { display: flex; justify-content: center; order: -1; margin-bottom: 24px; }
-      .headshot-wrap { padding: 0; align-items: center; gap: 0; }
-      .headshot-frame { max-width: 120px; }
-      .hero-orbital { display: none; }
-      .headshot-caption { font-size: 8px; }
+      .headshot-wrap { padding: 0; flex-direction: row; align-items: center; gap: 12px; justify-content: center; }
+      .headshot-frame { max-width: 120px; flex-shrink: 0; }
+      .hero-orbital { display: block; max-width: 110px; opacity: 0.75; flex-shrink: 0; }
       .hero-headline { font-size: clamp(72px, 18vw, 120px); }
       .section-work, .section-about, .section-photo, .section-contact { padding: 60px 24px; }
       .work-grid { grid-template-columns: 1fr; }
@@ -1130,7 +1129,6 @@
       </svg>
       <div class="headshot-frame">
         <img src="img/headshot.jpg" alt="Zubin Shourie">
-        <div class="headshot-caption">Zubin Shourie ✦ Boulder, CO</div>
       </div>
     </div>
   </div>
