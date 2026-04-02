@@ -800,7 +800,12 @@
       width: 100%;
       max-width: 420px;
       opacity: 0.85;
+      cursor: grab;
+      will-change: transform;
+      transform-style: preserve-3d;
     }
+    .hero-orbital:active { cursor: grabbing; }
+    #hero-orbital g, #hero-orbital circle { transition: none; }
     .headshot-frame {
       position: relative;
       display: inline-block;
@@ -1114,16 +1119,18 @@
   <div class="hero-visual">
     <div class="headshot-wrap">
       <!-- Orbital graphic above headshot -->
-      <svg class="hero-orbital" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="150" cy="150" r="120" stroke="#E8971A" stroke-width="1"   fill="none" opacity="0.18"/>
-        <circle cx="150" cy="150" r="86"  stroke="#2A8A7E" stroke-width="1"   fill="none" opacity="0.22"/>
-        <circle cx="150" cy="150" r="52"  stroke="#D94F2B" stroke-width="0.8" fill="none" opacity="0.18"/>
-        <circle cx="150" cy="150" r="24"  fill="#5C3F7A" opacity="0.22"/>
-        <circle cx="150" cy="150" r="24"  stroke="#5C3F7A" stroke-width="1.5" fill="none" opacity="0.45"/>
-        <ellipse cx="150" cy="150" rx="49" ry="10" stroke="#E8971A" stroke-width="1" fill="none" opacity="0.28"/>
-        <circle cx="72"  cy="122" r="5"  fill="#E8971A" opacity="0.6"/>
-        <circle cx="215" cy="174" r="3"  fill="#2A8A7E" opacity="0.7"/>
-        <circle cx="240" cy="96"  r="2"  fill="#D94F2B" opacity="0.6"/>
+      <svg id="hero-orbital" class="hero-orbital" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <g id="orb-outer"><circle cx="150" cy="150" r="120" stroke="#E8971A" stroke-width="1"   fill="none" opacity="0.18"/></g>
+        <g id="orb-mid">  <circle cx="150" cy="150" r="86"  stroke="#2A8A7E" stroke-width="1"   fill="none" opacity="0.22"/></g>
+        <g id="orb-inner"><circle cx="150" cy="150" r="52"  stroke="#D94F2B" stroke-width="0.8" fill="none" opacity="0.18"/></g>
+        <g id="orb-planet">
+          <circle cx="150" cy="150" r="24" fill="#5C3F7A" opacity="0.22"/>
+          <circle cx="150" cy="150" r="24" stroke="#5C3F7A" stroke-width="1.5" fill="none" opacity="0.45"/>
+          <ellipse cx="150" cy="150" rx="49" ry="10" stroke="#E8971A" stroke-width="1" fill="none" opacity="0.28"/>
+        </g>
+        <circle id="orb-dot1" cx="72"  cy="122" r="5" fill="#E8971A" opacity="0.6"/>
+        <circle id="orb-dot2" cx="215" cy="174" r="3" fill="#2A8A7E" opacity="0.7"/>
+        <circle id="orb-dot3" cx="240" cy="96"  r="2" fill="#D94F2B" opacity="0.6"/>
       </svg>
       <div class="headshot-frame">
         <img src="img/headshot.jpg" alt="Zubin Shourie">
@@ -1536,6 +1543,113 @@
     if (dayEl)  dayEl.textContent  = day;
     if (monEl)  monEl.textContent  = `${month} ${year}`;
   })();
+</script>
+
+<script>
+(function () {
+  const svg = document.getElementById('hero-orbital');
+  if (!svg) return;
+
+  // Each layer has a depth multiplier (SVG units moved per unit of cursor offset).
+  // Negative = moves against cursor (feels far away).
+  // Positive = moves with cursor (feels close / floating).
+  const layers = [
+    { id: 'orb-outer',  depth: -5  },
+    { id: 'orb-mid',    depth: -3  },
+    { id: 'orb-inner',  depth: -1.5},
+    { id: 'orb-planet', depth:  0  },
+    { id: 'orb-dot1',   depth:  11 },
+    { id: 'orb-dot2',   depth:  7  },
+    { id: 'orb-dot3',   depth:  14 },
+  ].map(l => ({ ...l, el: document.getElementById(l.id) })).filter(l => l.el);
+
+  // Smoothed state
+  let tiltX = 0, tiltY = 0, aimTiltX = 0, aimTiltY = 0;
+  let pxCur = 0, pyCur = 0, pxAim = 0, pyAim = 0;
+
+  // Drag state
+  let dragging = false, dragPrevX = 0, dragPrevY = 0;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function tick() {
+    const ease = 0.072;
+    tiltX = lerp(tiltX, aimTiltX, ease);
+    tiltY = lerp(tiltY, aimTiltY, ease);
+    pxCur = lerp(pxCur, pxAim, ease);
+    pyCur = lerp(pyCur, pyAim, ease);
+
+    // 3D tilt on the whole SVG
+    svg.style.transform =
+      `perspective(520px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+
+    // Individual layer parallax (translate in SVG coordinate space)
+    layers.forEach(({ el, depth }) => {
+      const tx = pxCur * depth;
+      const ty = pyCur * depth;
+      el.setAttribute('transform', `translate(${tx.toFixed(2)},${ty.toFixed(2)})`);
+    });
+
+    requestAnimationFrame(tick);
+  }
+
+  // Returns cursor offset from SVG center, normalised to ±1
+  function normOffset(e) {
+    const r = svg.getBoundingClientRect();
+    return {
+      nx: (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2),
+      ny: (e.clientY - (r.top  + r.height / 2)) / (r.height / 2),
+    };
+  }
+
+  // Hover — track from the wider hero-visual area so tilt starts before reaching the SVG
+  const heroVisual = document.querySelector('.hero-visual');
+  heroVisual?.addEventListener('mousemove', e => {
+    if (dragging) return;
+    const { nx, ny } = normOffset(e);
+    aimTiltY = clamp(nx * 22, -22, 22);
+    aimTiltX = clamp(-ny * 15, -15, 15);
+    pxAim = clamp(nx, -1, 1);
+    pyAim = clamp(ny, -1, 1);
+  });
+
+  heroVisual?.addEventListener('mouseleave', () => {
+    if (!dragging) { aimTiltX = 0; aimTiltY = 0; pxAim = 0; pyAim = 0; }
+  });
+
+  // Drag — lets you spin it manually
+  svg.addEventListener('mousedown', e => {
+    dragging  = true;
+    dragPrevX = e.clientX;
+    dragPrevY = e.clientY;
+    svg.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - dragPrevX;
+    const dy = e.clientY - dragPrevY;
+    dragPrevX = e.clientX;
+    dragPrevY = e.clientY;
+    aimTiltY = clamp(aimTiltY + dx * 0.45, -38, 38);
+    aimTiltX = clamp(aimTiltX - dy * 0.35, -28, 28);
+    // parallax follows drag direction
+    const r = svg.getBoundingClientRect();
+    pxAim = clamp((e.clientX - (r.left + r.width / 2)) / (r.width / 2), -1, 1);
+    pyAim = clamp((e.clientY - (r.top + r.height / 2)) / (r.height / 2), -1, 1);
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    svg.style.cursor = 'grab';
+    aimTiltX = 0; aimTiltY = 0; pxAim = 0; pyAim = 0;
+  });
+
+  tick();
+})();
 </script>
 
 </body>
