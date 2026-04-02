@@ -3,1041 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Daily Brief — Wednesday, April 1, 2026</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <title>The Daily Brief &mdash; Thursday, April 2, 2026</title>
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
     :root {
-      --cream: #F4EFE0;
-      --cream-dark: #E8E0CC;
-      --charcoal: #1C1A16;
-      --coral: #D94F2B;
-      --amber: #E8971A;
-      --teal: #2A8A7E;
-      --purple: #5C3F7A;
-      --market-up: #2A8A7E;
-      --market-down: #D94F2B;
+      --cream: #F4F1EB; --warm-white: #FAF8F5; --tan: #E5DDD0; --sand: #D4C9B8;
+      --charcoal: #2A2A2A; --soft-black: #1A1A1A; --forest: #3D5A47;
+      --forest-light: #4A6B55; --forest-dark: #2E4536; --warm-gray: #8C8578;
+      --faded-coral: #D4A08F; --market-green: #4A6B55; --market-red: #B8524D;
     }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--cream);
-      color: var(--charcoal);
-      font-family: 'Sora', sans-serif;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── GRAIN OVERLAY ── */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.18;
-      mix-blend-mode: multiply;
-    }
-
-    /* ── NAV ── */
-    .dash-nav {
-      background: var(--cream-dark);
-      border-bottom: 2px solid var(--charcoal);
-      padding: 0 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 56px;
-    }
-    .dash-nav .back {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .dash-nav .back:hover { color: var(--coral); }
-    .dash-nav .date {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      opacity: 0.5;
-    }
-
-    /* ── HEADER ── */
-    .brief-header {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 56px 48px 40px;
-      border-bottom: 2px solid var(--charcoal);
-    }
-    .brief-edition {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 16px;
-    }
-    .brief-masthead {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(56px, 8vw, 96px);
-      letter-spacing: 0.04em;
-      line-height: 0.9;
-      color: var(--charcoal);
-      margin-bottom: 24px;
-    }
-    .brief-masthead span { color: var(--amber); }
-    .brief-greeting {
-      font-family: 'Sora', sans-serif;
-      font-size: 14px;
-      line-height: 1.78;
-      color: var(--charcoal);
-      opacity: 0.75;
-      max-width: 780px;
-      padding: 20px 24px;
-      border-left: 3px solid var(--amber);
-      background: rgba(232,151,26,0.05);
-    }
-
-    /* ── TICKER STRIP ── */
-    .ticker-strip {
-      background: var(--cream-dark);
-      border-bottom: 2px solid var(--charcoal);
-      overflow: hidden;
-      position: relative;
-      height: 38px;
-    }
-    .ticker-strip::before,
-    .ticker-strip::after {
-      content: '';
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 48px;
-      z-index: 2;
-      pointer-events: none;
-    }
-    .ticker-strip::before { left: 0; background: linear-gradient(to right, var(--cream-dark), transparent); }
-    .ticker-strip::after  { right: 0; background: linear-gradient(to left, var(--cream-dark), transparent); }
-    .ticker-track {
-      display: flex;
-      white-space: nowrap;
-      animation: ticker-scroll 30s linear infinite;
-      width: max-content;
-      height: 100%;
-      align-items: center;
-    }
-    .ticker-track:hover { animation-play-state: paused; }
-    @keyframes ticker-scroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-    .ticker-item {
-      display: inline-flex;
-      align-items: center;
-      cursor: pointer;
-      transition: background 0.15s;
-      border-radius: 3px;
-      position: relative;
-      z-index: 3;
-      pointer-events: all;
-      gap: 6px;
-      padding: 0 20px;
-      border-right: 1px solid rgba(28,26,22,0.1);
-      height: 100%;
-    }
-    .ticker-sym {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      opacity: 0.5;
-    }
-    .ticker-val {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 15px;
-      letter-spacing: 0.04em;
-      color: var(--charcoal);
-      line-height: 1;
-    }
-    .ticker-chg {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.04em;
-    }
-    .ticker-chg.up   { color: var(--teal); }
-    .ticker-chg.down { color: var(--coral); }
-    .ticker-dot { color: var(--amber); font-size: 10px; opacity: 0.6; padding: 0 4px; }
-    .ticker-item:hover { background: rgba(28,26,22,0.08); }
-    .ticker-item:hover .ticker-sym { opacity: 0.8; }
-
-    /* ── CONTENT WRAPPER ── */
-    .brief-content {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 0 48px;
-    }
-
-    /* ── SECTIONS ── */
-    .brief-section {
-      padding: 48px 0;
-      border-bottom: 1px solid rgba(28,26,22,0.12);
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Sora', -apple-system, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+    .dash-nav { padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--tan); max-width: 1000px; margin: 0 auto; }
+    .dash-nav .back { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); text-decoration: none; }
+    .dash-nav .date { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); }
+    .brief-header { max-width: 1000px; margin: 0 auto; padding: 4rem 3rem 3rem; border-bottom: 2px solid var(--soft-black); }
+    .brief-header .masthead { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--soft-black); letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    .brief-header .edition { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
+    .brief-header .greeting { font-family: 'Lora', serif; font-style: italic; font-size: 1.1rem; color: var(--warm-gray); margin-top: 1.5rem; }
+    .ticker { max-width: 100%; padding: 1.25rem 3rem; display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--tan); flex-wrap: wrap; }
+    .ticker-item { display: flex; flex-direction: column; min-width: fit-content; }
+    .ticker-item .symbol { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; color: var(--charcoal); }
+    .ticker-item .price { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--charcoal); }
+    .ticker-item .change { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; }
+    .ticker-item .change.up { color: var(--market-green); }
+    .ticker-item .change.down { color: var(--market-red); }
+    .brief-content { max-width: 1000px; margin: 0 auto; padding: 0 3rem; }
+    .brief-section { padding: 2.5rem 0; border-bottom: 1px solid var(--tan); }
     .brief-section:last-child { border-bottom: none; }
-
-    /* ── SECTION LABEL ── */
-    .section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--amber);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--amber);
-      opacity: 0.22;
-    }
-    .section-label.teal   { color: var(--teal); }
-    .section-label.teal::after   { background: var(--teal); }
-    .section-label.coral  { color: var(--coral); }
-    .section-label.coral::after  { background: var(--coral); }
-    .section-label.purple { color: var(--purple); }
-    .section-label.purple::after { background: var(--purple); }
-
-    /* ── TOP STORIES GRID ── */
-    .stories-grid {
-      display: grid;
-      grid-template-columns: 1.25fr 1fr;
-      gap: 0;
-    }
-    .story-lead {
-      padding-right: 40px;
-      border-right: 1px solid rgba(28,26,22,0.12);
-    }
-    .story-lead-img {
-      width: 100%;
-      aspect-ratio: 16/9;
-      overflow: hidden;
-      margin-bottom: 20px;
-      border: 2px solid var(--charcoal);
-      position: relative;
-    }
-    .story-lead-img img {
-      width: 100%; height: 100%; object-fit: cover;
-      display: block;
-      filter: saturate(0.88) contrast(1.05);
-    }
-    .story-lead-img-placeholder {
-      width: 100%;
-      aspect-ratio: 16/9;
-      margin-bottom: 20px;
-      border: 2px solid var(--charcoal);
-      background: var(--charcoal);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 1.5rem;
-    }
-    .story-lead h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(22px, 2.8vw, 32px);
-      letter-spacing: 0.03em;
-      line-height: 1.1;
-      color: var(--charcoal);
-      margin-bottom: 14px;
-    }
-    .story-lead p {
-      font-family: 'Sora', sans-serif;
-      font-size: 13px;
-      line-height: 1.75;
-      color: var(--charcoal);
-      opacity: 0.72;
-      margin-bottom: 10px;
-    }
-    .read-more {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--coral);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 6px;
-    }
-    .read-more:hover { opacity: 0.7; }
-
-    .story-sidebar {
-      padding-left: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    .story-small {
-      padding: 20px 0;
-      border-bottom: 1px solid rgba(28,26,22,0.1);
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .story-small:first-child { padding-top: 0; }
+    .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--tan); }
+    .stories-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.5rem; }
+    .story-lead { border-right: 1px solid var(--tan); padding-right: 2.5rem; }
+    .story-lead-img { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 3px; margin-bottom: 1rem; background: var(--tan); }
+    .story-lead-img img { width: 100%; height: 100%; object-fit: cover; }
+    .story-lead h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; line-height: 1.2; color: var(--soft-black); margin-bottom: 1rem; letter-spacing: -0.02em; }
+    .story-lead p { font-size: 0.95rem; font-weight: 300; line-height: 1.7; color: var(--charcoal); margin-bottom: 1rem; }
+    .story-lead .read-more { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); text-decoration: none; }
+    .story-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+    .story-small { padding-bottom: 1.5rem; border-bottom: 1px solid var(--tan); text-decoration: none; color: inherit; display: block; }
     .story-small:last-child { border-bottom: none; }
-    .story-source {
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      opacity: 0.38;
-      margin-bottom: 8px;
-    }
-    .story-small h4 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 18px;
-      letter-spacing: 0.03em;
-      line-height: 1.15;
-      color: var(--charcoal);
-      margin-bottom: 8px;
-    }
-    .story-small p {
-      font-family: 'Sora', sans-serif;
-      font-size: 12px;
-      line-height: 1.65;
-      color: var(--charcoal);
-      opacity: 0.58;
-    }
-
-    /* ── MARKET CARDS ── */
-    .markets-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .market-card {
-      border: 2px solid var(--charcoal);
-      padding: 18px 16px;
-      position: relative;
-      background: var(--cream-dark);
-    }
-    .market-card::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      right: -5px;
-      width: 100%;
-      height: 100%;
-      border: 2px solid var(--amber);
-      z-index: -1;
-    }
-    .market-card .name {
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      opacity: 0.45;
-      margin-bottom: 8px;
-    }
-    .market-card .value {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 26px;
-      letter-spacing: 0.03em;
-      line-height: 1;
-      color: var(--charcoal);
-      margin-bottom: 5px;
-    }
-    .market-card .delta {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      font-weight: 700;
-    }
-    .market-card .delta.up   { color: var(--teal); }
-    .market-card .delta.down { color: var(--coral); }
-    .market-card .delta .delta-arrow { font-size: 10px; }
-    .market-card .delta.up   .delta-arrow { color: #27ae60; }
-    .market-card .delta.down .delta-arrow { color: #c0392b; }
-
-    /* ── WATCHLIST ── */
-    .watchlist-section {
-      margin: 28px 0;
-    }
-    .watchlist-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 16px;
-      display: block;
-    }
-    .watchlist-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-    }
-    .watchlist-item {
-      border: 2px solid var(--charcoal);
-      padding: 14px 12px;
-      position: relative;
-      background: var(--cream-dark);
-    }
-    .watchlist-item::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      right: -5px;
-      width: 100%;
-      height: 100%;
-      border: 2px solid var(--amber);
-      z-index: -1;
-    }
-    .watchlist-item .symbol {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .watchlist-item .company {
-      font-family: 'Sora', sans-serif;
-      font-size: 11px;
-      line-height: 1.4;
-      color: var(--charcoal);
-      opacity: 0.65;
-      margin-bottom: 8px;
-    }
-    .watchlist-item .price {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 18px;
-      letter-spacing: 0.03em;
-      line-height: 1;
-      color: var(--charcoal);
-      margin-bottom: 3px;
-    }
-    .watchlist-item .change {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.06em;
-      color: rgba(28, 26, 22, 0.5); /* same visual as charcoal @ 0.5 opacity, but allows child override */
-    }
-    .watchlist-item .change .change-arrow { font-size: 8px; }
-    .watchlist-item .change.up   .change-arrow { color: #27ae60; }
-    .watchlist-item .change.down .change-arrow { color: #c0392b; }
-
-
-    /* ── MARKET NOTE ── */
-    .market-note {
-      font-family: 'Sora', sans-serif;
-      font-size: 13px;
-      line-height: 1.78;
-      color: var(--charcoal);
-      opacity: 0.72;
-      padding: 20px 24px;
-      border-left: 3px solid var(--teal);
-      background: rgba(42,138,126,0.05);
-      margin: 28px 0 20px;
-    }
-
-    /* ── MARKET STORIES ── */
-    .market-stories { display: flex; flex-direction: column; gap: 0; }
-    .market-story {
-      padding: 18px 0;
-      border-bottom: 1px solid rgba(28,26,22,0.1);
-      transition: background 0.15s;
-      border-radius: 4px;
-      padding-left: 8px;
-      padding-right: 8px;
-      margin-left: -8px;
-      margin-right: -8px;
-    }
+    .story-small .source { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); margin-bottom: 0.4rem; }
+    .story-small h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; line-height: 1.3; color: var(--soft-black); margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+    .story-small p { font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.5; }
+    .markets-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .market-card { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; }
+    .market-card .name { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); margin-bottom: 0.5rem; }
+    .market-card .value { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--soft-black); margin-bottom: 0.25rem; }
+    .market-card .delta { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; }
+    .market-card .delta.up { color: var(--market-green); }
+    .market-card .delta.down { color: var(--market-red); }
+    .market-note { font-size: 0.85rem; font-weight: 300; color: var(--charcoal); line-height: 1.7; }
+    .market-stories { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+    .market-story { padding-bottom: 1rem; border-bottom: 1px solid var(--tan); }
     .market-story:last-child { border-bottom: none; }
-    .market-story:hover { background: rgba(28,26,22,0.04); }
-    .story-headline {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 18px;
-      letter-spacing: 0.03em;
-      line-height: 1.15;
-      color: var(--charcoal);
-    }
-    .market-story:hover .story-headline { color: var(--coral); }
-    .story-summary {
-      font-family: 'Sora', sans-serif;
-      font-size: 12px;
-      line-height: 1.65;
-      color: var(--charcoal);
-      opacity: 0.58;
-      margin-top: 6px;
-    }
-    .story-read-more {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--coral);
-      margin-top: 8px;
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-    .market-story:hover .story-read-more { opacity: 1; }
-
-    /* ── SCORES ── */
-    .scores-row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .score-card {
-      border: 2px solid var(--charcoal);
-      padding: 18px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      position: relative;
-      background: var(--cream);
-      transition: transform 0.18s ease;
-    }
-    .score-card::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      right: -5px;
-      width: 100%;
-      height: 100%;
-      border: 2px solid var(--amber);
-      z-index: -1;
-      transition: bottom 0.18s ease, right 0.18s ease;
-    }
-    .score-card:hover { transform: translate(-3px, -3px); }
-    .score-card:hover::after { bottom: -8px; right: -8px; }
-    .score-card .teams {
-      font-family: 'Sora', sans-serif;
-      font-size: 13px;
-      color: var(--charcoal);
-    }
+    .story-source { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); margin-bottom: 0.25rem; }
+    .story-headline a { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--soft-black); text-decoration: none; line-height: 1.3; }
+    .story-headline a:hover { color: var(--forest); }
+    .story-summary { font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.5; margin-top: 0.25rem; }
+    .scores-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .score-card { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+    .score-card .teams { font-size: 0.9rem; color: var(--charcoal); }
     .score-card .teams strong { font-weight: 600; }
-    .score-card .result {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
-      letter-spacing: 0.03em;
-      color: var(--charcoal);
-      white-space: nowrap;
-    }
-    .score-card .status {
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      opacity: 0.38;
-      text-align: right;
-      margin-top: 3px;
-    }
-    .box-hint {
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-top: 4px;
-      opacity: 0.7;
-    }
-
-    .upcoming { margin-top: 8px; }
-    .upcoming-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      opacity: 0.38;
-      margin-bottom: 12px;
-    }
-    .upcoming-item {
-      font-family: 'Sora', sans-serif;
-      font-size: 13px;
-      color: var(--charcoal);
-      opacity: 0.65;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(28,26,22,0.08);
-    }
-    .upcoming-item:last-child { border-bottom: none; }
-
-    /* ── ENTERTAINMENT GRID ── */
-    .ent-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .ent-card {
-      text-decoration: none; color: inherit; display: block;
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.15s;
-    }
-    .ent-card:hover { transform: translateY(-2px); }
-    .ent-card::after {
-      content: 'READ MORE ↗';
-      position: absolute;
-      bottom: 0; right: 0;
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.14em;
-      color: var(--coral);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .ent-card:hover::after { opacity: 1; }
-    .ent-card .ent-image {
-      width: 100%;
-      aspect-ratio: 16/10;
-      border: 2px solid var(--charcoal);
-      margin-bottom: 14px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      position: relative;
-    }
-    .ent-card .ent-image img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      position: absolute;
-      inset: 0;
-      filter: saturate(0.88) contrast(1.05);
-    }
-    .ent-type {
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 8px;
-    }
-    .ent-card h4 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 17px;
-      letter-spacing: 0.03em;
-      line-height: 1.15;
-      color: var(--charcoal);
-      margin-bottom: 8px;
-    }
-    .ent-card p {
-      font-family: 'Sora', sans-serif;
-      font-size: 12px;
-      line-height: 1.65;
-      color: var(--charcoal);
-      opacity: 0.58;
-    }
-
-    /* ── RABBIT HOLE ── */
-    .rabbit-hole {
-      background: var(--charcoal);
-      padding: 40px;
-      position: relative;
-      overflow: hidden;
-    }
-    .rabbit-hole::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(244,239,224,0.05) 1px, transparent 1px);
-      background-size: 18px 18px;
-      pointer-events: none;
-    }
-    .rabbit-hole::after {
-      content: '';
-      position: absolute;
-      bottom: -7px;
-      right: -7px;
-      width: 100%;
-      height: 100%;
-      border: 2px solid var(--purple);
-      z-index: -1;
-    }
-    .rh-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--purple);
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
-    }
-    .rh-image {
-      width: 100%;
-      aspect-ratio: 21/7;
-      overflow: hidden;
-      border: 2px solid rgba(92,63,122,0.5);
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 1;
-    }
-    .rh-image img {
-      width: 100%; height: 100%; object-fit: cover;
-      filter: saturate(0.7) contrast(1.05);
-    }
-    .rabbit-hole h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(24px, 3vw, 36px);
-      letter-spacing: 0.04em;
-      line-height: 1.1;
-      color: var(--cream);
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
-    }
-    .rabbit-hole p {
-      font-family: 'Sora', sans-serif;
-      font-size: 13px;
-      line-height: 1.8;
-      color: var(--cream);
-      opacity: 0.65;
-      margin-bottom: 16px;
-      max-width: 820px;
-      position: relative;
-      z-index: 1;
-    }
-    .read-full {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--purple);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(92,63,122,0.5);
-      padding-bottom: 2px;
-      position: relative;
-      z-index: 1;
-    }
-    .read-full:hover { color: var(--cream); border-color: var(--cream); }
-
-    /* ── FOOTER ── */
-    .brief-footer {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 28px 48px;
-      border-top: 2px solid var(--charcoal);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .brief-footer p {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      opacity: 0.38;
-    }
-    .brief-footer a {
-      color: var(--charcoal);
-      opacity: 0.55;
-      text-decoration: none;
-    }
-    .brief-footer a:hover { opacity: 1; color: var(--coral); }
-
-    /* ── BOX SCORE MODAL ── */
-    #boxscore-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: rgba(28,26,22,0.7);
-      backdrop-filter: blur(4px);
-      align-items: center;
-      justify-content: center;
-    }
-    #boxscore-modal.open { display: flex; }
-    #boxscore-inner {
-      background: var(--cream);
-      border: 2px solid var(--charcoal);
-      width: min(92vw, 860px);
-      max-height: 88vh;
-      overflow-y: auto;
-      position: relative;
-    }
-    #boxscore-inner::after {
-      content: '';
-      position: absolute;
-      bottom: -7px;
-      right: -7px;
-      width: 100%;
-      height: 100%;
-      border: 2px solid var(--amber);
-      z-index: -1;
-    }
-    #boxscore-header {
-      padding: 20px 28px 16px;
-      border-bottom: 2px solid var(--charcoal);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      position: sticky;
-      top: 0;
-      background: var(--cream);
-      z-index: 10;
-    }
-    #boxscore-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 24px;
-      letter-spacing: 0.05em;
-      color: var(--charcoal);
-    }
-    #boxscore-subtitle {
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      opacity: 0.38;
-      margin-top: 4px;
-    }
-    #boxscore-close {
-      background: none;
-      border: 2px solid var(--charcoal);
-      font-size: 18px;
-      cursor: pointer;
-      color: var(--charcoal);
-      padding: 2px 10px;
-      line-height: 1.2;
-      font-family: 'Bebas Neue', sans-serif;
-      letter-spacing: 0.05em;
-      transition: background 0.15s, color 0.15s;
-    }
-    #boxscore-close:hover { background: var(--charcoal); color: var(--cream); }
-    #boxscore-body { padding: 20px 28px 28px; }
-    #boxscore-body .linescore {
-      display: flex;
-      gap: 0;
-      margin-bottom: 20px;
-      border: 2px solid var(--charcoal);
-    }
-    #boxscore-body .linescore-team {
-      flex: 1;
-      padding: 14px 18px;
-      border-right: 1px solid rgba(28,26,22,0.15);
-    }
-    #boxscore-body .linescore-team:last-child { border-right: none; }
-    #boxscore-body .linescore-name {
-      font-family: 'Sora', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--charcoal);
-      margin-bottom: 4px;
-    }
-    #boxscore-body .linescore-score {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 32px;
-      letter-spacing: 0.03em;
-      color: var(--charcoal);
-      line-height: 1;
-    }
-    #boxscore-body .linescore-quarters {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.08em;
-      color: var(--charcoal);
-      opacity: 0.38;
-      margin-top: 4px;
-    }
-    .bs-team-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin: 20px 0 8px;
-    }
-    .bs-table { width: 100%; border-collapse: collapse; font-size: 11px; }
-    .bs-table th {
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      opacity: 0.38;
-      padding: 6px 8px;
-      text-align: right;
-      border-bottom: 1px solid rgba(28,26,22,0.12);
-    }
-    .bs-table th:first-child { text-align: left; }
-    .bs-table td {
-      padding: 6px 8px;
-      text-align: right;
-      border-bottom: 1px solid rgba(28,26,22,0.06);
-      color: var(--charcoal);
-      font-family: 'Sora', sans-serif;
-    }
-    .bs-table td:first-child { text-align: left; font-weight: 600; }
-    .bs-table tr:last-child td { border-bottom: none; }
-    .bs-table tr.starter td { background: rgba(28,26,22,0.03); }
-    #boxscore-loading {
-      text-align: center;
-      padding: 48px;
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      opacity: 0.38;
-    }
-    #boxscore-error {
-      text-align: center;
-      padding: 32px;
-      font-family: 'Sora', sans-serif;
-      font-size: 13px;
-      color: var(--charcoal);
-      opacity: 0.58;
-    }
-
-    /* ── ENT MODAL ── */
-    #ent-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: rgba(28,26,22,0.72);
-      backdrop-filter: blur(4px);
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    #ent-modal.open { display: flex; }
-    #ent-inner {
-      background: var(--cream);
-      border: 2px solid var(--charcoal);
-      width: min(92vw, 680px);
-      max-height: 88vh;
-      overflow-y: auto;
-      position: relative;
-    }
-    #ent-inner::after {
-      content: '';
-      position: absolute;
-      bottom: -7px; right: -7px;
-      width: 100%; height: 100%;
-      border: 2px solid var(--amber);
-      z-index: -1;
-    }
-    #ent-header {
-      padding: 20px 28px 16px;
-      border-bottom: 2px solid var(--charcoal);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      position: sticky;
-      top: 0;
-      background: var(--cream);
-      z-index: 10;
-    }
-    #ent-close {
-      background: none;
-      border: 2px solid var(--charcoal);
-      font-size: 18px;
-      cursor: pointer;
-      color: var(--charcoal);
-      padding: 2px 10px;
-      line-height: 1.2;
-      font-family: 'Bebas Neue', sans-serif;
-      letter-spacing: 0.05em;
-      transition: background 0.15s, color 0.15s;
-      flex-shrink: 0;
-      margin-left: 16px;
-    }
-    #ent-close:hover { background: var(--charcoal); color: var(--cream); }
-    #ent-body { padding: 24px 28px 32px; }
-    #ent-body .ent-modal-banner {
-      width: 100%;
-      aspect-ratio: 16/7;
-      border: 2px solid var(--charcoal);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 8px;
-      padding: 1rem;
-    }
-    #ent-body .ent-modal-type {
-      font-family: 'Space Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 10px;
-    }
-    #ent-body h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(20px, 3vw, 28px);
-      letter-spacing: 0.03em;
-      line-height: 1.1;
-      color: var(--charcoal);
-      margin-bottom: 16px;
-    }
-    #ent-body p {
-      font-family: 'Sora', sans-serif;
-      font-size: 13px;
-      line-height: 1.78;
-      color: var(--charcoal);
-      opacity: 0.78;
-      margin-bottom: 14px;
-    }
-    #ent-body .ent-source-link {
-      display: inline-block;
-      margin-top: 8px;
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--coral);
-      text-decoration: none;
-      border-bottom: 1px solid var(--coral);
-      padding-bottom: 2px;
-    }
-    #ent-body .ent-source-link:hover { opacity: 0.7; }
-
-    /* ── RESPONSIVE ── */
+    .score-card .result { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 700; color: var(--soft-black); }
+    .score-card .status { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
+    .upcoming { margin-top: 1rem; }
+    .upcoming-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); margin-bottom: 0.75rem; }
+    .upcoming-item { font-size: 0.85rem; font-weight: 300; color: var(--charcoal); padding: 0.5rem 0; border-bottom: 1px solid rgba(212,197,173,0.5); }
+    .ent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .ent-card { text-decoration: none; color: inherit; }
+    .ent-card .ent-image { width: 100%; aspect-ratio: 16/10; background: var(--tan); border-radius: 3px; margin-bottom: 0.75rem; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; }
+    .ent-card .ent-type { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--forest); margin-bottom: 0.35rem; }
+    .ent-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--soft-black); line-height: 1.3; }
+    .ent-card p { font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.5; margin-top: 0.35rem; }
+    .rabbit-hole { background: var(--forest-dark); border-radius: 6px; padding: 2.5rem; color: var(--cream); }
+    .rh-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest-light); margin-bottom: 1.25rem; }
+    .rh-image { width: 100%; aspect-ratio: 16/7; overflow: hidden; border-radius: 4px; margin-bottom: 1.5rem; background: var(--forest); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+    .rabbit-hole h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; line-height: 1.25; margin-bottom: 1rem; letter-spacing: -0.02em; }
+    .rabbit-hole p { font-size: 0.9rem; font-weight: 300; line-height: 1.8; color: var(--sand); margin-bottom: 1.5rem; }
+    .rabbit-hole .read-full { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest-light); text-decoration: none; border-bottom: 1px solid var(--faded-coral); padding-bottom: 0.2rem; }
+    .brief-footer { max-width: 1000px; margin: 0 auto; padding: 2rem 3rem; text-align: center; border-top: 2px solid var(--soft-black); }
+    .brief-footer p { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--warm-gray); }
+    .brief-footer a { color: var(--warm-gray); }
     @media (max-width: 768px) {
-      .dash-nav, .brief-header, .brief-content, .brief-footer { padding-left: 24px; padding-right: 24px; }
-      .brief-masthead { font-size: 52px; }
-      .ticker-strip { padding: 0 24px; }
+      .dash-nav, .brief-header, .brief-content, .brief-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .brief-header .masthead { font-size: 2.5rem; }
       .stories-grid { grid-template-columns: 1fr; }
-      .story-lead { padding-right: 0; border-right: none; border-bottom: 1px solid rgba(28,26,22,0.12); padding-bottom: 28px; margin-bottom: 28px; }
-      .story-sidebar { padding-left: 0; }
+      .story-lead { border-right: none; padding-right: 0; border-bottom: 1px solid var(--tan); padding-bottom: 2rem; }
       .markets-row { grid-template-columns: repeat(2, 1fr); }
       .scores-row { grid-template-columns: 1fr; }
       .ent-grid { grid-template-columns: 1fr; }
@@ -1045,968 +97,213 @@
   </style>
 </head>
 <body>
-
-  <!-- NAV -->
   <div class="dash-nav">
-    <a href="index.html" class="back">← Back to site</a>
-    <span class="date">Wednesday, April 1, 2026</span>
+    <a href="index.html" class="back">&larr; Back to site</a>
+    <span class="date">Thursday, April 2, 2026</span>
   </div>
-
-  <!-- HEADER -->
   <header class="brief-header">
-    <div class="brief-edition">Morning Edition &middot; Wednesday, April 1, 2026</div>
-    <div class="brief-masthead">THE <span>DAILY</span> BRIEF</div>
-    <p class="brief-greeting">Good morning, Zubin. Happy April 1 — the joke today is that Trump says the Iran war could be over in "two to three weeks," and Asia ripped 5–8% on that headline. S&amp;P futures are up. Gold hit $4,719 for a fourth straight session of gains. Oil is falling hard on ceasefire optimism — WTI slipped near $98, Brent flirting with $100. Luka dropped 42 last night as the Lakers torched Cleveland 127-113. Q2 starts today and it starts with the biggest macro swing trade in years.</p>
+    <div class="masthead">The Daily Brief</div>
+    <div class="edition">Morning Edition &middot; Thursday, April 2, 2026</div>
+    <p class="greeting">Good morning, Zubin. Markets are waking up skittish — Trump's overnight address threatening to hit Iran 'back to the stone ages' erased Wednesday's relief rally and sent futures down roughly 1%. Oil is back above $103 WTI, and the word 'stagflation' is being typed in every trading desk from London to Tokyo. Good Friday closes markets tomorrow, so today's the last shot to act on anything before the long weekend.</p>
   </header>
 
   <!-- TICKER -->
-  <div class="ticker-strip">
-    <div class="ticker-track">
-      <!-- Set 1 -->
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">S&amp;P 500</span><span class="ticker-val">6,528</span><span class="ticker-chg">&#9658; Prior Close</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">Nasdaq</span><span class="ticker-val">21,590</span><span class="ticker-chg">&#9658; Prior Close</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">BTC</span><span class="ticker-val">$68,577</span><span class="ticker-chg up">&#9650; +2.8%</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">Gold</span><span class="ticker-val">$4,719</span><span class="ticker-chg up">&#9650; +3.5%</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">WTI</span><span class="ticker-val">$98.04</span><span class="ticker-chg down">&#9660; -4.3%</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">Brent</span><span class="ticker-val">$101.36</span><span class="ticker-chg down">&#9660; -2.5%</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">10-Yr</span><span class="ticker-val">4.29%</span><span class="ticker-chg up">&#9650; +8bp</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">DXY</span><span class="ticker-val">104.2</span><span class="ticker-chg down">&#9660; -0.18%</span></div>
-      <span class="ticker-dot">✦</span>
-      <!-- Set 2 (duplicate for seamless loop) -->
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">S&amp;P 500</span><span class="ticker-val">6,528</span><span class="ticker-chg">&#9658; Prior Close</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">Nasdaq</span><span class="ticker-val">21,590</span><span class="ticker-chg">&#9658; Prior Close</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">BTC</span><span class="ticker-val">$68,577</span><span class="ticker-chg up">&#9650; +2.8%</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">Gold</span><span class="ticker-val">$4,719</span><span class="ticker-chg up">&#9650; +3.5%</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">WTI</span><span class="ticker-val">$98.04</span><span class="ticker-chg down">&#9660; -4.3%</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">Brent</span><span class="ticker-val">$101.36</span><span class="ticker-chg down">&#9660; -2.5%</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">10-Yr</span><span class="ticker-val">4.29%</span><span class="ticker-chg up">&#9650; +8bp</span></div>
-      <div class="ticker-item" onclick="tickerClick(this)"><span class="ticker-sym">DXY</span><span class="ticker-val">104.2</span><span class="ticker-chg down">&#9660; -0.18%</span></div>
-      <span class="ticker-dot">✦</span>
+  <div class="ticker">
+    <div class="ticker-item">
+      <span class="symbol">S&P 500</span>
+      <span class="price">655.24</span>
+      <span class="change up">&#9650; +0.07%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">Nasdaq</span>
+      <span class="price">584.31</span>
+      <span class="change up">&#9650; +0.08%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">VIX</span>
+      <span class="price">26.63</span>
+      <span class="change up">&#9650; +8.56%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">Bitcoin</span>
+      <span class="price">$66,428</span>
+      <span class="change down">&#9660; -2.41%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">Gold</span>
+      <span class="price">$4,648</span>
+      <span class="change down">&#9660; -1.26%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="symbol">10-YR</span>
+      <span class="price">4.32%</span>
+      <span class="change up">&#9650; +0.19%</span>
     </div>
   </div>
 
-  <!-- CONTENT -->
   <div class="brief-content">
 
-    <!-- ── TOP STORIES ── -->
+    <!-- TOP STORIES -->
     <div class="brief-section">
       <div class="section-label">Top Stories</div>
       <div class="stories-grid">
         <div class="story-lead">
-          <div class="story-lead-img-placeholder">
-            <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(244,239,224,0.35);">Geopolitics &middot; April 1 &middot; Iran War</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:0.04em;color:rgba(244,239,224,0.7);line-height:1;text-align:center;margin-top:6px;">Two to Three Weeks</div>
+          <div class="story-lead-img" style="background: #0d1520; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; padding: 1.5rem;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#5a7a9a;">Geopolitics · April 2, 2026 · Energy Shock</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:#c9d4e0; line-height:1; letter-spacing:-0.03em; text-align:center;">Iran Escalation</div>
           </div>
-          <h3>Trump Says Iran War Could End in "2-3 Weeks" — Asia Rips, Oil Tanks, Gold Still Climbing</h3>
-          <p>Global markets went full risk-on Wednesday after President Trump publicly stated the Iran conflict could be resolved within two to three weeks. Asian equities surged — South Korea's Kospi +8.4%, Tokyo's Nikkei +5.2%. US futures followed. Oil cratered on the headline: WTI fell below $99 toward $98, Brent slipped to $101 and briefly flirted with $100. The market is pricing in a Hormuz reopening and an end to the five-week energy shock that defined Q1.</p>
-          <p>But analysts caution: even if a deal materializes, food prices, freight costs, and inflation effects could persist for months. The Bank of England called it a "substantial negative supply shock." German economic forecasts are specifically modeled on the Strait of Hormuz reopening in Q2. Meanwhile, gold at $4,719 tells you some traders still aren't buying the peace narrative — hedging both outcomes. This is the biggest macro swing trade of the year so far.</p>
-          <a href="https://www.theguardian.com/business/live/2026/apr/01/oil-tumbles-stock-markets-gold-bonds-dollar-middle-east-war-manufacturing-factories-news-updates" target="_blank" class="read-more">Full coverage →</a>
+          <h3>Trump re-escalates Iran threat, Brent crude tops $106 as 'warflation' grips global markets</h3>
+          <p>President Trump's Wednesday evening address changed the calculus overnight. After a week of cautious optimism around potential de-escalation talks, Trump said the U.S. would 'hit Iran extremely hard' over the next two to three weeks, pledging to bring Tehran 'back to the stone ages.' Futures cratered on the news: S&P 500 futures fell ~1%, Nasdaq lost ~1.4%, Dow slid 360 points pre-market.</p><p>The real damage is in energy. Brent crude surged past $106, WTI topped $103 — moves that feed directly into production costs, shipping costs, and consumer prices everywhere. Economists are dusting off a word not heard seriously since the 1970s: stagflation. Oxford Economics has modeled that if oil averages $140 for two months, parts of the global economy tip into mild recession.</p><p>The IEA, IMF, and World Bank have formed a joint coordination group — a rare, almost unprecedented collaboration — signaling just how seriously multilateral institutions view the downside scenarios. Markets are closed Friday for Good Friday, which means today's price action is the last read until Monday. Watch the Strait of Hormuz situation closely — roughly one-fifth of global oil supply flows through it.</p>
+          <a href="https://www.theguardian.com/business/live/2026/apr/02/uk-record-rise-fuel-prices-mortgage-shock-stock-markets-iran-war-oil-dollar-news-updates" target="_blank" class="read-more">Full coverage &rarr;</a>
         </div>
         <div class="story-sidebar">
           <div class="story-small">
-            <div class="story-source">NBA &middot; March 31 &middot; Luka Night</div>
-            <h4>Luka Drops 42/12 as Lakers Blow Past Cavs 127-113 — Blazers Snap Clippers' 5-Game Win Streak</h4>
-            <p>Luka Doncic put up 42 points and 12 assists as the Lakers cruised past Cleveland. Reaves added 19, Ayton 18. In the other notable game, Portland snapped LA's Clippers 5-game win streak 114-104. Jrue Holiday went 30/7 threes, Deni Avdija added 28/11/8. Kawhi had 23 for the Clippers.</p>
+            <div class="source">Gartner · April 2, 2026 · Enterprise AI</div>
+            <h4>Gartner: Most enterprises will ditch AI copilots for outcome-focused 'agentic' platforms by 2028</h4>
+            <p>Gartner dropped a significant prediction today: over half of all enterprises will abandon assistive AI tools — think Copilot-style helpers — in favor of platforms that commit to delivering specific workflow results through autonomous agents. Software companies that fail to redesign for agentic execution could face margin compression of up to 80% by 2030. Human roles evolve to 'Agent Stewards' overseeing outcomes rather than doing tasks themselves.</p>
           </div>
           <div class="story-small">
-            <div class="story-source">ISM &middot; Manufacturing &middot; April 1</div>
-            <h4>ISM Manufacturing PMI Drops as Tariff Costs Hit — New Section 122 Global Surcharge Now in Effect</h4>
-            <p>The April 1 ISM Manufacturing PMI is being closely watched as the new Section 122 Trade Act global surcharge takes effect today, replacing IEEPA-based tariffs struck down in February. Manufacturers navigating a new cost environment. Watch the number — it's the first clean read on how tariff regime change hits the factory floor.</p>
+            <div class="source">Brown University · April 1, 2026 · AI Research</div>
+            <h4>Yann LeCun raises $1B+ for AMI Labs, says LLMs are dead end — world models are the future</h4>
+            <p>LeCun used a Brown University lecture to reiterate his argument that large language models lack true understanding of the physical world and its causal structure. His new venture, AMI Labs, just closed over $1 billion in funding to build 'world models' — systems that process video, audio, images, and scientific data to build genuine situational understanding. It's a direct challenge to the OpenAI/Anthropic paradigm and worth watching.</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ── MARKETS ── -->
+    <!-- MARKETS -->
     <div class="brief-section">
-      <div class="section-label teal">Markets</div>
+      <div class="section-label">Markets</div>
       <div class="markets-row">
-        <div class="market-card" data-mktid="^GSPC">
-          <div class="name">S&amp;P 500</div>
-          <div class="value">6,528</div>
-          <div class="delta">&#9658; Prior Close</div>
+        <div class="market-card">
+          <div class="name">S&P 500</div>
+          <div class="value">655.24</div>
+          <div class="delta up">&#9650; +0.07%</div>
         </div>
-        <div class="market-card" data-mktid="^NDX">
+        <div class="market-card">
           <div class="name">Nasdaq</div>
-          <div class="value">21,590</div>
-          <div class="delta">&#9658; Prior Close</div>
+          <div class="value">584.31</div>
+          <div class="delta up">&#9650; +0.08%</div>
         </div>
-        <div class="market-card" data-mktid="BTC-USD">
+        <div class="market-card">
           <div class="name">Bitcoin</div>
-          <div class="value">$68,577</div>
-          <div class="delta up"><span class="delta-arrow">&#9650;</span> +2.8%</div>
+          <div class="value">$66,428</div>
+          <div class="delta down">&#9660; -2.41%</div>
         </div>
-        <div class="market-card" data-mktid="GC=F">
+        <div class="market-card">
           <div class="name">Gold</div>
-          <div class="value">$4,719</div>
-          <div class="delta up"><span class="delta-arrow">&#9650;</span> +3.5%</div>
+          <div class="value">$4,648</div>
+          <div class="delta down">&#9660; -1.26%</div>
         </div>
       </div>
-      <div class="markets-row">
-        <div class="market-card" data-mktid="CL=F">
-          <div class="name">WTI Crude</div>
-          <div class="value">$98.04</div>
-          <div class="delta down"><span class="delta-arrow">&#9660;</span> -4.3%</div>
-        </div>
-        <div class="market-card" data-mktid="BZ=F">
-          <div class="name">Brent</div>
-          <div class="value">$101.36</div>
-          <div class="delta down"><span class="delta-arrow">&#9660;</span> -2.5%</div>
-        </div>
-        <div class="market-card">
-          <div class="name">2Y Yield</div>
-          <div class="value">3.75%</div>
-          <div class="delta down"><span class="delta-arrow">&#9660;</span> -8bp</div>
-        </div>
-        <div class="market-card" data-mktid="^TNX">
-          <div class="name">10Y Yield</div>
-          <div class="value">4.29%</div>
-          <div class="delta up"><span class="delta-arrow">&#9650;</span> +8bp</div>
-        </div>
-      </div>
-      <div class="markets-row">
-        <div class="market-card">
-          <div class="name">2s/10s Spread</div>
-          <div class="value">+54bp</div>
-          <div class="delta up"><span class="delta-arrow">&#9650;</span> Steepening</div>
-        </div>
-        <div class="market-card" data-mktid="^VIX">
-          <div class="name">VIX</div>
-          <div class="value">—</div>
-          <div class="delta">Elevated</div>
-        </div>
-        <div class="market-card">
-          <div class="name">IG Spread</div>
-          <div class="value">~88bp</div>
-          <div class="delta up"><span class="delta-arrow">&#9650;</span> Tightening</div>
-        </div>
-        <div class="market-card">
-          <div class="name">HY Spread</div>
-          <div class="value">~346bp</div>
-          <div class="delta">Near Normal</div>
-        </div>
-      </div>
-
-      <div class="watchlist-section">
-        <span class="watchlist-label">MY POSITIONS</span>
-        <div class="watchlist-grid">
-          <div class="watchlist-item"><div class="symbol">SPY</div><div class="company">S&amp;P 500 ETF</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">QQQ</div><div class="company">Nasdaq 100 ETF</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">SMH</div><div class="company">VanEck Semiconductor ETF</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">GOOGL</div><div class="company">Alphabet</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">AMZN</div><div class="company">Amazon</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">MSFT</div><div class="company">Microsoft</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">UBER</div><div class="company">Uber</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">GLD</div><div class="company">SPDR Gold Shares</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">BX</div><div class="company">Blackstone</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">VXUS</div><div class="company">Vanguard Total Intl</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">COHR</div><div class="company">Coherent Corp</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">SCHD</div><div class="company">Schwab Dividend ETF</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">NLR</div><div class="company">VanEck Uranium+Nuclear</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">STX</div><div class="company">Seagate Technology</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">META</div><div class="company">Meta Platforms</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">AAPL</div><div class="company">Apple</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">PLTR</div><div class="company">Palantir</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">CRWV</div><div class="company">CoreWeave</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">XLU</div><div class="company">Utilities Select SPDR</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">GFS</div><div class="company">GlobalFoundries</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">BABA</div><div class="company">Alibaba</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">SOFI</div><div class="company">SoFi Technologies</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">APLD</div><div class="company">Applied Digital</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">ORCL</div><div class="company">Oracle</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">QCOM</div><div class="company">Qualcomm</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">UUUU</div><div class="company">Energy Fuels</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">BLK</div><div class="company">BlackRock</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">ARKQ</div><div class="company">ARK Autonomous Tech ETF</div><div class="price">—</div><div class="change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">VUG</div><div class="company">Vanguard Growth ETF</div><div class="price">—</div><div class="change">—</div></div>
-        </div>
-      </div>
-
-      <div class="market-note">
-        Q2 opens with a monster macro swing: Trump signaled the Iran war could end in "two to three weeks," and markets went full risk-on overnight. Asia surged 5–8%. Oil is the tell — WTI dropped to $98, Brent broke below $102 and flirting with $100. Gold keeps climbing, now at $4,719 on its fourth straight up session. BTC back near $68K. The curve is steepening further — 2Y down to 3.75% as rate cut expectations rebuild, 10Y at 4.29% on growth. The 2s/10s spread is now +54bp. HY spreads (~346bp) are normalizing fast. If this Iran peace signal is real, energy names crater and everything else rips into mid-April. If it's noise, you get a violent reversal. That's the trade.
-      </div>
-
+      <p class="market-note">Futures are red across the board — S&P 500 futures -1%, Nasdaq -1.4%, Dow -360 pts — after Trump's overnight Iran escalation language reversed Wednesday's relief rally. WTI crude is above $103 and Brent over $106, and Treasury yields rose as investors price in both an inflation shock and safe-haven demand simultaneously. Markets close tomorrow for Good Friday, making today a compressed window for any repositioning. SPY, QQQ, and SMH all see pressure; GLD likely catches a bid as a geopolitical hedge.</p>
       <div class="market-stories">
-        <div class="market-story" data-story="iran-rally" style="cursor:pointer;">
-          <div class="story-source">Equities &middot; April 1 &middot; Peace Trade</div>
-          <div class="story-headline">Oil Below $100 as Markets Price In Iran Deal — S&amp;P Pushes Further Into Q2 Rally Mode</div>
-          <div class="story-summary">WTI crude broke below $100 for the first time since Operation Epic Fury began as Trump's "two to three weeks" comment triggered a broad peace-trade rotation. Energy stocks fell, tech and travel led the advance.</div>
-          <div class="story-read-more">Read full story →</div>
+        <div class="market-story">
+          <div class="story-source">Energy Markets · Geopolitical Risk</div>
+          <div class="story-headline"><a href="https://www.tradingview.com/news/tradingview:124e72ba1094b:0-spx-s-p-500-futures-sharply-lower-after-trump-says-us-will-hit-iran-extremely-hard/" target="_blank">WTI above $103, Brent above $106 — oil's Iran premium is back and then some</a></div>
+          <div class="story-summary">The market's early April optimism is gone. Crude's surge reflects both actual supply disruption risk through the Strait of Hormuz and a re-pricing of the geopolitical premium. Brent has nearly doubled from a year ago on conflict risk alone, and some models now put a 'widened conflict' scenario at $174/bbl. Energy stocks get a bid; everything else does not.</div>
         </div>
-        <div class="market-story" data-story="google-ai-ads" style="cursor:pointer;">
-          <div class="story-source">Google &middot; Ad Tech &middot; April 1</div>
-          <div class="story-headline">Google Embeds Shopping &amp; Travel Ads Into AI Mode — The Biggest Search Ad Format Shift in a Decade</div>
-          <div class="story-summary">Sponsored retailer listings and travel placements now appear inside Google AI Mode conversational responses, not just beside them. It's contextual ad placement at a scale the industry hasn't seen since the mobile transition.</div>
-          <div class="story-read-more">Read full story →</div>
+        <div class="market-story">
+          <div class="story-source">Macro · Fed Watch</div>
+          <div class="story-headline"><a href="https://qna.org.qa/en/news/news-details?id=rising-oil-prices-put-global-economy-on-brink-of-stagflation&date=2/04/2026" target="_blank">Stagflation trap: rising oil prices put central banks between rate hikes and recession</a></div>
+          <div class="story-summary">The classic stagflation dilemma is back: inflation is ripping thanks to energy costs, but growth is faltering — meaning hiking rates fights inflation but accelerates slowdown, while cutting rates gooses growth but pours fuel on inflation. Oxford Economics pegs the tipping point at $140 oil sustained for 60 days. Germany's major economic institutes have already cut growth forecasts. The Fed's next meeting just got a lot more complicated.</div>
         </div>
       </div>
     </div>
 
-    <!-- ── SPORTS ── -->
+    <!-- SPORTS -->
     <div class="brief-section">
-      <div class="section-label coral">Sports</div>
-      <div class="scores-row" id="scores-row">
-        <!-- Injected by fetchScores() or static fallback -->
+      <div class="section-label">Sports</div>
+      <div class="scores-row">
+        <div class="score-card">
+          <div class="teams"><strong>Boston Celtics</strong> vs. Miami Heat</div>
+          <div>
+            <div class="result">147 – 129</div>
+            <div class="status">Final · Boston on a tear to close the regular season</div>
+          </div>
+        </div>
+        <div class="score-card">
+          <div class="teams"><strong>New York Knicks</strong> vs. Memphis Grizzlies</div>
+          <div>
+            <div class="result">130 – 119</div>
+            <div class="status">Final · Knicks locking in playoff seeding</div>
+          </div>
+        </div>
+        <div class="score-card">
+          <div class="teams"><strong>Houston Rockets</strong> vs. Milwaukee Bucks</div>
+          <div>
+            <div class="result">119 – 113</div>
+            <div class="status">Final · Bucks struggling down the stretch</div>
+          </div>
+        </div>
+        <div class="score-card">
+          <div class="teams"><strong>San Antonio Spurs</strong> vs. Golden State Warriors</div>
+          <div>
+            <div class="result">127 – 113</div>
+            <div class="status">Final · Warriors' season circling the drain</div>
+          </div>
+        </div>
       </div>
       <div class="upcoming">
         <div class="upcoming-label">Today / Upcoming</div>
-        <div class="upcoming-item">NBA Tonight (April 1) — Thunder vs. Pelicans, Heat vs. Celtics, Warriors vs. Nuggets among the slate as playoff seeding tightens</div>
-        <div class="upcoming-item">The Boys Season 5 — One week away. Two-part premiere April 8 on Prime Video. Final season.</div>
+        <div class="upcoming-item">Men's Final Four — Saturday April 4, Lucas Oil Stadium, Indianapolis: UConn vs. Illinois | Arizona vs. Michigan. Two compelling matchups — UConn gunning for a dynasty three-peat, Illinois emerging as the sentimental bracket buster.</div>
+        <div class="upcoming-item">Women's Final Four — Friday April 3, Phoenix: games begin as the women's bracket delivers its own drama heading toward Sunday's title game.</div>
       </div>
-      <div class="market-note" style="border-left-color: var(--coral); background: rgba(217,79,43,0.05); margin-top: 24px;">
-        Luka was dialed in on Tuesday night — 42 points, 12 assists on efficient shooting as the Lakers dismantled Cleveland 127-113. The win is the Lakers&#x27; 50th of the season and officially clinches their playoff spot. Deandre Ayton added 18 points and 9 rebounds in a strong effort off the bench. Meanwhile in Dallas, the Bucks handled the Mavericks 123-99, sending Dallas to their fifth straight loss. Dallas is sliding at the worst time — their West playoff seeding is slipping and the team looks disconnected from two months ago. The Western Conference race is getting sharp.
-      </div>
+      <p class="market-note" style="margin-top:1rem">The NBA is in its final week of regular season play — last night's card was heavy with 9 games, and the playoff seeding picture is tightening. Boston's 147-point night is a statement; they look like the class of the East heading in. But the real sports conversation this weekend is March Madness: UConn vs. Illinois and Arizona vs. Michigan at Lucas Oil Stadium Saturday. UConn is chasing a rare three-peat, which would cement this as one of the great dynasties in college basketball history. Arizona and Michigan bring different styles — this one could be the more entertaining of the two semis.</p>
     </div>
 
-    <!-- ── CULTURE & ENTERTAINMENT ── -->
+    <!-- CULTURE & ENTERTAINMENT -->
     <div class="brief-section">
       <div class="section-label">Culture &amp; Entertainment</div>
       <div class="ent-grid">
-        <div class="ent-card" data-ent="euphoria">
-          <div class="ent-image" style="background: #1a1a2e;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;color:rgba(244,239,224,0.8);text-align:center;position:relative;z-index:1;">Euphoria S3</div>
-            <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(92,63,122,0.9);margin-top:6px;position:relative;z-index:1;">HBO · April 2026</div>
+        <div class="ent-card">
+          <div class="ent-image" style="background: #1a1a2e; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">Euphoria S3</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">HBO Max · Drama · Now Streaming</div>
           </div>
           <div class="ent-type">TV · HBO Max · April 2026</div>
-          <h4>'Euphoria' Season 3 Is Finally Here — HBO's Gen Z Drama Returns After a Long Hiatus</h4>
-          <p>Euphoria Season 3 is one of the most anticipated TV returns of the year, dropping on HBO Max this month. The show has been in limbo since Zendaya's schedule and production delays held things up — but it's back, and the cultural conversation is already picking back up.</p>
+          <h4>Euphoria Season 3 is here — Zendaya, post-high school, and the same beautiful chaos</h4>
+          <p>The most aesthetically maximalist show on television is back for its third season, this time following the characters into early adulthood. Season 3 has been the most anticipated TV return in years — Zendaya remains the gravitational center — and early reviews suggest the show hasn't lost its willingness to go places other prestige TV won't. If you've been waiting for an excuse to rewatch, now's the time.</p>
         </div>
-        <div class="ent-card" data-ent="theboys">
-          <div class="ent-image" style="background: #1c0a0a;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;color:rgba(244,239,224,0.8);text-align:center;position:relative;z-index:1;">The Boys S5</div>
-            <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(217,79,43,0.9);margin-top:6px;position:relative;z-index:1;">Prime Video · April 8</div>
+        <div class="ent-card">
+          <div class="ent-image" style="background: #1a1a2e; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">BEEF Season 2</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">Netflix · Anthology · Now Streaming</div>
           </div>
-          <div class="ent-type">TV · Prime Video · April 8</div>
-          <h4>'The Boys' Season 5 Kicks Off April 8 — The Final Season Promises to Go Harder Than Ever</h4>
-          <p>The final season of The Boys premieres with a two-episode drop on April 8. Amazon is treating this as a major event — the satirical superhero series has been one of Prime Video's biggest global hits. Expect the final season to go full send on the political commentary.</p>
+          <div class="ent-type">TV · Netflix · April 2026</div>
+          <h4>BEEF Season 2 returns as anthology — Oscar Isaac, Carey Mulligan, Charles Melton in a new feud</h4>
+          <p>Netflix's Emmy-winning original is back with a completely new cast and story. Oscar Isaac, Carey Mulligan, Charles Melton, and Cailee Spaeny step in for season one's Ali Wong/Steven Yeun pairing. The anthology format is a smart call — keeps the concept fresh without trying to force a sequel. Season 1 was one of the tightest character studies of the streaming era; this one has the pedigree to match it.</p>
         </div>
-        <div class="ent-card" data-ent="hailmary">
-          <div class="ent-image" style="background: #0a1a12;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;color:rgba(244,239,224,0.8);text-align:center;position:relative;z-index:1;">Project Hail Mary</div>
-            <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(42,138,126,0.9);margin-top:6px;position:relative;z-index:1;">Amazon · In Theaters</div>
+        <div class="ent-card">
+          <div class="ent-image" style="background: #1a1a2e; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">Hacks Season 5</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">HBO Max · Comedy · Final Season</div>
           </div>
-          <div class="ent-type">Film · Amazon/Theatrical · March 20</div>
-          <h4>Ryan Gosling's 'Project Hail Mary' Is the Sci-Fi Film Critics Didn't Know They Needed</h4>
-          <p>Still in theaters and picking up steam. Gosling plays an amnesiac astronaut on a solo mission to save Earth. Adapted from Andy Weir's novel, it's being called the best hard sci-fi film since Interstellar — emotionally ambitious and technically rigorous.</p>
+          <div class="ent-type">TV · HBO Max · April 2026</div>
+          <h4>Hacks bows out — Jean Smart's final season is a rare send-off for prestige TV's best comedy</h4>
+          <p>The fifth and final season of Hacks premieres this month, and it's already drawing praise as a graceful conclusion to one of the best shows of the decade. Jean Smart as Deborah Vance is one of TV's all-time characters. If you haven't seen this one, it's the perfect long weekend binge — four seasons available, finale incoming.</p>
         </div>
       </div>
     </div>
 
-    <!-- ── RABBIT HOLE ── -->
-    <div class="brief-section" style="border-bottom: none;">
-      <div class="section-label purple">Today's Rabbit Hole</div>
+    <!-- RABBIT HOLE -->
+    <div class="brief-section">
       <div class="rabbit-hole">
-        <div class="rh-label">Deep Read ✦ Sports &amp; Media</div>
-        <div class="rh-image" style="background: linear-gradient(135deg, #0d1b2a 0%, #1a2a1a 50%, #2a1a0d 100%);">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,4vw,56px);color:rgba(244,239,224,0.55);letter-spacing:0.04em;line-height:1;text-align:center;">Live Sports Premium</div>
+        <div class="rh-label">Today&rsquo;s Rabbit Hole</div>
+        <div class="rh-image" style="background: linear-gradient(135deg, #0d1b2a 0%, #1a2a1a 50%, #2a1a0d 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; padding: 2rem;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#5a8a5a;">Sports Business · Media Rights · AI Disruption</div>
+          <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:#c9d4e0; line-height:1; letter-spacing:-0.03em; text-align:center;">Fan Data Wars</div>
         </div>
-        <h3>Why AI Is Making Live Sports Rights More Expensive, Not Less — The Counterintuitive Logic Reshaping the Industry</h3>
-        <p>Here's the paradox: the more capable AI becomes at generating content, the more valuable live sports get. As AI automates scripted shows, documentaries, and even highlight packages, the programming that genuinely can't be replicated — the live, unscripted, emotionally chaotic nature of a playoff game — becomes the rarest asset on the TV dial. Rights holders are starting to understand this, and so are the platforms writing the checks.</p>
-        <p>The shift is already visible in the deals. Amazon's 'Prime Vision' for the UEFA Champions League isn't just streaming the game — it's layering in real-time tactical overlays, live win probabilities, and AI-generated stats feeds tailored to what you care about. That's not a novelty feature; it's a preview of where every major sports broadcast is heading. The question is no longer 'who gets the rights' but 'who has the data and AI infrastructure to make those rights worth the premium.' Netflix, Amazon, and Apple are bidding up sports not just for eyeballs, but for the fan data that comes with them.</p>
-        <p>For someone entering sports marketing, this is the architecture you're walking into. The traditional broadcast model — one feed, one narrative, one sponsor integration — is being replaced by a participation model where every fan gets a slightly different product. That changes how brands sponsor sports (contextual, moment-based ads vs. static logos), how athletes build personal brands (direct-to-fan data pipelines), and how agencies like CAA or WME measure the value of a client. The job titles haven't fully caught up yet, but 'fan engagement strategist' and 'sports data partnerships' are where the growth is.</p>
-        <p>What to watch: the NBA's next media rights deal (likely in 2027–28 negotiation cycle) will be the first major US league contract negotiated in a fully AI-aware landscape. Expect Amazon and Apple to bid hard, and expect the league to push aggressively for data ownership provisions that would've been inconceivable five years ago.</p>
-        <a href="https://magnifi.ai/insights/5-key-predictions-for-sports-media-in-2026" target="_blank" class="read-full">5 Key Predictions for Sports Media in 2026 →</a>
+        <h3>The sports media rights game just changed forever — and the prize isn't distribution, it's fan data</h3>
+        <p>For the past three decades, sports media rights negotiations were fundamentally about one thing: who gets to broadcast the game. Networks paid billions for the right to put a product in front of eyeballs, and the league or team got a check. It was a clean transaction. That model is now obsolete. The critical question in 2026 rights negotiations is no longer 'who gets the broadcast?' — it's 'who owns the fan data?'</p><p>Streaming has done something broadcast never could: it makes every fan individually identifiable. When someone watches a game on a legacy cable package, the network knows they watched. When they stream it, the platform knows who they are, what device they used, when they paused, what they searched after, and what they bought. That data is worth more over a ten-year period than almost any traditional advertising deal. Rights holders who understand this are negotiating equity stakes, co-ownership of first-party data, and direct-to-consumer pipelines into their deals — not just rights fees. Leagues that got this early (the NFL, NBA, and increasingly Serie A and LaLiga) are building permanent competitive moats. Those that didn't are slowly becoming content vendors for platforms that actually own their audience.</p><p>Here's why this matters for where you're heading in sports and entertainment marketing: the 'fan relationship' is becoming a first-party data asset on par with an e-commerce customer list. Whoever owns that relationship — the streaming platform, the league, the team, the athlete's personal brand — owns the future monetization. A sports marketing career built around understanding how to activate within that data ecosystem (personalized experiences, AI-generated content at scale, second-screen engagement, live event conversion funnels) is qualitatively different from one built around traditional sponsorship activation. The skills gap is real and the window to get ahead of it is right now.</p><p>Watch: which leagues negotiate direct streaming deals with data-sharing clauses in their next rights cycle. The NBA's next deal, MLB's streaming rights, and the Premier League's global digital strategy are all case studies worth following closely. The winners won't just be the highest bidders — they'll be whoever builds the best technology layer between the game and the fan.</p>
+        <a href="https://magnifi.ai/insights/5-key-predictions-for-sports-media-in-2026" target="_blank" class="read-full">5 key sports media predictions for 2026 — Magnifi AI &rarr;</a>
       </div>
     </div>
 
   </div>
 
-  <!-- FOOTER -->
   <div class="brief-footer">
-    <p>Updated 7:00 AM MT · April 1, 2026</p>
-    <p><a href="index.html">← Back to site</a></p>
+    <p>Updated 4:03 AM MT, April 2, 2026 &middot; <a href="index.html">Back to site</a></p>
   </div>
-
-  <!-- ENT MODAL -->
-  <div id="ent-modal" role="dialog" aria-modal="true">
-    <div id="ent-inner">
-      <div id="ent-header">
-        <div>
-          <div id="ent-modal-type" style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);margin-bottom:4px;"></div>
-          <div id="ent-modal-title" style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.04em;color:var(--charcoal);"></div>
-        </div>
-        <button id="ent-close" aria-label="Close">✕</button>
-      </div>
-      <div id="ent-body"></div>
-    </div>
-  </div>
-
-  <!-- BOX SCORE MODAL -->
-  <div id="boxscore-modal" role="dialog" aria-modal="true" aria-labelledby="boxscore-title">
-    <div id="boxscore-inner">
-      <div id="boxscore-header">
-        <div>
-          <div id="boxscore-title">Box Score</div>
-          <div id="boxscore-subtitle"></div>
-        </div>
-        <button id="boxscore-close" aria-label="Close">✕</button>
-      </div>
-      <div id="boxscore-body">
-        <div id="boxscore-loading">Loading box score&hellip;</div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-  const ESPN_SCOREBOARD = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard';
-  const ESPN_SUMMARY    = 'https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/summary';
-
-  const STATIC_GAMES = [
-    { away:'Cavaliers', home:'Lakers', awayScore:113, homeScore:127, status:'Final',
-      note:'Luka: 42 pts, 12 ast — LAL clinches playoff spot (50 wins)', espnId: '401810958' },
-    { away:'Bucks', home:'Mavericks', awayScore:123, homeScore:99, status:'Final',
-      note:'MIL dominant — DAL drops 5th straight', espnId: '401858694' },
-  ];
-
-  function renderCards(games) {
-    const row = document.getElementById('scores-row');
-    row.innerHTML = '';
-    games.forEach(g => {
-      const card = document.createElement('div');
-      card.className = 'score-card';
-      if (g.espnId) card.setAttribute('data-espn-id', g.espnId);
-      card.innerHTML = `
-        <div class="teams">
-          <div><strong>${g.away}</strong> vs. ${g.home}</div>
-          ${g.note ? `<div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;color:var(--charcoal);opacity:0.45;margin-top:4px;">${g.note}</div>` : ''}
-          ${g.espnId ? '<div class="box-hint">↗ tap for box score</div>' : ''}
-        </div>
-        <div style="text-align:right;">
-          <div class="result">${g.awayScore} – ${g.homeScore}</div>
-          <div class="status">${g.status}</div>
-        </div>`;
-      if (g.espnId) {
-        card.addEventListener('click', () => openBoxScore(g.espnId, `${g.away} vs. ${g.home}`, g.status));
-      }
-      row.appendChild(card);
-    });
-  }
-
-  async function fetchScores() {
-    try {
-      const yd = new Date(); yd.setDate(yd.getDate() - 1);
-      const yStr = yd.toISOString().slice(0,10).replace(/-/g,'');
-      const res = await fetch(`${ESPN_SCOREBOARD}?dates=${yStr}&limit=20`);
-      if (!res.ok) throw new Error('ESPN error');
-      const data = await res.json();
-      const events = data.events || [];
-      if (!events.length) throw new Error('No games');
-      const games = events.map(ev => {
-        const comp   = ev.competitions[0];
-        const away   = comp.competitors.find(c => c.homeAway === 'away');
-        const home   = comp.competitors.find(c => c.homeAway === 'home');
-        const status = comp.status.type.shortDetail || 'Final';
-        return {
-          away: away.team.shortDisplayName || away.team.displayName,
-          home: home.team.shortDisplayName || home.team.displayName,
-          awayScore: away.score || '–',
-          homeScore: home.score || '–',
-          status, note: '', espnId: ev.id,
-        };
-      });
-      renderCards(games);
-    } catch(e) {
-      renderCards(STATIC_GAMES);
-    }
-  }
-
-  const modal     = document.getElementById('boxscore-modal');
-  const modalBody = document.getElementById('boxscore-body');
-  const modalTitle = document.getElementById('boxscore-title');
-  const modalSub  = document.getElementById('boxscore-subtitle');
-
-  document.getElementById('boxscore-close').addEventListener('click', closeModal);
-  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-  function openModal()  { modal.classList.add('open'); document.body.style.overflow = 'hidden'; }
-  function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
-
-  async function openBoxScore(espnId, matchup, status) {
-    modalTitle.textContent = matchup;
-    modalSub.textContent   = status;
-    modalBody.innerHTML    = '<div id="boxscore-loading">Loading box score&hellip;</div>';
-    openModal();
-    try {
-      const res = await fetch(`${ESPN_SUMMARY}?region=us&lang=en&contentorigin=espn&event=${espnId}`);
-      if (!res.ok) throw new Error('ESPN summary error');
-      renderBoxScore(await res.json());
-    } catch(e) {
-      modalBody.innerHTML = `<div id="boxscore-error">
-        Could not load box score from ESPN.<br><br>
-        <a href="https://www.espn.com/nba/game/_/gameId/${espnId}" target="_blank" rel="noopener"
-           style="color:var(--coral);text-decoration:underline;">View on ESPN →</a>
-      </div>`;
-    }
-  }
-
-  function renderBoxScore(data) {
-    const boxscore = data.boxscore;
-    if (!boxscore) { modalBody.innerHTML = '<div id="boxscore-error">No box score data available.</div>'; return; }
-    const header = data.header || {};
-    const comp   = (header.competitions || [])[0] || {};
-    const teams  = comp.competitors || [];
-    const awayTeam = teams.find(t => t.homeAway === 'away') || teams[0] || {};
-    const homeTeam = teams.find(t => t.homeAway === 'home') || teams[1] || {};
-    const linescore = boxscore.teams || [];
-    const awayLine  = linescore.find(t => t.homeAway === 'away') || linescore[0] || {};
-    const homeLine  = linescore.find(t => t.homeAway === 'home') || linescore[1] || {};
-    function qtrs(lt) { return (lt.linescores||[]).map(q=>q.displayValue||q.value||'').join('  '); }
-    let html = `<div class="linescore">
-      <div class="linescore-team">
-        <div class="linescore-name">${awayTeam.team?.displayName||awayLine.team?.displayName||'Away'}</div>
-        <div class="linescore-score">${awayTeam.score||awayLine.score||'–'}</div>
-        <div class="linescore-quarters">${qtrs(awayLine)}</div>
-      </div>
-      <div class="linescore-team">
-        <div class="linescore-name">${homeTeam.team?.displayName||homeLine.team?.displayName||'Home'}</div>
-        <div class="linescore-score">${homeTeam.score||homeLine.score||'–'}</div>
-        <div class="linescore-quarters">${qtrs(homeLine)}</div>
-      </div>
-    </div>`;
-    const players = boxscore.players || [];
-    players.forEach(teamPlayers => {
-      const teamName = teamPlayers.team?.displayName || 'Team';
-      const stats    = teamPlayers.statistics || [];
-      const mainStat = stats[0];
-      if (!mainStat) return;
-      const cols     = mainStat.labels || [];
-      const athletes = mainStat.athletes || [];
-      html += `<div class="bs-team-label">${teamName}</div>
-      <table class="bs-table"><thead><tr>
-        <th>Player</th>${cols.map(c=>`<th>${c}</th>`).join('')}
-      </tr></thead><tbody>`;
-      athletes.forEach(a => {
-        const name = a.athlete?.shortName || a.athlete?.displayName || '–';
-        const pos  = a.athlete?.position?.abbreviation || '';
-        html += `<tr class="${a.starter?'starter':''}">
-          <td>${name}${pos?` <span style="font-weight:300;opacity:0.45;font-size:0.7rem">${pos}</span>`:''}</td>
-          ${(a.stats||[]).map(s=>`<td>${s}</td>`).join('')}
-        </tr>`;
-      });
-      html += `</tbody></table>`;
-    });
-    if (!players.length) {
-      html += `<div style="padding:1rem 0;opacity:0.55;font-size:13px">
-        Box score not available. <a href="https://www.espn.com/nba/" target="_blank" style="color:var(--coral)">View on ESPN →</a>
-      </div>`;
-    }
-    modalBody.innerHTML = html;
-  }
-
-  fetchScores();
-
-  // ── Entertainment modal ──
-  const ENT_DATA = {
-    euphoria: {
-      type: 'TV · HBO Max · April 2026',
-      title: "Euphoria Season 3 Is Finally Here",
-      banner: { bg: '#1a1a2e', label: 'Euphoria S3', accent: 'rgba(92,63,122,0.9)', sub: 'HBO · April 2026' },
-      body: `
-        <p>Euphoria Season 3 is one of the most anticipated TV returns in recent memory — it's been three years since Season 2 wrapped. The show spent that time in development limbo while Zendaya's schedule (Dune, Challengers) and production issues held things up. It's back now, and the cultural noise is already building ahead of the April premiere.</p>
-        <p>Season 2 ended on a deliberately fragmented note — Rue narrating an ambiguous future for each character, Cassie and Nate's fallout, Lexi's play as a structural centerpiece. Season 3 is reportedly a time-jump, pushing the characters into early adulthood and exploring what that transition looks like for a generation raised on social media and chemical dependency.</p>
-        <p>Creator Sam Levinson has described it as a "new chapter" rather than a direct continuation. Whether that means a tighter narrative or more of the show's signature visual maximalism — or both — remains to be seen. What's clear is that Euphoria still has the most talked-about aesthetic of any show on television, and the HBO marketing machine will make sure no one misses the drop.</p>
-        <p><strong>Why it matters:</strong> Beyond the entertainment value, Euphoria is a case study in brand-building through cultural saturation. The show moves fashion cycles, drives music chart placements (its soundtrack approach is unusually deliberate), and generates earned media at a scale most advertisers can't buy. Watch how brands respond to Season 3 — and which ones stay away.</p>
-        <a href="https://www.hbo.com/euphoria" target="_blank" class="ent-source-link">Watch on HBO Max →</a>
-      `
-    },
-    theboys: {
-      type: 'TV · Prime Video · April 8',
-      title: "The Boys Season 5 — The Final Season",
-      banner: { bg: '#1c0a0a', label: 'The Boys S5', accent: 'rgba(217,79,43,0.9)', sub: 'Prime Video · April 8' },
-      body: `
-        <p>The Boys Season 5 premieres April 8 with a two-episode drop. This is the final season — showrunner Eric Kripke has been clear that the story ends here, and the marketing has leaned hard into the "no more holding back" framing. The show has run as one of Prime Video's most successful original series globally, and Amazon is treating this finale as a tent-pole event.</p>
-        <p>Season 4 escalated the political allegory to near-literal levels — Homelander as a MAGA stand-in was barely metaphorical by the end. Season 5 is expected to resolve the Homelander arc definitively, bring the CIA's role into full focus, and either complete or destroy the Supe-rebellion storyline that's been building since Season 2.</p>
-        <p>The show has also become one of the more interesting examples of how streaming platforms market prestige violence to a broad audience — it consistently threads the needle between mainstream accessibility and genuinely shocking content. From a media perspective, it's worth watching how Prime handles the finale campaign and whether they can convert the cultural moment into subscriber retention.</p>
-        <p><strong>Key question:</strong> Does The Boys end with a statement, or does it pull its punches the way a lot of "provocative" TV does when it finally has to commit? The finale season will reveal whether the show's political commentary was substantive or just aesthetic.</p>
-        <a href="https://www.amazon.com/primevideo" target="_blank" class="ent-source-link">Watch on Prime Video →</a>
-      `
-    },
-    hailmary: {
-      type: 'Film · Amazon/Theatrical · March 20',
-      title: "Project Hail Mary — Ryan Gosling's Best Film in Years",
-      banner: { bg: '#0a1a12', label: 'Project Hail Mary', accent: 'rgba(42,138,126,0.9)', sub: 'Amazon · In Theaters' },
-      body: `
-        <p>Project Hail Mary is still in theaters and building momentum. Ryan Gosling plays Ryland Grace, an amnesiac astronaut who wakes up alone on a spacecraft with no memory of why he's there — and has to piece together that he's on a solo mission to save Earth from an extinction-level energy crisis. Adapted from Andy Weir's novel (the same author who wrote The Martian), it's a hard sci-fi story with serious emotional ambition.</p>
-        <p>Critics have responded strongly. It's being called the best sci-fi film since Interstellar — high praise that's actually being backed up by audience scores. The film is technically rigorous without being cold; Gosling's performance does the heavy lifting of making orbital mechanics and alien biology feel personal and urgent.</p>
-        <p>What makes this worth paying attention to beyond the film itself: it's Amazon's biggest theatrical bet in years. The studio has historically struggled to convert its prestige content into genuine cultural moments. If Hail Mary sustains its box office run and crosses into award season conversation, it represents a meaningful shift in Amazon's content strategy — and a validation of the theory that audiences will show up for original, non-IP-based sci-fi if the quality is there.</p>
-        <p><strong>The Rocky connection:</strong> The alien friendship at the heart of the story is being discussed as one of the most effective non-human character arcs in recent sci-fi cinema. It's not a spoiler to say the film's emotional core is a relationship — the execution of that is what's generating the most conversation.</p>
-        <a href="https://a.co/hailmary" target="_blank" class="ent-source-link">Get Tickets / Watch on Amazon →</a>
-      `
-    }
-  };
-
-  const entModal  = document.getElementById('ent-modal');
-  const entClose  = document.getElementById('ent-close');
-  const entBody   = document.getElementById('ent-body');
-  const entTitle  = document.getElementById('ent-modal-title');
-  const entType   = document.getElementById('ent-modal-type');
-
-  document.querySelectorAll('.ent-card[data-ent]').forEach(card => {
-    card.addEventListener('click', () => {
-      const d = ENT_DATA[card.dataset.ent];
-      if (!d) return;
-      entType.textContent  = d.type;
-      entTitle.textContent = d.title;
-      entBody.innerHTML = `
-        <div class="ent-modal-banner" style="background:${d.banner.bg};">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:0.04em;color:rgba(244,239,224,0.85);text-align:center;">${d.banner.label}</div>
-          <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:${d.banner.accent};">${d.banner.sub}</div>
-        </div>
-        ${d.body}
-      `;
-      entModal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    });
-  });
-
-  entClose.addEventListener('click', closeEntModal);
-  entModal.addEventListener('click', e => { if (e.target === entModal) closeEntModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEntModal(); });
-  function closeEntModal() {
-    entModal.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  // ── Market story modals ──
-  const STORY_DATA = {
-    'q1close': {
-      source: 'Equities · March 31 · Q1 Close',
-      title: 'Stocks Post Best Day Since May — S&P +2.91%, Nasdaq +3.83% on Iran Peace Hopes',
-      sourceUrl: 'https://www.cnbc.com/2026/03/30/stock-market-today-live-updates.html',
-      body: `
-        <p>All three major indexes closed sharply higher on March 31, driven by a wave of optimism around preliminary Iran-US back-channel talks suggesting a possible Strait of Hormuz deal. The S&P 500 finished up 2.91%, the Nasdaq jumped 3.83%, and the Dow added 2.14% — the best single-session performance across the board since May 2025.</p>
-        <p>The move was broad but tech-led. Semiconductors surged as AI infrastructure spending expectations got a reset — if oil stabilizes, freight and energy costs recede, and margin forecasts for capex-heavy names improve. Nvidia, AMD, and TSMC's US-listed ADRs all closed up more than 5%. The Nasdaq's jump was the most telegraphed trade of the day once the headlines broke around 2PM ET.</p>
-        <p>Despite the green close, Q1 ends as the worst quarter for the S&P since 2022, down roughly 5.3%. The Iran-driven energy shock was the dominant macro narrative all quarter — it spilled into inflation expectations, freight indexes, credit spreads, and corporate guidance across sectors. Airlines, consumer discretionary, and high-yield names got hit hardest.</p>
-        <p><strong>What to watch in Q2:</strong> The Iran situation remains the swing factor. A credible ceasefire or Hormuz agreement would flip energy, relieve inflation pressure, and likely extend the rally into mid-April. The opposite — escalation or breakdown — puts the Fed back in an impossible position. Oil's direction in the first two weeks of April will tell you most of what you need to know about how Q2 starts.</p>
-        <p>Bitcoin closed Q1 essentially flat at $66,710 — crypto traders have been sidelined watching geopolitics rather than leading the risk trade. Gold at $4,578 was the quarter's standout winner, up on every flight-to-safety bid the conflict produced. The 10-year yield at 4.41% is the number to keep watching.</p>
-      `
-    },
-    'openai-ads': {
-      source: 'OpenAI · Advertising · March 31',
-      title: 'OpenAI Scales ChatGPT Ads Pilot Globally — Self-Serve Tools and Global Expansion on the Roadmap',
-      sourceUrl: 'https://agilebrandguide.com/yesterdays-marketing-technology-news-march-31-2026/',
-      body: `
-        <p>OpenAI is expanding its ChatGPT advertising pilot beyond the small group of early U.S. partners it started with in Q4 2025. Global rollout is now on the roadmap, along with self-serve ad tools that would let any brand run campaigns inside ChatGPT without going through a managed sales process. The move puts OpenAI squarely in competition with Google and Meta for performance ad dollars.</p>
-        <p>Early demand from the pilot has reportedly exceeded OpenAI's initial projections. The core value proposition for advertisers: ChatGPT users are in an active information-seeking state, which creates intent signals that are qualitatively different from social feed impressions. A user asking ChatGPT about "best noise-canceling headphones under $200" is much closer to a purchase decision than someone scrolling past a banner ad.</p>
-        <p>The format being tested is native — responses that integrate branded information or product mentions contextually rather than display ad units. OpenAI has been careful about how it frames this to avoid the perception that answers are being bought, but the line between "sponsored context" and "paid answer" will be one of the central trust questions the product has to navigate.</p>
-        <p><strong>Why this matters for marketing:</strong> If ChatGPT becomes a significant media buy, it reshapes how search and discovery budgets get allocated. Brands that have built SEO and Google Ads moats are suddenly exposed — ChatGPT answers don't rank organic results, they synthesize them. A strong position in traditional search doesn't automatically translate. The brands that figure out how to show up credibly in AI-generated responses — through PR, content strategy, and early ad partnerships — will have a structural advantage.</p>
-        <p>OpenAI also announced expanded access to its fine-tuning API for enterprise advertising use cases, allowing brands to customize model behavior for specific campaign objectives. That's a meaningful capability that doesn't exist anywhere else in the current ad tech stack.</p>
-      `
-    }
-  };
-
-  document.querySelectorAll('.market-story[data-story]').forEach(card => {
-    card.addEventListener('click', () => {
-      const d = STORY_DATA[card.dataset.story];
-      if (!d) return;
-      entType.textContent  = d.source;
-      entTitle.textContent = d.title;
-      entBody.innerHTML = `
-        <div class="ent-modal-banner" style="background:#1C1A16;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;color:rgba(244,239,224,0.85);text-align:center;line-height:1.1;">${d.title}</div>
-          <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--amber);margin-top:8px;">${d.source}</div>
-        </div>
-        ${d.body}
-        <a href="${d.sourceUrl}" target="_blank" class="ent-source-link">View Original Source →</a>
-      `;
-      entModal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    });
-  });
-
-  // ── Fetch live stock prices ──
-  async function fetchPositionPrices() {
-    const tickers = ['SPY', 'QQQ', 'SMH', 'GOOGL', 'AMZN', 'MSFT', 'UBER', 'GLD', 'BX', 'VXUS', 'COHR', 'SCHD', 'NLR', 'STX', 'META', 'AAPL', 'PLTR', 'CRWV', 'XLU', 'GFS', 'BABA', 'SOFI', 'APLD', 'ORCL', 'QCOM', 'UUUU', 'BLK', 'ARKQ', 'VUG'];
-    const symbolsParam = tickers.join(',');
-    const yhooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbolsParam}`;
-
-    async function tryFetch(proxyUrl, parseResponse) {
-      const res = await fetch(proxyUrl, { cache: 'no-store' });
-      if (!res.ok) throw new Error('fetch failed');
-      return parseResponse(await res.json());
-    }
-
-    let results = [];
-    try {
-      // Primary: Vercel serverless proxy at /api/prices (no CORS issues)
-      const res = await fetch(`/api/prices?symbols=${symbolsParam}`, { cache: 'no-store' });
-      if (!res.ok) throw new Error('api failed');
-      const data = await res.json();
-      results = data.quoteResponse?.result || [];
-      if (results.length === 0) throw new Error('empty results');
-    } catch {
-      try {
-        // Fallback 1: corsproxy.io
-        const data = await tryFetch(
-          `https://corsproxy.io/?${encodeURIComponent(yhooUrl)}`,
-          d => d
-        );
-        results = data.quoteResponse?.result || [];
-      } catch {
-        try {
-          // Fallback 2: allorigins
-          const data = await tryFetch(
-            `https://api.allorigins.win/get?url=${encodeURIComponent(yhooUrl)}`,
-            d => JSON.parse(d.contents)
-          );
-          results = data.quoteResponse?.result || [];
-        } catch { results = []; }
-      }
-    }
-
-    // Build a map of symbol to quote data
-    const quoteMap = {};
-    results.forEach(quote => { if (quote.symbol) quoteMap[quote.symbol] = quote; });
-
-    // Update each watchlist item
-    document.querySelectorAll('.watchlist-item').forEach(item => {
-      const symbolDiv = item.querySelector('.symbol');
-      const priceDiv  = item.querySelector('.price');
-      const changeDiv = item.querySelector('.change');
-      if (!symbolDiv || !priceDiv || !changeDiv) return;
-      const quote = quoteMap[symbolDiv.textContent.trim()];
-      if (!quote) return;
-      const price = quote.regularMarketPrice;
-      if (price != null) priceDiv.textContent = '$' + price.toFixed(2);
-      const chg = quote.regularMarketChangePercent;
-      if (chg != null) {
-        const up = chg >= 0;
-        changeDiv.innerHTML = `<span class="change-arrow">${up ? '▲' : '▼'}</span> ${up ? '+' : ''}${chg.toFixed(2)}%`;
-        changeDiv.className = 'change ' + (up ? 'up' : 'down');
-      }
-    });
-  }
-
-  fetchPositionPrices();
-
-  // ── Live market card prices ──
-  async function fetchMarketCards() {
-    const MKT_SYMS = ['^GSPC', '^NDX', 'BTC-USD', 'GC=F', 'CL=F', 'BZ=F', '^TNX', '^VIX'];
-    const param    = MKT_SYMS.join(',');
-    const yhooUrl  = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(param)}`;
-
-    let results = [];
-    try {
-      const res = await fetch(`/api/prices?symbols=${encodeURIComponent(param)}`, { cache: 'no-store' });
-      if (!res.ok) throw new Error('api failed');
-      results = (await res.json()).quoteResponse?.result || [];
-      if (results.length === 0) throw new Error('empty results');
-    } catch {
-      try {
-        const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(yhooUrl)}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error();
-        results = (await res.json()).quoteResponse?.result || [];
-      } catch {
-        try {
-          const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(yhooUrl)}`, { cache: 'no-store' });
-          if (!res.ok) throw new Error();
-          results = JSON.parse((await res.json()).contents).quoteResponse?.result || [];
-        } catch { results = []; }
-      }
-    }
-
-    const qmap = {};
-    results.forEach(q => { if (q.symbol) qmap[q.symbol] = q; });
-
-    // Symbols that are bond yields (use bp for delta, show % for value)
-    const YIELD_SYMS = new Set(['^TNX']);
-
-    document.querySelectorAll('.market-card[data-mktid]').forEach(card => {
-      const sym = card.dataset.mktid;
-      const q   = qmap[sym];
-      if (!q) return;
-
-      const price  = q.regularMarketPrice;
-      const chgPct = q.regularMarketChangePercent;
-      const chgAbs = q.regularMarketChange;
-      if (price == null) return;
-
-      const valueDiv = card.querySelector('.value');
-      const deltaDiv = card.querySelector('.delta');
-      if (!valueDiv || !deltaDiv) return;
-
-      // Format value
-      if (sym === '^GSPC' || sym === '^NDX') {
-        valueDiv.textContent = price.toLocaleString('en-US', { maximumFractionDigits: 0 });
-      } else if (sym === 'BTC-USD' || sym === 'GC=F') {
-        valueDiv.textContent = '$' + price.toLocaleString('en-US', { maximumFractionDigits: 0 });
-      } else if (sym === 'CL=F' || sym === 'BZ=F') {
-        valueDiv.textContent = '$' + price.toFixed(2);
-      } else if (YIELD_SYMS.has(sym)) {
-        valueDiv.textContent = price.toFixed(2) + '%';
-      } else if (sym === '^VIX') {
-        valueDiv.textContent = price.toFixed(1);
-      } else {
-        valueDiv.textContent = price.toFixed(2);
-      }
-
-      // Format delta
-      if (chgPct == null) return;
-      const up = chgPct >= 0;
-      let pct;
-      if (YIELD_SYMS.has(sym)) {
-        const bp = Math.round((chgAbs || 0) * 100);
-        pct = `${up && bp > 0 ? '+' : ''}${bp}bp`;
-      } else {
-        pct = `${up ? '+' : ''}${chgPct.toFixed(2)}%`;
-      }
-      deltaDiv.innerHTML = `<span class="delta-arrow">${up ? '▲' : '▼'}</span> ${pct}`;
-      deltaDiv.className = 'delta ' + (up ? 'up' : 'down');
-    });
-
-    // Also refresh matching ticker-strip items with live data
-    const TICKER_SYM_MAP = {
-      'S&P 500': '^GSPC', 'Nasdaq': '^NDX', 'BTC': 'BTC-USD',
-      'Gold': 'GC=F', 'WTI': 'CL=F', 'Brent': 'BZ=F', '10-Yr': '^TNX'
-    };
-    document.querySelectorAll('.ticker-item').forEach(item => {
-      const label = item.querySelector('.ticker-sym')?.textContent.trim();
-      const sym   = TICKER_SYM_MAP[label];
-      if (!sym) return;
-      const q = qmap[sym];
-      if (!q) return;
-      const price  = q.regularMarketPrice;
-      const chgPct = q.regularMarketChangePercent;
-      const chgAbs = q.regularMarketChange;
-      if (price == null) return;
-      const valEl = item.querySelector('.ticker-val');
-      const chgEl = item.querySelector('.ticker-chg');
-      if (!valEl || !chgEl) return;
-      if (sym === '^GSPC' || sym === '^NDX') {
-        valEl.textContent = price.toLocaleString('en-US', { maximumFractionDigits: 0 });
-      } else if (sym === 'BTC-USD' || sym === 'GC=F') {
-        valEl.textContent = '$' + price.toLocaleString('en-US', { maximumFractionDigits: 0 });
-      } else if (sym === 'CL=F' || sym === 'BZ=F') {
-        valEl.textContent = '$' + price.toFixed(2);
-      } else if (YIELD_SYMS.has(sym)) {
-        valEl.textContent = price.toFixed(2) + '%';
-      }
-      if (chgPct != null) {
-        const up = chgPct >= 0;
-        if (YIELD_SYMS.has(sym)) {
-          const bp = Math.round((chgAbs || 0) * 100);
-          chgEl.textContent = `${up ? '▲' : '▼'} ${up && bp > 0 ? '+' : ''}${bp}bp`;
-        } else {
-          chgEl.textContent = `${up ? '▲' : '▼'} ${up ? '+' : ''}${chgPct.toFixed(2)}%`;
-        }
-        chgEl.className = 'ticker-chg ' + (up ? 'up' : 'down');
-      }
-    });
-  }
-
-  fetchMarketCards();
-
-  // ── Stock click modal ──
-  document.querySelectorAll('.watchlist-item').forEach(item => {
-    item.style.cursor = 'pointer';
-    item.addEventListener('click', () => {
-      const sym     = item.querySelector('.symbol').textContent.trim();
-      const company = item.querySelector('.company').textContent.trim();
-      const price   = item.querySelector('.price').textContent.trim();
-      const change  = item.querySelector('.change').textContent.trim();
-      openStockModal(sym, company, price, change);
-    });
-  });
-
-  function openStockModal(sym, company, price, change) {
-    let modal = document.getElementById('stock-modal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'stock-modal';
-      modal.style.cssText = `
-        display:none; position:fixed; inset:0; z-index:2000;
-        background:rgba(28,26,22,0.75); backdrop-filter:blur(4px);
-        align-items:center; justify-content:center; padding:24px;
-      `;
-      modal.innerHTML = `
-        <div id="stock-inner" style="
-          background:var(--cream); border:2px solid var(--charcoal);
-          width:min(96vw,860px); max-height:90vh; overflow-y:auto;
-          position:relative; display:flex; flex-direction:column;
-        ">
-          <div id="stock-inner-after" style="
-            position:absolute; bottom:-7px; right:-7px;
-            width:100%; height:100%; border:2px solid var(--amber); z-index:-1;
-          "></div>
-          <div style="
-            padding:18px 24px 14px; border-bottom:2px solid var(--charcoal);
-            display:flex; justify-content:space-between; align-items:flex-start;
-            position:sticky; top:0; background:var(--cream); z-index:10;
-          ">
-            <div>
-              <div id="stock-sym" style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.06em;color:var(--charcoal);line-height:1;"></div>
-              <div id="stock-company" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--charcoal);opacity:0.45;margin-top:3px;"></div>
-            </div>
-            <div style="display:flex;align-items:center;gap:16px;">
-              <div style="text-align:right;">
-                <div id="stock-price" style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:0.04em;color:var(--charcoal);"></div>
-                <div id="stock-change" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.06em;"></div>
-              </div>
-              <button id="stock-close" style="
-                background:none; border:2px solid var(--charcoal); font-size:18px;
-                cursor:pointer; color:var(--charcoal); padding:2px 10px; line-height:1.2;
-                font-family:'Bebas Neue',sans-serif; letter-spacing:0.05em;
-              " onmouseover="this.style.background='var(--charcoal)';this.style.color='var(--cream)'"
-                 onmouseout="this.style.background='none';this.style.color='var(--charcoal)'">✕</button>
-            </div>
-          </div>
-          <div style="padding:0;">
-            <div id="stock-chart-wrap" style="border-bottom:1px solid rgba(28,26,22,0.12); height:380px;"></div>
-          </div>
-          <div style="padding:20px 24px 28px;">
-            <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--amber);margin-bottom:16px;display:flex;align-items:center;gap:10px;">
-              Recent News
-              <span style="flex:1;height:1px;background:var(--amber);opacity:0.2;display:inline-block;"></span>
-            </div>
-            <div id="stock-news" style="display:flex;flex-direction:column;gap:0;">
-              <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--charcoal);opacity:0.35;padding:16px 0;text-align:center;">
-                Loading news…
-              </div>
-            </div>
-            <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(28,26,22,0.1);">
-              <a id="stock-yhoo-link" href="#" target="_blank" style="
-                font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.14em;
-                text-transform:uppercase;color:var(--coral);text-decoration:none;
-                border-bottom:1px solid var(--coral);padding-bottom:2px;
-              ">View on Yahoo Finance →</a>
-            </div>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(modal);
-      document.getElementById('stock-close').addEventListener('click', closeStockModal);
-      modal.addEventListener('click', e => { if (e.target === modal) closeStockModal(); });
-    }
-
-    // Populate header
-    document.getElementById('stock-sym').textContent     = sym;
-    document.getElementById('stock-company').textContent = company;
-    document.getElementById('stock-price').textContent   = price;
-    const chgEl = document.getElementById('stock-change');
-    chgEl.textContent = change;
-    chgEl.style.color = change.includes('▲') ? 'var(--teal)' : change === '—' ? 'var(--charcoal)' : 'var(--coral)';
-    document.getElementById('stock-yhoo-link').href = `https://finance.yahoo.com/quote/${sym}`;
-
-    // TradingView chart
-    const chartWrap = document.getElementById('stock-chart-wrap');
-    chartWrap.innerHTML = '';
-    const containerId = 'tv_chart_' + sym + '_' + Date.now();
-    const chartDiv = document.createElement('div');
-    chartDiv.id = containerId;
-    chartDiv.style.cssText = 'width:100%;height:100%;';
-    chartWrap.appendChild(chartDiv);
-
-    function initTVWidget() {
-      new TradingView.widget({
-        autosize: true,
-        symbol: sym,
-        interval: 'D',
-        timezone: 'America/Denver',
-        theme: 'light',
-        style: '1',
-        locale: 'en',
-        toolbar_bg: '#F4EFE0',
-        enable_publishing: false,
-        hide_side_toolbar: true,
-        hide_legend: false,
-        allow_symbol_change: false,
-        save_image: false,
-        container_id: containerId,
-        overrides: {
-          'mainSeriesProperties.candleStyle.upColor': '#2A8A7E',
-          'mainSeriesProperties.candleStyle.downColor': '#D94F2B',
-          'mainSeriesProperties.candleStyle.borderUpColor': '#2A8A7E',
-          'mainSeriesProperties.candleStyle.borderDownColor': '#D94F2B',
-          'mainSeriesProperties.candleStyle.wickUpColor': '#2A8A7E',
-          'mainSeriesProperties.candleStyle.wickDownColor': '#D94F2B',
-          'paneProperties.background': '#F4EFE0',
-          'paneProperties.vertGridProperties.color': 'rgba(28,26,22,0.06)',
-          'paneProperties.horzGridProperties.color': 'rgba(28,26,22,0.06)',
-        }
-      });
-    }
-
-    if (window.TradingView && window.TradingView.widget) {
-      initTVWidget();
-    } else {
-      const existing = document.getElementById('tv-js-lib');
-      if (!existing) {
-        const s = document.createElement('script');
-        s.id = 'tv-js-lib';
-        s.src = 'https://s3.tradingview.com/tv.js';
-        s.onload = initTVWidget;
-        document.head.appendChild(s);
-      } else {
-        // Script tag exists but may still be loading — poll briefly
-        const poll = setInterval(() => {
-          if (window.TradingView && window.TradingView.widget) {
-            clearInterval(poll);
-            initTVWidget();
-          }
-        }, 100);
-      }
-    }
-
-    // News via Yahoo Finance RSS proxy
-    const newsEl = document.getElementById('stock-news');
-    newsEl.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--charcoal);opacity:0.35;padding:16px 0;text-align:center;">Loading news…</div>';
-    const newsApiUrl = `https://query1.finance.yahoo.com/v1/finance/search?q=${sym}&newsCount=6&quotesCount=0`;
-    const newsProxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(newsApiUrl)}`;
-    fetch(newsProxyUrl)
-      .then(r => r.json())
-      .then(wrapper => JSON.parse(wrapper.contents))
-      .then(d => {
-        const news = d.news || [];
-        if (!news.length) { newsEl.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--charcoal);opacity:0.35;padding:16px 0;text-align:center;">No recent news found</div>'; return; }
-        newsEl.innerHTML = news.slice(0,6).map(n => `
-          <a href="${n.link}" target="_blank" style="
-            display:block; padding:14px 0; border-bottom:1px solid rgba(28,26,22,0.08);
-            text-decoration:none; color:inherit;
-          " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
-            <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--charcoal);opacity:0.38;margin-bottom:5px;">${n.publisher || ''} · ${n.providerPublishTime ? new Date(n.providerPublishTime*1000).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : ''}</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.03em;line-height:1.15;color:var(--charcoal);">${n.title}</div>
-          </a>
-        `).join('');
-      })
-      .catch(() => { newsEl.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--charcoal);opacity:0.35;padding:16px 0;text-align:center;">News unavailable</div>'; });
-
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-
-  // ── Ticker strip click → stock modal ──
-  const TICKER_MAP = {
-    'S&P 500': { sym: 'SP:SPX',          label: 'S&P 500 Index' },
-    'Nasdaq':  { sym: 'NASDAQ:NDX',       label: 'Nasdaq 100 Index' },
-    'BTC':     { sym: 'BITSTAMP:BTCUSD',  label: 'Bitcoin / USD' },
-    'Gold':    { sym: 'TVC:GOLD',         label: 'Gold Spot (XAU/USD)' },
-    'WTI':     { sym: 'TVC:USOIL',        label: 'WTI Crude Oil' },
-    'Brent':   { sym: 'TVC:UKOIL',        label: 'Brent Crude Oil' },
-    '10-Yr':   { sym: 'TVC:US10Y',        label: 'US 10-Year Treasury Yield' },
-    'DXY':     { sym: 'TVC:DXY',          label: 'US Dollar Index' },
-  };
-
-  window.tickerClick = function(item) {
-    const symEl = item.querySelector('.ticker-sym');
-    const valEl = item.querySelector('.ticker-val');
-    const chgEl = item.querySelector('.ticker-chg');
-    if (!symEl) return;
-    const label  = symEl.textContent.trim();
-    const mapped = TICKER_MAP[label] || { sym: label, label: label };
-    const price  = valEl ? valEl.textContent.trim() : '—';
-    const change = chgEl ? chgEl.textContent.trim() : '—';
-    openStockModal(mapped.sym, mapped.label, price, change);
-  };
-
-  function closeStockModal() {
-    const modal = document.getElementById('stock-modal');
-    if (modal) { modal.style.display = 'none'; document.getElementById('stock-chart-wrap').innerHTML = ''; }
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeStockModal(); });
-
-  </script>
-
 </body>
 </html>
