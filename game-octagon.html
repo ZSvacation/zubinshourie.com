@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
   background: #0D0B08;
   display: flex;
@@ -19,36 +18,18 @@ body {
   overflow: hidden;
   touch-action: none;
 }
-
-#wrap {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-}
-
-canvas {
-  display: block;
-}
-
+#wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+canvas { display: block; }
 #back-link {
-  position: absolute;
-  top: -34px; left: 0;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: rgba(245,240,232,0.35);
-  text-decoration: none;
+  position: absolute; top: -34px; left: 0;
+  font-size: 10px; letter-spacing: 0.12em;
+  color: rgba(245,240,232,0.35); text-decoration: none;
   transition: color 0.2s;
 }
 #back-link:hover { color: #E8971A; }
-
 #hint {
-  margin-top: 10px;
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  color: rgba(245,240,232,0.22);
-  text-align: center;
+  margin-top: 10px; font-size: 9px;
+  letter-spacing: 0.18em; color: rgba(245,240,232,0.22);
 }
 </style>
 </head>
@@ -56,618 +37,691 @@ canvas {
 <div id="wrap">
   <a id="back-link" href="index.html">← BACK TO BASE</a>
   <canvas id="game"></canvas>
-  <div id="hint">← → ARROW KEYS &nbsp;|&nbsp; A D &nbsp;|&nbsp; TOUCH SIDES</div>
+  <div id="hint">← → ROTATE &nbsp;·&nbsp; STAY ON THE SOLID PANELS</div>
 </div>
 
 <script>
-// ─── CANVAS ─────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+//  OCTAGON — perspective tunnel game
+//  Rings fly toward you. Stay on FILLED panels. Avoid the gaps.
+// ─────────────────────────────────────────────────────────────
+
 const C   = document.getElementById('game');
 const ctx = C.getContext('2d');
-const SZ  = Math.min(window.innerWidth, window.innerHeight, 560);
-C.width   = SZ;
-C.height  = SZ;
-const CX  = SZ / 2, CY = SZ / 2;
+const SZ  = Math.min(window.innerWidth, window.innerHeight, 580);
+C.width = C.height = SZ;
+const CX = SZ / 2, CY = SZ / 2;
 
-// ─── PALETTE ────────────────────────────────────────────────
-const BG      = '#0D0B08';
-const CREAM   = '#F5F0E8';
-const CORAL   = '#D94F2B';
-const AMBER   = '#E8971A';
-const TEAL    = '#2A8A7E';
-const PURPLE  = '#5C3F7A';
+// ── Palette ──────────────────────────────────────────────────
+const BG     = '#0D0B08';
+const CREAM  = '#F5F0E8';
+const CORAL  = '#D94F2B';
+const AMBER  = '#E8971A';
+const TEAL   = '#2A8A7E';
+const PURPLE = '#5C3F7A';
 
-// ─── CONFIG ──────────────────────────────────────────────────
-const SIDES     = 8;           // octagon
-const PLAYER_R  = SZ * 0.085; // orbit radius
-const PLAYER_SZ = SZ * 0.028; // player triangle size
-const WALL_W    = SZ * 0.022; // wall thickness
-const MIN_GAP   = (2 * Math.PI / SIDES) * 0.72;  // gap arc width (fits player + margin)
-const INNER_R   = SZ * 0.055; // central dead zone radius
+// ── Geometry ─────────────────────────────────────────────────
+const SIDES = 8;
+const SEG   = (Math.PI * 2) / SIDES;  // 45° per face
 
-// Level speed config
-const BASE_SPIN_SPD  = 0.38;  // rad/sec world rotation
-const BASE_WALL_SPD  = SZ * 0.095; // px/sec walls closing
-const SPEED_INC      = 0.012; // per second of survival
+// Perspective: vanishing point sits in upper-center
+const VPX = CX;
+const VPY = SZ * 0.31;
 
-// Colors per difficulty band
-const WALL_COLORS = [C_TEAL, C_AMBER, C_CORAL, C_PURPLE].map ? null : null;
-// (defined inline below)
+// screenRadius(z) = RF / z  →  bigger = closer
+const RF  = SZ * 0.47;
 
-// ─── STATE ──────────────────────────────────────────────────
-let STATE     = 'start'; // 'start' | 'playing' | 'dead'
-let playerAngle = Math.PI / 2; // angle on the ring (0 = right)
-let spinAngle   = 0;           // world rotation offset
-let spinDir     = 1;           // +1 or -1
-let walls       = [];          // active wall rings
-let score       = 0;           // tenths of a second survived
-let hiScore     = 0;
-let gameTime    = 0;           // seconds survived
-let lastTS      = 0;
-let stars       = [];
-let shakeAmt    = 0;
-let deadAlpha   = 0;
-let bgHue       = 0;           // slow bg color shift
-let inputLeft   = false;
-let inputRight  = false;
-let WALL_COLORS_ARR = [TEAL, AMBER, CORAL, PURPLE, CREAM];
-let colorIdx    = 0;
-let flashTimer  = 0;
+// Z positions (decreasing = approaching player)
+const Z_PLAYER = 1.0;   // player's depth
+const Z_SPAWN  = 9.0;   // rings born here
+const Z_REMOVE = 0.15;  // rings deleted past here
+const RING_D   = 0.6;   // ring band thickness in z-units
 
-// ─── STARS ──────────────────────────────────────────────────
-function initStars() {
-  stars = [];
-  for (let i = 0; i < 90; i++) {
-    stars.push({
-      x: Math.random() * SZ,
-      y: Math.random() * SZ,
-      r: Math.random() * 1.2 + 0.2,
-      phase: Math.random() * Math.PI * 2,
-      col: Math.random() < 0.07 ? AMBER
-         : Math.random() < 0.10 ? TEAL : CREAM,
-    });
-  }
+// Player screen position: always bottom-center of the near cross-section
+const PLAYER_SX = VPX;
+const PLAYER_SY = VPY + RF / Z_PLAYER;  // ≈ SZ*0.78
+
+// ── Colors for rings ─────────────────────────────────────────
+const RCOLORS = [TEAL, AMBER, CORAL, PURPLE, '#6AB8B0', '#D4A84B', '#A07AC8'];
+
+// ── State ────────────────────────────────────────────────────
+let STATE      = 'start';
+let worldRot   = 0;       // world rotation (rings rotate, player stays at bottom)
+let targetRot  = 0;       // lerp target
+let rings      = [];
+let gameTime   = 0;
+let hiScore    = 0;
+let lastTS     = 0;
+let shakeAmt   = 0;
+let deadAlpha  = 0;
+let colorIdx   = 0;
+let spawnTimer = 0;
+let inputL          = false;
+let inputR          = false;
+let currentPattern  = [];   // active floor pattern (last-passed ring's pattern)
+let stars      = [];
+let particles  = [];
+let speedLines = [];
+
+// ── Screen vertex helper ─────────────────────────────────────
+// Returns screen [x, y] for vertex i of an octagon at depth z
+function sv(i, z) {
+  const angle = worldRot + (i / SIDES) * Math.PI * 2;
+  const sr    = RF / z;
+  return [VPX + Math.cos(angle) * sr, VPY + Math.sin(angle) * sr];
 }
 
-// ─── WALL GENERATION ─────────────────────────────────────────
-function spawnWall(r) {
-  // Pick a gap position — avoid the player's sector when starting
-  const gapSector = Math.floor(Math.random() * SIDES);
-  const gapStart  = (gapSector / SIDES) * Math.PI * 2;
-  const gapEnd    = gapStart + MIN_GAP;
+// ── Which face is the player on? ─────────────────────────────
+// Player is always at screen angle π/2 (bottom) from VP.
+// Ring face in local coords: angle (π/2 - worldRot), normalized.
+function playerFaceIdx() {
+  const la = ((Math.PI / 2 - worldRot) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+  return Math.floor(la / SEG) % SIDES;
+}
 
-  colorIdx = (colorIdx + 1) % WALL_COLORS_ARR.length;
+// ── Stars ────────────────────────────────────────────────────
+function initStars() {
+  stars = Array.from({ length: 80 }, () => ({
+    x: Math.random() * SZ, y: Math.random() * SZ,
+    r: Math.random() * 1.1 + 0.2,
+    p: Math.random() * Math.PI * 2,
+    c: Math.random() < 0.07 ? AMBER : Math.random() < 0.1 ? TEAL : CREAM,
+  }));
+}
 
-  walls.push({
-    r,           // current radius (shrinks toward center)
-    gapStart,    // gap arc start (in world space, ignores spinAngle)
-    gapEnd,      // gap arc end
-    col: WALL_COLORS_ARR[colorIdx],
+// Speed lines: radiate from VP outward
+function initSpeedLines() {
+  speedLines = Array.from({ length: 24 }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    len:   SZ * (0.15 + Math.random() * 0.35),
+    speed: 0.8 + Math.random() * 1.2,
+    life:  Math.random(),
+    col:   Math.random() < 0.5 ? TEAL : AMBER,
+  }));
+}
+
+// ── Ring generation ──────────────────────────────────────────
+function gapCount() {
+  if (gameTime < 7)  return 1;
+  if (gameTime < 16) return Math.random() < 0.55 ? 1 : 2;
+  if (gameTime < 30) return 2;
+  if (gameTime < 46) return Math.random() < 0.5 ? 2 : 3;
+  return 3;
+}
+
+function makePattern(nGaps, safeFace) {
+  const pool = Array.from({ length: SIDES }, (_, i) => i).filter(i => i !== safeFace);
+  // shuffle
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const gaps = new Set(pool.slice(0, Math.min(nGaps, pool.length)));
+  return Array.from({ length: SIDES }, (_, i) => !gaps.has(i));
+}
+
+function spawnRing() {
+  const pf = playerFaceIdx();
+  colorIdx = (colorIdx + 1) % RCOLORS.length;
+  rings.push({
+    z:    Z_SPAWN,
+    pat:  makePattern(gapCount(), pf),
+    col:  RCOLORS[colorIdx],
+    hit:  false,
   });
 }
 
-function wallSpeed() {
-  return BASE_WALL_SPD + gameTime * SPEED_INC * SZ;
+function ringSpeed() {
+  return Math.min(0.6 + gameTime * 0.013, 2.0);
 }
 
-function spinSpeed() {
-  return (BASE_SPIN_SPD + gameTime * 0.006) * spinDir;
+function spawnInterval() {
+  return Math.max(0.48, 1.7 - gameTime * 0.032);
 }
 
-// ─── UPDATE ──────────────────────────────────────────────────
+// ── Init ─────────────────────────────────────────────────────
 function initGame() {
-  walls       = [];
-  score       = 0;
-  gameTime    = 0;
-  playerAngle = Math.PI / 2;
-  spinAngle   = 0;
-  spinDir     = Math.random() < 0.5 ? 1 : -1;
-  colorIdx    = 0;
-  deadAlpha   = 0;
-  shakeAmt    = 0;
-  flashTimer  = 0;
-
-  // First wall spawns at edge
-  spawnWall(SZ * 0.55);
-  STATE = 'playing';
+  rings          = [];
+  particles      = [];
+  currentPattern = Array(SIDES).fill(true);  // start on all-solid surface
+  worldRot   = 0;
+  targetRot  = 0;
+  gameTime   = 0;
+  deadAlpha  = 0;
+  shakeAmt   = 0;
+  colorIdx   = 0;
+  spawnTimer = 0;
+  STATE      = 'playing';
+  // Pre-populate the tunnel so player starts on a surface
+  const gaps = [Z_SPAWN, Z_SPAWN - 2.0, Z_SPAWN - 4.0];
+  for (const z of gaps) {
+    colorIdx = (colorIdx + 1) % RCOLORS.length;
+    rings.push({ z, pat: makePattern(1, playerFaceIdx()), col: RCOLORS[colorIdx], hit: false });
+  }
+  spawnTimer = 0;
 }
 
+// ── Update ───────────────────────────────────────────────────
 function update(dt) {
   gameTime += dt;
-  score     = Math.floor(gameTime * 10);
-  if (score > hiScore) hiScore = score;
 
-  // Rotate world
-  spinAngle += spinSpeed() * dt;
-  // Occasionally flip spin direction
-  if (Math.random() < dt * 0.08) spinDir *= -1;
+  // Rotate world on input
+  const rotSpd = SEG * 5.0;
+  if (inputL) targetRot -= rotSpd * dt;
+  if (inputR) targetRot += rotSpd * dt;
+  worldRot += (targetRot - worldRot) * 0.22;
 
-  // Player rotation (input)
-  const turnSpd = (2.8 + gameTime * 0.03) * Math.PI;
-  if (inputLeft)  playerAngle -= turnSpd * dt;
-  if (inputRight) playerAngle += turnSpd * dt;
-  playerAngle = ((playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+  // Move rings toward player
+  const spd = ringSpeed();
+  for (let i = rings.length - 1; i >= 0; i--) {
+    rings[i].z -= spd * dt;
 
-  // Move walls inward
-  const spd = wallSpeed();
-  for (let i = walls.length - 1; i >= 0; i--) {
-    walls[i].r -= spd * dt;
-    if (walls[i].r < INNER_R - WALL_W) walls.splice(i, 1);
+    // Collision check: ring leading edge crosses player plane
+    if (!rings[i].hit && rings[i].z <= Z_PLAYER) {
+      rings[i].hit = true;
+      currentPattern = rings[i].pat;   // this ring is now the floor
+      const pf = playerFaceIdx();
+      if (!rings[i].pat[pf]) {
+        killPlayer(); return;
+      }
+    }
+    if (rings[i].z < Z_REMOVE) rings.splice(i, 1);
   }
 
-  // Spawn new wall when frontmost is at ~60% of screen
-  const outermost = walls.reduce((mx, w) => Math.max(mx, w.r), 0);
-  if (outermost < SZ * 0.42) {
-    // Smarter gap placement: pick gap sector closest to player
-    spawnWallSmart();
+  // Continuous bridge check: player must stay on solid face between rings too
+  const pfCont = playerFaceIdx();
+  if (!currentPattern[pfCont]) {
+    killPlayer(); return;
   }
 
-  // Collision
-  checkCollision();
-
-  shakeAmt *= 0.8;
-  bgHue     = (bgHue + dt * 8) % 360;
-  flashTimer = Math.max(0, flashTimer - dt);
-}
-
-function spawnWallSmart() {
-  // Gap starts at a random sector (not the one directly behind player)
-  const playerSector = Math.floor(
-    (((playerAngle - spinAngle) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2))
-    / (Math.PI * 2) * SIDES
-  );
-
-  // Give gap in a sector within reach of player (adjacent sector or player sector)
-  let gapSector;
-  const r = Math.random();
-  if (r < 0.45) {
-    gapSector = playerSector;
-  } else if (r < 0.72) {
-    gapSector = (playerSector + 1) % SIDES;
-  } else if (r < 0.92) {
-    gapSector = ((playerSector - 1) + SIDES) % SIDES;
-  } else {
-    gapSector = Math.floor(Math.random() * SIDES);
+  // Spawn
+  spawnTimer += dt;
+  if (spawnTimer >= spawnInterval()) {
+    spawnTimer = 0;
+    spawnRing();
   }
 
-  const gapStart = (gapSector / SIDES) * Math.PI * 2;
-  const gapEnd   = gapStart + MIN_GAP;
-
-  colorIdx = (colorIdx + 1) % WALL_COLORS_ARR.length;
-  walls.push({
-    r: SZ * 0.56,
-    gapStart,
-    gapEnd,
-    col: WALL_COLORS_ARR[colorIdx],
-  });
-}
-
-function checkCollision() {
-  // Player position in world space
-  const worldAngle = ((playerAngle - spinAngle) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
-
-  for (const w of walls) {
-    if (Math.abs(w.r - PLAYER_R) > WALL_W + 4) continue; // not at player radius
-
-    // Is player in the gap?
-    let gs = ((w.gapStart % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-    let ge = gs + MIN_GAP;
-
-    // Normalize worldAngle into gap check
-    let wa = worldAngle;
-    if (wa < gs - 0.1) wa += Math.PI * 2;
-
-    const inGap = wa >= gs - 0.02 && wa <= ge + 0.02;
-    if (!inGap) {
-      killPlayer();
-      return;
+  // Speed lines animation
+  for (const sl of speedLines) {
+    sl.life += dt * sl.speed * (STATE === 'playing' ? ringSpeed() * 0.8 : 0.3);
+    if (sl.life > 1) {
+      sl.life  = 0;
+      sl.angle = Math.random() * Math.PI * 2;
+      sl.len   = SZ * (0.15 + Math.random() * 0.35);
     }
   }
+
+  // Particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    p.life -= dt * 2.2;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+
+  shakeAmt *= 0.82;
 }
 
 function killPlayer() {
   if (STATE !== 'playing') return;
-  STATE     = 'dead';
-  shakeAmt  = 18;
+  const fs = Math.floor(gameTime * 10);
+  if (fs > hiScore) hiScore = fs;
+  STATE    = 'dead';
+  shakeAmt = 22;
   deadAlpha = 0;
-  flashTimer = 0.5;
+  // Explode
+  for (let i = 0; i < 26; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const s = 55 + Math.random() * 140;
+    particles.push({ x: PLAYER_SX, y: PLAYER_SY,
+                     vx: Math.cos(a)*s, vy: Math.sin(a)*s,
+                     life: 1, r: 1.5 + Math.random() * 4,
+                     col: [CORAL, AMBER, CREAM, PURPLE][Math.floor(Math.random()*4)] });
+  }
 }
 
-// ─── DRAW ─────────────────────────────────────────────────────
+// ── Draw ─────────────────────────────────────────────────────
 function draw(ts) {
   ctx.save();
   if (shakeAmt > 0.5) {
-    ctx.translate(
-      (Math.random() - 0.5) * shakeAmt * 2.5,
-      (Math.random() - 0.5) * shakeAmt * 2.5
-    );
+    ctx.translate((Math.random()-0.5)*shakeAmt*2, (Math.random()-0.5)*shakeAmt*2);
   }
 
-  // Clear
   ctx.fillStyle = BG;
   ctx.fillRect(0, 0, SZ, SZ);
 
-  // Stars
   drawStars(ts);
+  drawSpeedLines();
 
   if (STATE !== 'start') {
-    // Rotating world context
-    ctx.save();
-    ctx.translate(CX, CY);
-    ctx.rotate(spinAngle);
-
-    drawOctagonBg();
-    drawWalls();
-
-    ctx.restore();
-
-    // Player (in screen space, orbiting)
-    drawPlayer(ts);
-
-    // Score
+    drawTunnel();
+    // Draw rings far → near (painter's algo) with bridges between them
+    // z-convention: LARGER z = farther from player; nearZ < farZ in drawBridge
+    const sorted = [...rings].sort((a, b) => b.z - a.z);
+    for (let k = 0; k < sorted.length; k++) {
+      // Bridge from this ring's far face (sorted[k].z+RING_D) to prev ring's near face (sorted[k-1].z)
+      // Since sorted descending: sorted[k-1].z > sorted[k].z, so this bridge spans that gap
+      const bNear = sorted[k].z + RING_D;           // smaller z: far face of this ring (closer to player)
+      const bFar  = k > 0 ? sorted[k-1].z           // larger z: near face of prev (further) ring
+                          : Z_SPAWN + 2;
+      if (bFar > bNear) drawBridge(bNear, bFar, sorted[k]);
+      drawRing(sorted[k]);
+    }
+    // Bridge from last (nearest) ring's near face down to player level
+    if (sorted.length > 0) {
+      const last = sorted[sorted.length - 1];
+      if (last.z > Z_PLAYER) drawBridge(Z_PLAYER, last.z, last);
+    }
+    drawPlayerGuide();
+    drawParticles();
+    if (STATE === 'playing') drawBall(ts);
     drawHUD();
   }
 
   ctx.restore();
-
-  // CRT lines
   drawCRT();
 
-  // Overlays
-  if (STATE === 'start') drawStartScreen(ts);
-  if (STATE === 'dead')  drawDeadScreen(ts);
+  if (STATE === 'start') drawStart(ts);
+  if (STATE === 'dead')  drawDead(ts);
 }
 
 function drawStars(ts) {
   for (const s of stars) {
-    const a = 0.3 + 0.7 * Math.sin(ts / 900 + s.phase);
-    ctx.globalAlpha = a;
-    ctx.fillStyle   = s.col;
+    ctx.globalAlpha = 0.25 + 0.75 * Math.sin(ts/900 + s.p);
+    ctx.fillStyle   = s.c;
     ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
     ctx.fill();
   }
   ctx.globalAlpha = 1;
 }
 
-function octPts(r) {
-  const pts = [];
-  for (let i = 0; i < SIDES; i++) {
-    const a = (i / SIDES) * Math.PI * 2 - Math.PI / 2;
-    pts.push([Math.cos(a) * r, Math.sin(a) * r]);
-  }
-  return pts;
-}
-
-function drawOctagonBg() {
-  // Faint concentric octagons as depth guides
-  for (let rr = SZ * 0.08; rr < SZ * 0.6; rr += SZ * 0.065) {
-    const pts = octPts(rr);
-    ctx.beginPath();
-    pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-    ctx.closePath();
-    ctx.strokeStyle = 'rgba(245,240,232,0.04)';
+function drawSpeedLines() {
+  for (const sl of speedLines) {
+    const a = sl.angle;
+    const startR = SZ * 0.03 + sl.life * sl.len * 0.4;
+    const endR   = SZ * 0.03 + sl.life * sl.len;
+    ctx.strokeStyle = sl.col;
+    ctx.globalAlpha = (1 - sl.life) * 0.12;
     ctx.lineWidth   = 0.8;
-    ctx.stroke();
-  }
-
-  // Radial lines from center to each vertex
-  for (let i = 0; i < SIDES; i++) {
-    const a = (i / SIDES) * Math.PI * 2 - Math.PI / 2;
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(Math.cos(a) * SZ * 0.52, Math.sin(a) * SZ * 0.52);
-    ctx.strokeStyle = 'rgba(245,240,232,0.03)';
-    ctx.lineWidth   = 0.6;
+    ctx.moveTo(VPX + Math.cos(a) * startR, VPY + Math.sin(a) * startR);
+    ctx.lineTo(VPX + Math.cos(a) * endR,   VPY + Math.sin(a) * endR);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+}
+
+// Background tunnel: continuous octagonal tube from VP to player
+// Renders clearly visible surface panels so player always stands on something
+function drawTunnel() {
+  const farZ  = Z_SPAWN + 2;
+  const nearZ = Z_REMOVE;
+  const FACE  = ['#1E1B11', '#1A1810'];   // warm dark — clearly visible vs BG
+  const EDGE  = 'rgba(245,240,232,0.11)';
+
+  for (let i = 0; i < SIDES; i++) {
+    const [fx0, fy0] = sv(i,            farZ);
+    const [fx1, fy1] = sv((i+1)%SIDES,  farZ);
+    const [nx1, ny1] = sv((i+1)%SIDES,  nearZ);
+    const [nx0, ny0] = sv(i,            nearZ);
+
+    ctx.beginPath();
+    ctx.moveTo(fx0, fy0);
+    ctx.lineTo(fx1, fy1);
+    ctx.lineTo(nx1, ny1);
+    ctx.lineTo(nx0, ny0);
+    ctx.closePath();
+    ctx.fillStyle = FACE[i % 2];
+    ctx.fill();
+
+    // Longitudinal edge lines (corners of the octagon tube)
+    ctx.strokeStyle = EDGE;
+    ctx.lineWidth   = 0.9;
+    ctx.beginPath();
+    ctx.moveTo(fx0, fy0);
+    ctx.lineTo(nx0, ny0);
     ctx.stroke();
   }
 
-  // Inner solid octagon (center)
-  const ipts = octPts(INNER_R);
-  ctx.beginPath();
-  ipts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-  ctx.closePath();
-  ctx.fillStyle = '#0A0804';
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(245,240,232,0.12)';
-  ctx.lineWidth   = 1;
-  ctx.stroke();
-}
-
-function drawWalls() {
-  for (const w of walls) {
-    drawWallRing(w);
-  }
-}
-
-function drawWallRing(w) {
-  const r  = w.r;
-  const gs = w.gapStart;
-  const ge = w.gapEnd;
-
-  ctx.strokeStyle = w.col;
-  ctx.lineWidth   = WALL_W;
-  ctx.shadowColor = w.col;
-  ctx.shadowBlur  = WALL_W * 1.8;
-
-  // Draw the octagon ring as 8 arcs/segments, skipping the gap
-  // We represent the octagon wall as 8 line segments along the octagon perimeter
-  // Each segment spans from vertex i to vertex i+1
-  const segAngle = (Math.PI * 2) / SIDES;
-
+  // Cross-section ring at player level
+  ctx.strokeStyle = 'rgba(245,240,232,0.13)';
+  ctx.lineWidth   = 1.2;
   for (let i = 0; i < SIDES; i++) {
-    const segStart = (i / SIDES) * Math.PI * 2;
-    const segEnd   = ((i + 1) / SIDES) * Math.PI * 2;
-
-    // Check if this segment overlaps with the gap
-    if (segOverlapsGap(segStart, segEnd, gs, ge)) continue;
-
-    // Draw segment from vertex i to vertex i+1
-    const ax = Math.cos(segStart - Math.PI / 2) * r;
-    const ay = Math.sin(segStart - Math.PI / 2) * r;
-    const bx = Math.cos(segEnd - Math.PI / 2) * r;
-    const by = Math.sin(segEnd - Math.PI / 2) * r;
-
+    const [ax, ay] = sv(i,            Z_PLAYER);
+    const [bx, by] = sv((i+1)%SIDES,  Z_PLAYER);
     ctx.beginPath();
     ctx.moveTo(ax, ay);
     ctx.lineTo(bx, by);
     ctx.stroke();
   }
-
-  ctx.shadowBlur = 0;
 }
 
-function segOverlapsGap(segStart, segEnd, gapStart, gapEnd) {
-  // Normalize all angles to [0, 2π)
-  const norm = a => ((a % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-  const ss = norm(segStart);
-  const se = norm(segEnd);
-  const gs = norm(gapStart);
-  const ge = norm(gapEnd);
+// Draw a single ring band as 8 trapezoid faces (solid or gap cutout)
+function drawRing(ring) {
+  const nearZ = ring.z;
+  const farZ  = ring.z + RING_D;
 
-  // Segment midpoint check (simpler, good enough for octagon segments)
-  const mid = norm((ss + se) / 2 + (se < ss ? Math.PI : 0));
-  // Actually: check if segment center falls in gap
-  const smid = norm(segStart + (Math.PI * 2) / SIDES / 2);
+  if (nearZ > Z_SPAWN + 1 || farZ < Z_REMOVE) return;
 
-  if (ge > gs) {
-    return smid >= gs - 0.05 && smid <= ge + 0.05;
-  } else {
-    // Gap wraps around 2π
-    return smid >= gs - 0.05 || smid <= ge + 0.05;
+  const clampNear = Math.max(nearZ, Z_REMOVE);
+  const clampFar  = Math.min(farZ,  Z_SPAWN + 1);
+
+  for (let i = 0; i < SIDES; i++) {
+    const [n0x, n0y] = sv(i,            clampNear);
+    const [n1x, n1y] = sv((i+1)%SIDES,  clampNear);
+    const [f1x, f1y] = sv((i+1)%SIDES,  clampFar);
+    const [f0x, f0y] = sv(i,            clampFar);
+
+    if (ring.pat[i]) {
+      // Solid panel
+      ctx.shadowColor = ring.col;
+      ctx.shadowBlur  = 10;
+      ctx.fillStyle   = ring.col;
+      ctx.beginPath();
+      ctx.moveTo(n0x, n0y);
+      ctx.lineTo(n1x, n1y);
+      ctx.lineTo(f1x, f1y);
+      ctx.lineTo(f0x, f0y);
+      ctx.closePath();
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Bright leading edge
+      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+      ctx.lineWidth   = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(n0x, n0y);
+      ctx.lineTo(n1x, n1y);
+      ctx.stroke();
+    } else {
+      // Gap — punch through the tunnel wall to show open void
+      ctx.fillStyle = BG;
+      ctx.beginPath();
+      ctx.moveTo(n0x, n0y);
+      ctx.lineTo(n1x, n1y);
+      ctx.lineTo(f1x, f1y);
+      ctx.lineTo(f0x, f0y);
+      ctx.closePath();
+      ctx.fill();
+    }
   }
 }
 
-function drawPlayer(ts) {
-  const px = CX + Math.cos(playerAngle) * PLAYER_R;
-  const py = CY + Math.sin(playerAngle) * PLAYER_R;
+// Draw bridge: connecting tunnel panels between two z-depths using ring's pattern
+// Solid faces get a dim tint of ring color; gaps get bg cutout
+function drawBridge(nearZ, farZ, ring) {
+  if (farZ <= Z_REMOVE || nearZ >= Z_SPAWN + 2) return;
+  const cNear = Math.max(nearZ, Z_REMOVE);
+  const cFar  = Math.min(farZ,  Z_SPAWN + 1);
+  if (cNear >= cFar) return;
 
-  // Rotation: triangle points inward
-  const angle = playerAngle + Math.PI; // face center
+  // Derive a muted version of the ring color for the bridge
+  const FACE = ['#1E1B11', '#1A1810'];
 
-  ctx.save();
-  ctx.translate(px, py);
-  ctx.rotate(angle);
+  for (let i = 0; i < SIDES; i++) {
+    const [n0x, n0y] = sv(i,            cNear);
+    const [n1x, n1y] = sv((i+1)%SIDES,  cNear);
+    const [f1x, f1y] = sv((i+1)%SIDES,  cFar);
+    const [f0x, f0y] = sv(i,            cFar);
 
-  const sz = PLAYER_SZ;
+    if (ring.pat[i]) {
+      // Solid bridge face — slightly tinted with ring color, mostly tunnel
+      ctx.fillStyle = FACE[i % 2];
+      ctx.beginPath();
+      ctx.moveTo(n0x, n0y); ctx.lineTo(n1x, n1y);
+      ctx.lineTo(f1x, f1y); ctx.lineTo(f0x, f0y);
+      ctx.closePath();
+      ctx.fill();
 
-  // Glow
-  ctx.shadowColor = STATE === 'dead' && flashTimer > 0 ? CORAL : TEAL;
-  ctx.shadowBlur  = sz * 2.5;
+      // Subtle ring-color tint overlay
+      ctx.globalAlpha = 0.12;
+      ctx.fillStyle   = ring.col;
+      ctx.beginPath();
+      ctx.moveTo(n0x, n0y); ctx.lineTo(n1x, n1y);
+      ctx.lineTo(f1x, f1y); ctx.lineTo(f0x, f0y);
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    } else {
+      // Gap bridge — cutout
+      ctx.fillStyle = BG;
+      ctx.beginPath();
+      ctx.moveTo(n0x, n0y); ctx.lineTo(n1x, n1y);
+      ctx.lineTo(f1x, f1y); ctx.lineTo(f0x, f0y);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+}
 
-  // Triangle
+// Highlight the player's current face on the near cross-section ring
+function drawPlayerGuide() {
+  const pf = playerFaceIdx();
+  const [ax, ay] = sv(pf,          Z_PLAYER);
+  const [bx, by] = sv((pf+1)%SIDES, Z_PLAYER);
+
+  ctx.strokeStyle = 'rgba(245,240,232,0.28)';
+  ctx.lineWidth   = 2.5;
+  ctx.shadowColor = CREAM;
+  ctx.shadowBlur  = 6;
   ctx.beginPath();
-  ctx.moveTo(0, -sz * 1.1);        // tip (inward)
-  ctx.lineTo(-sz * 0.85, sz * 0.9); // left
-  ctx.lineTo(sz * 0.85, sz * 0.9);  // right
-  ctx.closePath();
-
-  ctx.fillStyle = STATE === 'dead' && flashTimer > 0 ? CORAL : CREAM;
-  ctx.fill();
-
-  // Inner accent
-  ctx.beginPath();
-  ctx.moveTo(0, -sz * 0.55);
-  ctx.lineTo(-sz * 0.42, sz * 0.45);
-  ctx.lineTo(sz * 0.42, sz * 0.45);
-  ctx.closePath();
-  ctx.fillStyle = STATE === 'dead' && flashTimer > 0 ? AMBER : TEAL;
-  ctx.fill();
-
+  ctx.moveTo(ax, ay);
+  ctx.lineTo(bx, by);
+  ctx.stroke();
   ctx.shadowBlur = 0;
-  ctx.restore();
+}
+
+function drawBall(ts) {
+  const pulse = 0.7 + 0.3 * Math.sin(ts / 290);
+  ctx.shadowColor = TEAL;
+  ctx.shadowBlur  = SZ * 0.032 * 4 * pulse;
+  ctx.fillStyle   = CREAM;
+  ctx.beginPath();
+  ctx.arc(PLAYER_SX, PLAYER_SY, SZ * 0.032, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  ctx.fillStyle  = TEAL;
+  ctx.beginPath();
+  ctx.arc(PLAYER_SX, PLAYER_SY, SZ * 0.013, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawParticles() {
+  for (const p of particles) {
+    ctx.globalAlpha = Math.max(0, p.life);
+    ctx.fillStyle   = p.col;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
 }
 
 function drawHUD() {
-  ctx.textAlign    = 'center';
-  ctx.font         = `bold ${SZ * 0.046}px "Space Mono"`;
-  ctx.fillStyle    = 'rgba(245,240,232,0.8)';
-  ctx.fillText(formatTime(gameTime), CX, CY - INNER_R - SZ * 0.038);
-
-  ctx.font      = `${SZ * 0.022}px "Space Mono"`;
-  ctx.fillStyle = 'rgba(245,240,232,0.25)';
-  ctx.fillText(`BEST ${formatTime(hiScore / 10)}`, CX, CY + INNER_R + SZ * 0.055);
+  ctx.textAlign = 'center';
+  ctx.font      = `bold ${SZ*0.042}px "Space Mono"`;
+  ctx.fillStyle = 'rgba(245,240,232,0.75)';
+  ctx.fillText(fmtTime(gameTime), CX, VPY - SZ * 0.04);
+  ctx.font      = `${SZ*0.018}px "Space Mono"`;
+  ctx.fillStyle = 'rgba(245,240,232,0.22)';
+  ctx.fillText(`BEST  ${fmtTime(hiScore/10)}`, CX, VPY - SZ * 0.075);
 }
 
-function formatTime(s) {
-  const m  = Math.floor(s / 60);
-  const ss = (s % 60).toFixed(1).padStart(4, '0');
-  return m > 0 ? `${m}:${ss}` : `${ss}s`;
+function fmtTime(s) {
+  if (!s || s <= 0) return '0.0s';
+  if (s < 60) return `${s.toFixed(1)}s`;
+  const m = Math.floor(s / 60);
+  return `${m}:${(s%60).toFixed(1).padStart(4,'0')}`;
 }
 
 function drawCRT() {
   for (let y = 0; y < SZ; y += 2) {
-    ctx.fillStyle = 'rgba(0,0,0,0.1)';
-    ctx.fillRect(0, y, SZ, 1);
+    ctx.fillStyle = 'rgba(0,0,0,0.09)'; ctx.fillRect(0,y,SZ,1);
   }
-  const vig = ctx.createRadialGradient(CX, CY, SZ * 0.25, CX, CY, SZ * 0.7);
-  vig.addColorStop(0, 'rgba(0,0,0,0)');
-  vig.addColorStop(1, 'rgba(0,0,0,0.5)');
-  ctx.fillStyle = vig;
-  ctx.fillRect(0, 0, SZ, SZ);
+  const vig = ctx.createRadialGradient(CX,CY,SZ*0.2,CX,CY,SZ*0.72);
+  vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.5)');
+  ctx.fillStyle = vig; ctx.fillRect(0,0,SZ,SZ);
 }
 
-// ─── SCREENS ─────────────────────────────────────────────────
-function drawStartScreen(ts) {
-  ctx.fillStyle = 'rgba(13,11,8,0.88)';
-  ctx.fillRect(0, 0, SZ, SZ);
+// ── Screens ──────────────────────────────────────────────────
+function drawStart(ts) {
+  ctx.fillStyle = 'rgba(13,11,8,0.9)';
+  ctx.fillRect(0,0,SZ,SZ);
 
-  // Animated octagon outline
-  ctx.save();
-  ctx.translate(CX, CY);
-  ctx.rotate(ts / 3000);
-  const rot  = (ts / 3000) % (Math.PI * 2);
-  const pts  = octPts(SZ * 0.28);
-  ctx.beginPath();
-  pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-  ctx.closePath();
-  ctx.strokeStyle = AMBER;
-  ctx.lineWidth   = 1.5;
-  ctx.globalAlpha = 0.25;
-  ctx.stroke();
+  // Animated incoming ring preview
+  const fakeZ  = 1.5 + 1.2 * Math.abs(Math.sin(ts / 1800));
+  const preRot = ts / 4500;
+  const pat    = [true,false,true,true,false,true,true,true];
+  const preCol = TEAL;
+  const nearZ2 = fakeZ, farZ2 = fakeZ + RING_D;
+  for (let i = 0; i < SIDES; i++) {
+    if (!pat[i]) continue;
+    const angN0 = preRot + (i/SIDES)*Math.PI*2;
+    const angN1 = preRot + ((i+1)/SIDES)*Math.PI*2;
+    const angF0 = angN0, angF1 = angN1;
+    const snear = RF / nearZ2, sfar = RF / farZ2;
+    ctx.beginPath();
+    ctx.moveTo(VPX+Math.cos(angN0)*snear, VPY+Math.sin(angN0)*snear);
+    ctx.lineTo(VPX+Math.cos(angN1)*snear, VPY+Math.sin(angN1)*snear);
+    ctx.lineTo(VPX+Math.cos(angF1)*sfar,  VPY+Math.sin(angF1)*sfar);
+    ctx.lineTo(VPX+Math.cos(angF0)*sfar,  VPY+Math.sin(angF0)*sfar);
+    ctx.closePath();
+    ctx.fillStyle   = i%3===0 ? TEAL : i%3===1 ? AMBER : CORAL;
+    ctx.globalAlpha = 0.55;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
 
-  ctx.rotate(-ts / 2000);
-  const pts2 = octPts(SZ * 0.16);
-  ctx.beginPath();
-  pts2.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-  ctx.closePath();
-  ctx.strokeStyle = TEAL;
-  ctx.lineWidth   = 1;
-  ctx.globalAlpha = 0.35;
-  ctx.stroke();
-  ctx.globalAlpha = 1;
-  ctx.restore();
-
-  // Title
-  const titleY = SZ * 0.3;
-  ctx.textAlign  = 'center';
-  ctx.fillStyle  = AMBER;
-  ctx.font       = `bold ${SZ * 0.096}px "Space Mono"`;
-  ctx.fillText('OCT', CX, titleY);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = AMBER;
+  ctx.font      = `bold ${SZ*0.098}px "Space Mono"`;
+  ctx.fillText('OCT', CX, SZ*0.55);
   ctx.fillStyle = CREAM;
-  ctx.fillText('AGON', CX, titleY + SZ * 0.096);
+  ctx.fillText('AGON', CX, SZ*0.55 + SZ*0.1);
 
-  ctx.fillStyle  = 'rgba(245,240,232,0.3)';
-  ctx.font       = `${SZ * 0.025}px "Space Mono"`;
-  ctx.fillText('S P A C E  R E A C T I O N', CX, titleY + SZ * 0.14);
+  ctx.fillStyle = 'rgba(245,240,232,0.28)';
+  ctx.font      = `${SZ*0.022}px "Space Mono"`;
+  ctx.fillText('S P A C E  A R C A D E', CX, SZ*0.7);
 
-  // Rules
-  ctx.fillStyle = 'rgba(245,240,232,0.35)';
-  ctx.font      = `${SZ * 0.024}px "Space Mono"`;
-  ctx.fillText('walls collapse inward', CX, SZ * 0.6);
-  ctx.fillText('rotate through the gap', CX, SZ * 0.63);
+  ctx.fillStyle = 'rgba(245,240,232,0.38)';
+  ctx.font      = `${SZ*0.021}px "Space Mono"`;
+  ctx.fillText('rings fly at you — stay on solid panels', CX, SZ*0.79);
 
-  const blink = Math.floor(ts / 550) % 2;
+  const blink = Math.floor(ts/520) % 2;
   if (blink) {
     ctx.fillStyle = TEAL;
-    ctx.font      = `${SZ * 0.028}px "Space Mono"`;
-    ctx.fillText('[ ANY KEY / TAP ]', CX, SZ * 0.74);
+    ctx.font      = `${SZ*0.025}px "Space Mono"`;
+    ctx.fillText('[ ANY KEY / TAP ]', CX, SZ*0.88);
   }
 }
 
-function drawDeadScreen(ts) {
-  deadAlpha = Math.min(1, deadAlpha + 0.03);
+function drawDead(ts) {
   if (deadAlpha <= 0) return;
-
   ctx.globalAlpha = deadAlpha;
-  ctx.fillStyle   = 'rgba(13,11,8,0.82)';
-  ctx.fillRect(0, 0, SZ, SZ);
+  ctx.fillStyle   = 'rgba(13,11,8,0.85)';
+  ctx.fillRect(0,0,SZ,SZ);
 
-  ctx.textAlign  = 'center';
-  ctx.fillStyle  = CORAL;
-  ctx.font       = `bold ${SZ * 0.072}px "Space Mono"`;
-  ctx.fillText('OBLITERATED', CX, SZ * 0.3);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = CORAL;
+  ctx.font      = `bold ${SZ*0.068}px "Space Mono"`;
+  ctx.fillText('IMPACT', CX, SZ*0.3);
 
-  ctx.fillStyle = 'rgba(245,240,232,0.35)';
-  ctx.font      = `${SZ * 0.024}px "Space Mono"`;
-  ctx.fillText('REACTION TOO SLOW', CX, SZ * 0.37);
+  ctx.fillStyle = 'rgba(245,240,232,0.3)';
+  ctx.font      = `${SZ*0.02}px "Space Mono"`;
+  ctx.fillText('FELL THROUGH THE GAP', CX, SZ*0.37);
 
   ctx.fillStyle = CREAM;
-  ctx.font      = `bold ${SZ * 0.065}px "Space Mono"`;
-  ctx.fillText(formatTime(gameTime), CX, SZ * 0.5);
-  ctx.fillStyle = 'rgba(245,240,232,0.4)';
-  ctx.font      = `${SZ * 0.022}px "Space Mono"`;
-  ctx.fillText('SURVIVED', CX, SZ * 0.565);
+  ctx.font      = `bold ${SZ*0.064}px "Space Mono"`;
+  ctx.fillText(fmtTime(gameTime), CX, SZ*0.51);
 
-  if (hiScore > 0) {
-    ctx.fillStyle = 'rgba(245,240,232,0.25)';
-    ctx.font      = `${SZ * 0.02}px "Space Mono"`;
-    ctx.fillText(`BEST  ${formatTime(hiScore / 10)}`, CX, SZ * 0.62);
-  }
+  ctx.fillStyle = 'rgba(245,240,232,0.38)';
+  ctx.font      = `${SZ*0.019}px "Space Mono"`;
+  ctx.fillText('SURVIVED', CX, SZ*0.575);
 
-  const newRecord = score >= hiScore && score > 0;
-  if (newRecord) {
+  const fs = Math.floor(gameTime*10);
+  if (fs >= hiScore && fs > 3) {
     ctx.fillStyle = AMBER;
-    ctx.font      = `${SZ * 0.024}px "Space Mono"`;
-    ctx.fillText('★  NEW RECORD  ★', CX, SZ * 0.65);
+    ctx.font      = `${SZ*0.022}px "Space Mono"`;
+    ctx.fillText('★  NEW RECORD  ★', CX, SZ*0.63);
+  } else if (hiScore > 0) {
+    ctx.fillStyle = 'rgba(245,240,232,0.22)';
+    ctx.font      = `${SZ*0.018}px "Space Mono"`;
+    ctx.fillText(`BEST  ${fmtTime(hiScore/10)}`, CX, SZ*0.63);
   }
 
-  const blink = Math.floor(ts / 500) % 2;
+  const blink = Math.floor(ts/500)%2;
   if (blink) {
     ctx.fillStyle = TEAL;
-    ctx.font      = `${SZ * 0.026}px "Space Mono"`;
-    ctx.fillText('[ R ] TRY AGAIN', CX, SZ * 0.78);
+    ctx.font      = `${SZ*0.025}px "Space Mono"`;
+    ctx.fillText('[ R ] TRY AGAIN', CX, SZ*0.78);
   }
-
   ctx.globalAlpha = 1;
 }
 
-// ─── GAME LOOP ────────────────────────────────────────────────
+// ── Loop ─────────────────────────────────────────────────────
 function loop(ts) {
   const dt = Math.min((ts - lastTS) / 1000, 0.05);
-  lastTS   = ts;
+  lastTS = ts;
 
-  if (STATE === 'playing') update(dt);
-  else if (STATE === 'dead') {
-    deadAlpha = Math.min(1, deadAlpha + dt * 2.0);
-    shakeAmt *= 0.8;
-    flashTimer = Math.max(0, flashTimer - dt);
+  if (STATE === 'playing') {
+    update(dt);
+  } else if (STATE === 'dead') {
+    deadAlpha = Math.min(1, deadAlpha + dt * 2.2);
+    shakeAmt *= 0.82;
+    for (let i = particles.length-1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt*2.2;
+      if (p.life <= 0) particles.splice(i,1);
+    }
+    for (const sl of speedLines) {
+      sl.life += dt * sl.speed * 0.3;
+      if (sl.life > 1) { sl.life = 0; sl.angle = Math.random()*Math.PI*2; }
+    }
+  } else if (STATE === 'start') {
+    for (const sl of speedLines) {
+      sl.life += dt * sl.speed * 0.25;
+      if (sl.life > 1) { sl.life = 0; sl.angle = Math.random()*Math.PI*2; }
+    }
   }
 
   draw(ts);
   requestAnimationFrame(loop);
 }
 
-// ─── INPUT ────────────────────────────────────────────────────
+// ── Input ────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
-  if (STATE === 'start') { initGame(); return; }
-  if (STATE === 'dead' && (e.key === 'r' || e.key === 'R')) { initGame(); return; }
-  if (e.key === 'ArrowLeft'  || e.key === 'a' || e.key === 'A') { inputLeft  = true; e.preventDefault(); }
-  if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { inputRight = true; e.preventDefault(); }
+  if (STATE === 'start')                                          { initGame(); return; }
+  if (STATE === 'dead' && (e.key==='r'||e.key==='R'))             { initGame(); return; }
+  if (e.key==='ArrowLeft' ||e.key==='a'||e.key==='A')  { inputL=true; e.preventDefault(); }
+  if (e.key==='ArrowRight'||e.key==='d'||e.key==='D')  { inputR=true; e.preventDefault(); }
 });
 document.addEventListener('keyup', e => {
-  if (e.key === 'ArrowLeft'  || e.key === 'a' || e.key === 'A') inputLeft  = false;
-  if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') inputRight = false;
+  if (e.key==='ArrowLeft' ||e.key==='a'||e.key==='A') inputL=false;
+  if (e.key==='ArrowRight'||e.key==='d'||e.key==='D') inputR=false;
 });
 
-// Touch: left half = left, right half = right
 C.addEventListener('touchstart', e => {
   e.preventDefault();
-  if (STATE === 'start')                    { initGame(); return; }
-  if (STATE === 'dead' && deadAlpha > 0.3)  { initGame(); return; }
+  if (STATE==='start')                   { initGame(); return; }
+  if (STATE==='dead'&&deadAlpha>0.3)     { initGame(); return; }
   for (const t of e.touches) {
-    if (t.clientX < C.getBoundingClientRect().left + SZ / 2) inputLeft  = true;
-    else                                                       inputRight = true;
+    const rect = C.getBoundingClientRect();
+    if (t.clientX - rect.left < SZ/2) inputL=true; else inputR=true;
   }
-}, { passive: false });
-
-C.addEventListener('touchend', e => {
-  e.preventDefault();
-  inputLeft  = false;
-  inputRight = false;
-}, { passive: false });
-
+}, {passive:false});
+C.addEventListener('touchend',  e => { e.preventDefault(); inputL=false; inputR=false; }, {passive:false});
 C.addEventListener('touchmove', e => {
-  e.preventDefault();
-  inputLeft  = false;
-  inputRight = false;
+  e.preventDefault(); inputL=false; inputR=false;
   for (const t of e.touches) {
-    if (t.clientX < C.getBoundingClientRect().left + SZ / 2) inputLeft  = true;
-    else                                                       inputRight = true;
+    const rect = C.getBoundingClientRect();
+    if (t.clientX-rect.left < SZ/2) inputL=true; else inputR=true;
   }
-}, { passive: false });
+}, {passive:false});
 
-// ─── BOOT ─────────────────────────────────────────────────────
+// ── Boot ─────────────────────────────────────────────────────
 initStars();
+initSpeedLines();
 requestAnimationFrame(ts => { lastTS = ts; requestAnimationFrame(loop); });
 </script>
 </body>
