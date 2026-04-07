@@ -1,19 +1,19 @@
 {
-  "updated": "2026-04-04T03:00:00.000Z",
+  "updated": "2026-04-07T00:00:00.000Z",
   "TNX": {
-    "price": 4.32,
-    "prev": 4.297,
-    "change": 0.23
+    "price": 4.336,
+    "prev": 4.32,
+    "change": 0.016
   },
   "TWO": {
-    "price": 3.80,
-    "prev": 3.791,
-    "change": 0.009
+    "price": 3.85,
+    "prev": 3.80,
+    "change": 0.05
   },
   "SPREAD": {
-    "price": 0.52,
-    "prev": 0.506,
-    "change": 0.014,
+    "price": 0.486,
+    "prev": 0.52,
+    "change": -0.034,
     "isSpread": true
   }
 }
