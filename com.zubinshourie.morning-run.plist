@@ -3,28 +3,30 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.zubinshourie.daily-brief-push</string>
+    <string>com.zubinshourie.morning-run</string>
 
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/Users/ZYN/Desktop/site-prototype/auto-push-brief.sh</string>
+        <string>/Users/ZYN/Desktop/site-prototype/morning-run.sh</string>
     </array>
 
+    <!-- Run at 8:00 AM every day (after the 7:09 AM Cowork brief task finishes) -->
     <key>StartCalendarInterval</key>
     <dict>
         <key>Hour</key>
-        <integer>7</integer>
+        <integer>8</integer>
         <key>Minute</key>
-        <integer>25</integer>
+        <integer>0</integer>
     </dict>
 
     <key>StandardOutPath</key>
-    <string>/Users/ZYN/Desktop/brief-push.log</string>
+    <string>/Users/ZYN/Desktop/morning-run.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/Users/ZYN/Desktop/brief-push.log</string>
+    <string>/Users/ZYN/Desktop/morning-run.log</string>
 
+    <!-- Do NOT run immediately on login (only at 8 AM) -->
     <key>RunAtLoad</key>
     <false/>
 </dict>

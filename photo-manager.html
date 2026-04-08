@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Manager — ZS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --cream: #F4EFE0; --cream-dark: #E8E0CC; --charcoal: #1C1A16;
+      --coral: #D94F2B; --amber: #E8971A; --teal: #2A8A7E;
+    }
+    body { background: var(--cream); color: var(--charcoal); font-family: 'Sora', sans-serif; }
+
+    header {
+      background: var(--cream-dark);
+      border-bottom: 2px solid var(--charcoal);
+      padding: 0 40px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.1em; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .count-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+    .btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border: 2px solid var(--charcoal);
+      background: transparent;
+      cursor: pointer;
+      color: var(--charcoal);
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn:hover { background: var(--charcoal); color: var(--cream); }
+    .btn-primary { background: var(--coral); border-color: var(--coral); color: var(--cream); }
+    .btn-primary:hover { background: var(--charcoal); border-color: var(--charcoal); }
+    .btn-danger { border-color: var(--coral); color: var(--coral); }
+    .btn-danger:hover { background: var(--coral); color: var(--cream); }
+
+    .toolbar {
+      padding: 16px 40px;
+      border-bottom: 1px solid rgba(28,26,22,0.12);
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: var(--cream);
+    }
+    .toolbar-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.4;
+    }
+    .filter-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 1px solid rgba(28,26,22,0.25);
+      background: transparent;
+      cursor: pointer;
+      color: var(--charcoal);
+      transition: all 0.15s;
+    }
+    .filter-btn.active { border-color: var(--teal); color: var(--teal); background: rgba(42,138,126,0.06); }
+    .filter-btn:hover { border-color: var(--charcoal); }
+
+    .sections-wrap { padding: 32px 40px 80px; }
+
+    .section-block { margin-bottom: 48px; }
+    .section-head {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(232,151,26,0.25);
+    }
+    .section-head .s-count { color: var(--charcoal); opacity: 0.35; }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .photo-item {
+      position: relative;
+      border: 2px solid var(--charcoal);
+      cursor: grab;
+      background: var(--cream-dark);
+      transition: transform 0.15s, opacity 0.2s, border-color 0.15s;
+      user-select: none;
+    }
+    .photo-item:active { cursor: grabbing; }
+    .photo-item.dragging {
+      opacity: 0.4;
+      transform: scale(0.96);
+      border-color: var(--amber);
+    }
+    .photo-item.drag-over {
+      border-color: var(--coral);
+      transform: scale(1.03);
+    }
+    .photo-item.excluded {
+      opacity: 0.28;
+      border-color: var(--coral);
+    }
+    .photo-item.excluded .exclude-btn { background: var(--coral); color: var(--cream); }
+    .photo-item img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      filter: saturate(0.88) contrast(1.04);
+    }
+    .photo-meta {
+      padding: 6px 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 7px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      opacity: 0.55;
+      line-height: 1.4;
+      border-top: 1px solid rgba(28,26,22,0.1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .exclude-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 22px;
+      height: 22px;
+      background: var(--cream);
+      border: 1.5px solid var(--charcoal);
+      font-size: 11px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--charcoal);
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      z-index: 2;
+    }
+    .exclude-btn:hover { background: var(--coral); color: var(--cream); border-color: var(--coral); }
+    .excluded-label {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      color: var(--coral);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .photo-item.excluded .excluded-label { display: flex; }
+
+    /* OUTPUT MODAL */
+    #output-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28,26,22,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    #output-modal.open { display: flex; }
+    #output-inner {
+      background: var(--cream);
+      border: 2px solid var(--charcoal);
+      width: min(90vw, 720px);
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    #output-inner::after {
+      content: '';
+      position: absolute;
+      bottom: -7px; right: -7px;
+      width: 100%; height: 100%;
+      border: 2px solid var(--amber);
+      z-index: -1;
+    }
+    .output-header {
+      padding: 18px 24px 14px;
+      border-bottom: 2px solid var(--charcoal);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-header h2 { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.05em; }
+    .output-header .sub { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-top: 2px; }
+    .output-body { padding: 16px 24px 20px; flex: 1; overflow-y: auto; }
+    .output-body textarea {
+      width: 100%;
+      height: 320px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      line-height: 1.6;
+      border: 1px solid rgba(28,26,22,0.2);
+      background: var(--cream-dark);
+      padding: 12px;
+      resize: vertical;
+      color: var(--charcoal);
+    }
+    .output-actions {
+      padding: 12px 24px 20px;
+      display: flex;
+      gap: 12px;
+      border-top: 1px solid rgba(28,26,22,0.1);
+    }
+    .close-btn {
+      background: none;
+      border: 2px solid var(--charcoal);
+      padding: 4px 12px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      cursor: pointer;
+      color: var(--charcoal);
+      transition: background 0.15s, color 0.15s;
+    }
+    .close-btn:hover { background: var(--charcoal); color: var(--cream); }
+
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--charcoal);
+      color: var(--cream);
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border: 2px solid var(--amber);
+      opacity: 0;
+      transition: transform 0.25s, opacity 0.25s;
+      z-index: 999;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">ZS · Photo Manager</div>
+  <div class="header-right">
+    <span class="count-badge" id="count-label">42 photos · 0 excluded</span>
+    <button class="btn btn-danger" onclick="restoreAll()">Restore All</button>
+    <button class="btn" onclick="showOutput('list')">Export List</button>
+    <button class="btn btn-primary" onclick="showOutput('gallery')">Generate Gallery →</button>
+  </div>
+</header>
+
+<div class="toolbar">
+  <span class="toolbar-label">Filter:</span>
+  <button class="filter-btn active" onclick="filterSection('all', this)">All</button>
+  <button class="filter-btn" onclick="filterSection('morocco', this)">Morocco</button>
+  <button class="filter-btn" onclick="filterSection('iceland', this)">Iceland</button>
+  <button class="filter-btn" onclick="filterSection('italy', this)">Italy</button>
+  <button class="filter-btn" onclick="filterSection('spain', this)">Spain</button>
+  <button class="filter-btn" onclick="filterSection('newyork', this)">New York</button>
+  <button class="filter-btn" onclick="filterSection('colorado', this)">Colorado</button>
+  <button class="filter-btn" style="border-color:var(--coral);color:var(--coral);" onclick="filterSection('uncategorized', this)">⚠ Uncategorized</button>
+</div>
+
+<div class="sections-wrap" id="sections-wrap"></div>
+
+<!-- OUTPUT MODAL -->
+<div id="output-modal">
+  <div id="output-inner">
+    <div class="output-header">
+      <div>
+        <h2 id="output-title">Export</h2>
+        <div class="sub" id="output-sub"></div>
+      </div>
+      <button class="close-btn" onclick="closeOutput()">✕</button>
+    </div>
+    <div class="output-body">
+      <textarea id="output-text" readonly></textarea>
+    </div>
+    <div class="output-actions">
+      <button class="btn btn-primary" onclick="copyOutput()">Copy to Clipboard</button>
+      <button class="btn" onclick="downloadOutput()">Download File</button>
+      <button class="btn" onclick="closeOutput()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SECTIONS = [
+  {
+    id: 'morocco', label: 'Morocco',
+    photos: [
+      'arch-alcove-morocco.jpg','artisan-loom.jpg','camel-caravan.jpg','camel-close.jpg',
+      'desert-kasbah.jpg','desert-silhouette.jpg','morocco-canyon.jpg',
+      'sahara-camp.jpg','sahara-dunes-sunset.jpg','moped-path.jpg'
+    ]
+  },
+  {
+    id: 'iceland', label: 'Iceland',
+    photos: [
+      'ice-cave.jpg','iceland-beach-sunset.jpg','iceland-beach.jpg','iceland-bridge-sunset.jpg',
+      'iceland-coast.jpg','iceland-dock.jpg','iceland-geothermal.jpg',
+      'iceland-horses.jpg','iceland-lighthouse.jpg','ravens-ice.jpg'
+    ]
+  },
+  {
+    id: 'italy', label: 'Italy',
+    photos: [
+      'colosseum-arch.jpg','colosseum.jpg','rome-gelato-vendor.jpg',
+      'st-peters-rome.jpg','venice-canal.jpg','museum-sculptures.jpg'
+    ]
+  },
+  {
+    id: 'spain', label: 'Spain',
+    photos: [
+      'gibraltar-monkey.jpg','montserrat-monastery.jpg','montserrat-rooftops.jpg',
+      'montserrat-valley.jpg','tunnel-couple.jpg'
+    ]
+  },
+  {
+    id: 'newyork', label: 'New York',
+    photos: [
+      'nyc-bar.jpg','nyc-street-dusk.jpg','nyc-sunset.jpg',
+      'park-path-nyc.jpg','soho-dusk.jpg'
+    ]
+  },
+  {
+    id: 'colorado', label: 'Colorado',
+    photos: [
+      'boulder-hillside.jpg','colorado-mountain-mist.jpg','colorado-peaks.jpg',
+      'flatirons-sunset.jpg','golden-vista-colorado.jpg','ski-lift-colorado.jpg'
+    ]
+  },
+  {
+    id: 'uncategorized', label: '⚠ Uncategorized — Not in Gallery Yet',
+    photos: [
+      'gelato-cart-rome.jpg',
+      'dscf1896-2.jpg','dscf1907.jpg','dscf1954.jpg','dscf2260.jpg',
+      'IMG_2477.jpeg','PNG image.jpeg',
+      '237e6344-584f-42fb-91dc-ee89b5cbb9ef-1-105-c.jpg',
+      'c56e34e9-c143-4a0b-8326-0f30117fd9f4-1-105-c.jpg',
+      '56FE1FE8-7CDF-45DA-8C30-210805B7CA03.JPG',
+      '6EEAF821-EABE-4BD2-906C-896A0CD69B47.JPG',
+      '6eeaf821-eabe-4bd2-906c-896a0cd69b47-1.jpg',
+      'A04550D6-1206-474E-8929-B19B5BC9DC53.JPG'
+    ]
+  }
+];
+
+// State: per-section ordered arrays + excluded set
+const state = {};
+const excluded = new Set();
+SECTIONS.forEach(s => { state[s.id] = [...s.photos]; });
+
+let dragSrc = null;
+let dragSrcSection = null;
+
+function toLabel(filename) {
+  return filename.replace('.jpg','').replace(/-/g,' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function render() {
+  const wrap = document.getElementById('sections-wrap');
+  wrap.innerHTML = '';
+  SECTIONS.forEach(sec => {
+    const block = document.createElement('div');
+    block.className = 'section-block';
+    block.dataset.section = sec.id;
+    const visible = state[sec.id].filter(p => !excluded.has(p)).length;
+    block.innerHTML = `
+      <div class="section-head">
+        ${sec.label}
+        <span class="s-count">${state[sec.id].length} photos · ${visible} visible</span>
+      </div>
+      <div class="photo-grid" data-section="${sec.id}"></div>
+    `;
+    const grid = block.querySelector('.photo-grid');
+    state[sec.id].forEach(photo => {
+      const item = document.createElement('div');
+      item.className = 'photo-item' + (excluded.has(photo) ? ' excluded' : '');
+      item.dataset.photo = photo;
+      item.dataset.section = sec.id;
+      item.draggable = true;
+      item.innerHTML = `
+        <img src="img/photos/${photo}" alt="${toLabel(photo)}" loading="lazy">
+        <div class="excluded-label">EXCLUDED</div>
+        <button class="exclude-btn" title="${excluded.has(photo) ? 'Restore' : 'Exclude'}">${excluded.has(photo) ? '↩' : '✕'}</button>
+        <div class="photo-meta">${toLabel(photo)}</div>
+      `;
+      item.querySelector('.exclude-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        toggleExclude(photo, item);
+      });
+      item.addEventListener('dragstart', onDragStart);
+      item.addEventListener('dragover',  onDragOver);
+      item.addEventListener('dragleave', onDragLeave);
+      item.addEventListener('drop',      onDrop);
+      item.addEventListener('dragend',   onDragEnd);
+      grid.appendChild(item);
+    });
+    wrap.appendChild(block);
+  });
+  updateCount();
+}
+
+function toggleExclude(photo, item) {
+  if (excluded.has(photo)) {
+    excluded.delete(photo);
+    item.classList.remove('excluded');
+    item.querySelector('.exclude-btn').textContent = '✕';
+    item.querySelector('.exclude-btn').title = 'Exclude';
+  } else {
+    excluded.add(photo);
+    item.classList.add('excluded');
+    item.querySelector('.exclude-btn').textContent = '↩';
+    item.querySelector('.exclude-btn').title = 'Restore';
+  }
+  updateCount();
+}
+
+function restoreAll() {
+  excluded.clear();
+  render();
+  toast('All photos restored');
+}
+
+function updateCount() {
+  const total = SECTIONS.reduce((a, s) => a + state[s.id].length, 0);
+  const ex = excluded.size;
+  document.getElementById('count-label').textContent = `${total} photos · ${ex} excluded`;
+  // Update section counts
+  document.querySelectorAll('.section-block').forEach(block => {
+    const sid = block.dataset.section;
+    const sec = SECTIONS.find(s => s.id === sid);
+    if (!sec) return;
+    const visible = state[sid].filter(p => !excluded.has(p)).length;
+    const cnt = block.querySelector('.s-count');
+    if (cnt) cnt.textContent = `${state[sid].length} photos · ${visible} visible`;
+  });
+}
+
+// ── DRAG & DROP ──
+function onDragStart(e) {
+  dragSrc = this;
+  dragSrcSection = this.dataset.section;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  if (this !== dragSrc) this.classList.add('drag-over');
+}
+function onDragLeave() { this.classList.remove('drag-over'); }
+function onDrop(e) {
+  e.preventDefault();
+  this.classList.remove('drag-over');
+  if (this === dragSrc) return;
+  const srcSection  = dragSrcSection;
+  const destSection = this.dataset.section;
+  const srcPhoto    = dragSrc.dataset.photo;
+  const destPhoto   = this.dataset.photo;
+  if (srcSection !== destSection) {
+    // Move between sections
+    const si = state[srcSection].indexOf(srcPhoto);
+    state[srcSection].splice(si, 1);
+    const di = state[destSection].indexOf(destPhoto);
+    state[destSection].splice(di, 0, srcPhoto);
+    // Update section id label mapping
+    SECTIONS.find(s => s.id === srcSection);
+  } else {
+    const arr = state[srcSection];
+    const si  = arr.indexOf(srcPhoto);
+    const di  = arr.indexOf(destPhoto);
+    arr.splice(si, 1);
+    arr.splice(di, 0, srcPhoto);
+  }
+  render();
+}
+function onDragEnd() {
+  document.querySelectorAll('.photo-item').forEach(el => {
+    el.classList.remove('dragging', 'drag-over');
+  });
+}
+
+// ── FILTER ──
+function filterSection(id, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.section-block').forEach(block => {
+    block.style.display = (id === 'all' || block.dataset.section === id) ? '' : 'none';
+  });
+}
+
+// ── OUTPUT ──
+let outputMode = 'list';
+let outputFilename = 'photos.txt';
+
+function showOutput(mode) {
+  outputMode = mode;
+  const modal = document.getElementById('output-modal');
+  const title = document.getElementById('output-title');
+  const sub   = document.getElementById('output-sub');
+  const ta    = document.getElementById('output-text');
+
+  if (mode === 'list') {
+    title.textContent = 'Included Photos';
+    const total = SECTIONS.reduce((a,s) => a + state[s.id].length, 0) - excluded.size;
+    sub.textContent = `${total} photos · copy and send to Claude to update gallery`;
+    outputFilename = 'photo-order.txt';
+    let txt = '';
+    SECTIONS.forEach(sec => {
+      const photos = state[sec.id].filter(p => !excluded.has(p));
+      if (photos.length === 0) return;
+      txt += `## ${sec.label}\n`;
+      photos.forEach(p => txt += `${p}\n`);
+      txt += '\n';
+    });
+    ta.value = txt.trim();
+  } else {
+    title.textContent = 'Gallery HTML';
+    const total = SECTIONS.reduce((a,s) => a + state[s.id].length, 0) - excluded.size;
+    sub.textContent = `${total} photos · replace gallery.html with this file`;
+    outputFilename = 'gallery.html';
+    ta.value = generateGalleryHTML();
+  }
+  modal.classList.add('open');
+}
+
+function closeOutput() {
+  document.getElementById('output-modal').classList.remove('open');
+}
+
+function copyOutput() {
+  const ta = document.getElementById('output-text');
+  ta.select();
+  document.execCommand('copy');
+  toast('Copied to clipboard');
+}
+
+function downloadOutput() {
+  const text = document.getElementById('output-text').value;
+  const blob = new Blob([text], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = outputFilename;
+  a.click();
+  toast(`Downloaded ${outputFilename}`);
+}
+
+function generateGalleryHTML() {
+  const sectionBlocks = SECTIONS.map(sec => {
+    const photos = state[sec.id].filter(p => !excluded.has(p));
+    if (photos.length === 0) return '';
+    const items = photos.map(p => `
+      <article class="gallery-item">
+        <div class="gallery-item-wrapper">
+          <img src="img/photos/${p}" alt="${toLabel(p)}" loading="lazy">
+          <span class="gallery-label">${toLabel(p)}</span>
+        </div>
+      </article>`).join('');
+    return `
+    <p class="gallery-section-label">${sec.label}</p>
+    <div class="gallery-grid">${items}
+    </div>`;
+  }).join('\n');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photography — Zubin Shourie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --cream: #F4EFE0; --cream-dark: #E8E0CC; --charcoal: #1C1A16;
+      --coral: #D94F2B; --amber: #E8971A; --teal: #2A8A7E;
+    }
+    body { background: var(--cream); color: var(--charcoal); font-family: 'Sora', sans-serif; overflow-x: hidden; }
+    body::after {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.18; mix-blend-mode: multiply;
+    }
+    nav {
+      position: sticky; top: 0; z-index: 500;
+      background: var(--cream-dark); border-bottom: 2px solid var(--charcoal);
+      padding: 0 48px; display: flex; align-items: center; justify-content: space-between; height: 56px;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.1em;
+      color: var(--charcoal); border: 2px solid var(--charcoal); padding: 2px 12px 0;
+      text-decoration: none; position: relative; display: inline-block; transition: background 0.2s, color 0.2s;
+    }
+    .nav-logo::after {
+      content: ''; position: absolute; bottom: -5px; right: -5px;
+      width: 100%; height: 100%; border: 2px solid var(--amber); z-index: -1;
+    }
+    .nav-logo:hover { background: var(--charcoal); color: var(--cream); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--charcoal); text-decoration: none;
+    }
+    .nav-cta {
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.15em;
+      text-transform: uppercase; background: var(--charcoal); color: var(--cream);
+      border: 2px solid var(--charcoal); padding: 9px 18px; text-decoration: none;
+    }
+    .page-header { padding: 56px 48px 32px; border-bottom: 2px solid var(--charcoal); }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 7vw, 80px);
+      letter-spacing: 0.04em; line-height: 0.9; color: var(--charcoal); margin-bottom: 12px;
+    }
+    .page-subtitle {
+      font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--teal); opacity: 0.75;
+    }
+    .gallery { padding: 0 48px 80px; }
+    .gallery-section-label {
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--teal);
+      display: flex; align-items: center; gap: 16px;
+      margin: 48px 0 20px; padding-bottom: 8px;
+      border-bottom: 1px solid rgba(232,151,26,0.22);
+    }
+    .gallery-section-label:first-child { margin-top: 40px; }
+    .gallery-grid { columns: 3; column-gap: 14px; }
+    .gallery-item { break-inside: avoid; margin-bottom: 14px; position: relative; cursor: pointer; }
+    .gallery-item-wrapper { position: relative; overflow: hidden; border: 2px solid var(--charcoal); }
+    .gallery-item-wrapper img {
+      width: 100%; display: block; filter: saturate(0.9) contrast(1.04);
+      transition: transform 0.4s ease, filter 0.3s;
+    }
+    .gallery-item:hover img { transform: scale(1.03); filter: saturate(1) contrast(1.06); }
+    .gallery-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(28,26,22,0.75), transparent);
+      padding: 20px 12px 10px;
+      font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--cream);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .gallery-item:hover .gallery-label { opacity: 1; }
+    @media (max-width: 900px) { .gallery-grid { columns: 2; } nav { padding: 0 24px; } .gallery, .page-header { padding-left: 24px; padding-right: 24px; } }
+    @media (max-width: 640px) { .gallery-grid { columns: 1; } .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">ZS</a>
+    <ul class="nav-links">
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="index.html#brief">Brief</a></li>
+      <li><a href="index.html#photography">Photography</a></li>
+    </ul>
+    <a href="index.html" class="nav-cta">← Back</a>
+  </nav>
+  <header class="page-header">
+    <h1 class="page-title">PHOTOGRAPHY</h1>
+    <p class="page-subtitle">Fujifilm X-T5 · Morocco · Iceland · Italy · New York · Colorado · Spain</p>
+  </header>
+  <div class="gallery">
+    ${sectionBlocks}
+  </div>
+</body>
+</html>`;
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// Init
+render();
+</script>
+</body>
+</html>

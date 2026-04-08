@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Daily Brief &mdash; Tuesday, April 7, 2026</title>
+  <title>The Daily Brief &mdash; Wednesday, April 8, 2026</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
     :root {
@@ -61,52 +61,12 @@
     .story-headline a { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--soft-black); text-decoration: none; line-height: 1.3; }
     .story-headline a:hover { color: var(--forest); }
     .story-summary { font-size: 0.8rem; font-weight: 300; color: var(--warm-gray); line-height: 1.5; margin-top: 0.25rem; }
-    .watchlist-section { margin: 2rem 0 1.5rem; }
-    .watchlist-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
-    .watchlist-label::after { content: ''; flex: 1; height: 1px; background: var(--tan); }
-    .watchlist-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; }
-    .watchlist-item { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1rem; cursor: pointer; transition: border-color 0.15s; }
-    .watchlist-item:hover { border-color: var(--forest); }
-    .watchlist-item .symbol { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; color: var(--soft-black); margin-bottom: 0.2rem; }
-    .watchlist-item .company { font-size: 0.7rem; font-weight: 300; color: var(--warm-gray); line-height: 1.3; margin-bottom: 0.5rem; }
-    .watchlist-item .wi-price { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--soft-black); line-height: 1; }
-    .watchlist-item .wi-change { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; margin-top: 0.15rem; }
-    .watchlist-item .wi-change.up { color: var(--market-green); }
-    .watchlist-item .wi-change.down { color: var(--market-red); }
     .scores-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
-    .score-card { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: border-color 0.15s; }
-    .score-card:hover { border-color: var(--forest); }
+    .score-card { background: var(--warm-white); border: 1px solid var(--tan); border-radius: 4px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; }
     .score-card .teams { font-size: 0.9rem; color: var(--charcoal); }
     .score-card .teams strong { font-weight: 600; }
     .score-card .result { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 700; color: var(--soft-black); }
     .score-card .status { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm-gray); }
-    .box-hint { font-family: 'JetBrains Mono', monospace; font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--forest); margin-top: 0.3rem; opacity: 0.7; }
-    #boxscore-modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(26,26,26,0.65); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
-    #boxscore-modal.open { display: flex; }
-    #boxscore-inner { background: var(--cream); border: 1px solid var(--sand); width: min(92vw, 860px); max-height: 88vh; overflow-y: auto; border-radius: 4px; }
-    #boxscore-header { padding: 1.25rem 1.75rem 1rem; border-bottom: 1px solid var(--tan); display: flex; justify-content: space-between; align-items: flex-start; position: sticky; top: 0; background: var(--cream); z-index: 10; }
-    #boxscore-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; letter-spacing: -0.02em; color: var(--soft-black); }
-    #boxscore-subtitle { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); margin-top: 0.25rem; }
-    #boxscore-close { background: none; border: 1px solid var(--tan); font-size: 1rem; cursor: pointer; color: var(--charcoal); padding: 0.25rem 0.6rem; border-radius: 3px; transition: background 0.15s; }
-    #boxscore-close:hover { background: var(--tan); }
-    #boxscore-body { padding: 1.25rem 1.75rem 1.75rem; }
-    .linescore { display: flex; gap: 0; margin-bottom: 1.25rem; border: 1px solid var(--tan); border-radius: 3px; overflow: hidden; }
-    .linescore-team { flex: 1; padding: 0.9rem 1.1rem; border-right: 1px solid var(--tan); }
-    .linescore-team:last-child { border-right: none; }
-    .linescore-name { font-size: 0.75rem; font-weight: 600; color: var(--charcoal); margin-bottom: 0.2rem; }
-    .linescore-score { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--soft-black); line-height: 1; }
-    .linescore-quarters { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em; color: var(--warm-gray); margin-top: 0.25rem; }
-    .bs-team-label { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--forest); margin: 1.25rem 0 0.5rem; }
-    .bs-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-    .bs-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm-gray); padding: 0.4rem 0.5rem; text-align: right; border-bottom: 1px solid var(--tan); }
-    .bs-table th:first-child { text-align: left; }
-    .bs-table td { padding: 0.35rem 0.5rem; text-align: right; border-bottom: 1px solid rgba(212,201,184,0.4); color: var(--charcoal); font-family: 'Sora', sans-serif; }
-    .bs-table td:first-child { text-align: left; font-weight: 500; }
-    .bs-table tr:last-child td { border-bottom: none; }
-    .bs-table tr.starter td { background: rgba(61,90,71,0.04); }
-    #boxscore-loading { text-align: center; padding: 3rem; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm-gray); }
-    #boxscore-error { text-align: center; padding: 2rem; font-size: 0.85rem; color: var(--warm-gray); }
-    #boxscore-error a { color: var(--forest); }
     .upcoming { margin-top: 1rem; }
     .upcoming-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm-gray); margin-bottom: 0.75rem; }
     .upcoming-item { font-size: 0.85rem; font-weight: 300; color: var(--charcoal); padding: 0.5rem 0; border-bottom: 1px solid rgba(212,197,173,0.5); }
@@ -139,55 +99,45 @@
 <body>
   <div class="dash-nav">
     <a href="index.html" class="back">&larr; Back to site</a>
-    <span class="date">Tuesday, April 7, 2026</span>
+    <span class="date">Wednesday, April 8, 2026</span>
   </div>
   <header class="brief-header">
     <div class="masthead">The Daily Brief</div>
-    <div class="edition">Morning Edition &middot; Tuesday, April 7, 2026</div>
-    <p class="greeting">Good morning, Zubin. Markets closed green today despite Trump's Iran ultimatum expiring — the S&P eked out +0.40% on hopes of a diplomatic off-ramp. WTI sitting at $115, gold hit $4,865, VIX at 24. Goldman is calling tech a "generational buying opportunity." The Cavs won twice. Stephon Castle dropped a triple-double. Big day.</p>
+    <div class="edition">Morning Edition &middot; Wednesday, April 8, 2026</div>
+    <p class="greeting">Good morning, Zubin. A U.S.-Iran ceasefire dropped overnight and markets are ripping — Dow futures jumped 1,000 points, oil fell below $100 a barrel, and European stocks opened up 4%. The deal is fragile — Iran says it's still charging ships through Hormuz and enriching uranium — but for now, traders are buying first and asking questions later.</p>
   </header>
 
   <!-- TICKER -->
   <div class="ticker">
     <div class="ticker-item">
       <span class="symbol">S&P 500</span>
-      <span class="price">6,585</span>
-      <span class="change down">&#9660; &minus;0.41%</span>
+      <span class="price">659.22</span>
+      <span class="change down">&#9660; -2.14%</span>
     </div>
     <div class="ticker-item">
       <span class="symbol">Nasdaq</span>
-      <span class="price">21,996</span>
-      <span class="change up">&#9650; +0.53%</span>
+      <span class="price">588.59</span>
+      <span class="change down">&#9660; -2.73%</span>
     </div>
     <div class="ticker-item">
       <span class="symbol">VIX</span>
-      <span class="price">24.17</span>
-      <span class="change up">&#9650; +1.26%</span>
+      <span class="price">20.43</span>
+      <span class="change down">&#9660; -20.63%</span>
     </div>
     <div class="ticker-item">
       <span class="symbol">Bitcoin</span>
-      <span class="price">$68,700</span>
-      <span class="change up">&#9650; +0.45%</span>
+      <span class="price">$71,696</span>
+      <span class="change down">&#9660; -0.32%</span>
     </div>
     <div class="ticker-item">
       <span class="symbol">Gold</span>
-      <span class="price">$4,865</span>
-      <span class="change up">&#9650; +0.38%</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">2-YR</span>
-      <span class="price">3.87%</span>
-      <span class="change">&#8212;</span>
+      <span class="price">$4,813</span>
+      <span class="change down">&#9660; -0.31%</span>
     </div>
     <div class="ticker-item">
       <span class="symbol">10-YR</span>
       <span class="price">4.34%</span>
-      <span class="change">&#8212;</span>
-    </div>
-    <div class="ticker-item">
-      <span class="symbol">2s/10s</span>
-      <span class="price">+47bp</span>
-      <span class="change up" style="color:var(--market-green)">steepen</span>
+      <span class="change up">&#9650; +0.18%</span>
     </div>
   </div>
 
@@ -199,23 +149,23 @@
       <div class="stories-grid">
         <div class="story-lead">
           <div class="story-lead-img" style="background: #0d1520; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; padding: 1.5rem;">
-            <div style="font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#5a7a9a;">Geopolitics · April 7 · Middle East</div>
-            <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:#c9d4e0; line-height:1; letter-spacing:-0.03em; text-align:center;">Hormuz Deadline</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#5a7a9a;">Geopolitics · April 8, 2026 · U.S.-Iran War</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:#c9d4e0; line-height:1; letter-spacing:-0.03em; text-align:center;">Ceasefire Deal</div>
           </div>
-          <h3>Trump's Iran Ultimatum Expires Today — Tehran Defiant as Airstrikes Continue</h3>
-          <p>Today is the day Trump set as his deadline for Iran to reopen the Strait of Hormuz, the narrow chokepoint through which roughly 20% of global oil flows. Iran's response: President Pezeshkian declared 14 million Iranians — himself included — have volunteered to die in the war, and dismissed any ceasefire talk short of a permanent end to hostilities.</p><p>Overnight airstrikes hit Iran's largest petrochemical complex, multiple airports, and infrastructure targets across the country. Iranian missiles struck Haifa, killing four. U.S. forces have taken 373 casualties since operations began, including 15 Americans injured in a drone strike on a Kuwait air base. The UN Security Council is expected to vote on a Hormuz resolution today — with China and Russia signaling they'll run interference.</p><p>The market angle: WTI crude is at $115/barrel, nearly double pre-conflict levels of ~$70. That's a direct hit to inflation, consumer spending, and the Fed's already tight maneuvering room. GLD (gold) is your safe-haven play to watch; oil-exposed names in the portfolio like UBER face real cost pressure.</p>
-          <a href="https://www.aljazeera.com/news/2026/4/7/iran-war-what-is-happening-on-day-39-of-us-israeli-attacks" target="_blank" class="read-more">Full coverage &rarr;</a>
+          <h3>Trump Agrees to Two-Week Pause on Iran Strikes; Oil Plunges Below $100 as Markets Rally Hard</h3>
+          <p>President Trump announced late Tuesday that the U.S. and Iran have agreed to a conditional two-week ceasefire, pulling back from his explicit threat to destroy Iranian 'civilization.' The terms: Iran must 'completely, immediately, and safely' reopen the Strait of Hormuz — the chokepoint through which roughly 20% of the world's oil flows. Markets didn't wait for the fine print. Dow futures surged 1,000 points, oil plunged below $100 a barrel, and European stocks opened up 4% this morning with travel stocks jumping 7%.</p><p>The deal has problems baked in from the start. Iranian Foreign Minister Abbas Araghchi said Tehran's forces will 'cease defensive operations,' but Iran simultaneously insists it will continue controlling and charging ships through Hormuz — and that uranium enrichment continues. Several Gulf nations reported incoming Iranian missiles and drones even hours after the ceasefire announcement, triggering air defenses. Shell reported its Q1 LNG production fell from 948K to 880-920K barrels-of-oil-equivalent due to war disruption, even as energy trading revenue surged.</p><p>This is classic Trump negotiating theater: ominous deadline, then a two-week extension that resets the clock. The market is pricing in de-escalation. If the Strait reopens cleanly, energy prices stay lower, inflation relief follows, and the Fed has more room to cut. If it unravels — and Iran's mixed signals suggest it might — we're right back to $110+ oil within days. Watch the Strait and watch Gulf air defense reports closely.</p>
+          <a href="https://www.cnbc.com/2026/04/08/european-markets-ftse-dax-cac-ftsemib-ibex-react-to-iran-us-ceasefire-deal.html" target="_blank" class="read-more">Full coverage &rarr;</a>
         </div>
         <div class="story-sidebar">
           <div class="story-small">
-            <div class="source">CBSNews · April 7 · Economy</div>
-            <h4>Jamie Dimon Annual Letter: U.S. Economy 'Still Strong' — But Asset Valuations 'Dramatic' Concern</h4>
-            <p>JPMorgan CEO Jamie Dimon acknowledged in his shareholder letter that the U.S. economy remains healthy but flagged that elevated stock and asset prices could trigger a dramatic correction if geopolitical outcomes disappoint. He called oil prices a potential recession trigger and lowered JPM's S&P 500 year-end target to 7,200.</p>
+            <div class="source">AP News · April 8, 2026 · U.S. Politics</div>
+            <h4>Republican Clay Fuller Wins Marjorie Taylor Greene's Former Georgia House Seat</h4>
+            <p>Republican Clay Fuller flipped Marjorie Taylor Greene's former U.S. House seat in a special election Tuesday, defeating a Democratic challenger with Trump's direct endorsement. The win signals continued GOP hold in that district despite broader national unease about the Iran conflict. Trump's endorsement record remains clean in special elections.</p>
           </div>
           <div class="story-small">
-            <div class="source">CBS News · April 7 · Space</div>
-            <h4>Artemis II Crew Loops the Moon's Far Side Today — Farthest Humans From Earth in 50+ Years</h4>
-            <p>Four astronauts aboard Artemis II are completing their lunar flyby today, passing around the Moon's far side at approximately 180,000 miles from Earth — farther from home than any human since Apollo 17 in 1972. Commander Reid Wiseman leads a crew that includes Victor Glover, Christina Koch, and Jeremy Hansen. Live coverage on NASA+.</p>
+            <div class="source">Space · April 2026 · NASA</div>
+            <h4>Artemis II Crew Breaks Distance Record — Humans Farther From Earth Than Ever</h4>
+            <p>The Artemis II crew has set a new distance record for human spaceflight, venturing farther from Earth than any humans in history on their lunar flyby mission. The crew marked the milestone with an emotional tribute to a lost loved one. It's a genuine NASA moment worth paying attention to — the first crewed lunar mission since Apollo 17.</p>
           </div>
         </div>
       </div>
@@ -227,70 +177,36 @@
       <div class="markets-row">
         <div class="market-card">
           <div class="name">S&P 500</div>
-          <div class="value">6,585</div>
-          <div class="delta down">&#9660; &minus;0.41%</div>
+          <div class="value">659.22</div>
+          <div class="delta down">&#9660; -2.14%</div>
         </div>
         <div class="market-card">
           <div class="name">Nasdaq</div>
-          <div class="value">21,996</div>
-          <div class="delta up">&#9650; +0.53%</div>
+          <div class="value">588.59</div>
+          <div class="delta down">&#9660; -2.73%</div>
         </div>
         <div class="market-card">
           <div class="name">Bitcoin</div>
-          <div class="value">$68,700</div>
-          <div class="delta up">&#9650; +0.45%</div>
+          <div class="value">$71,696</div>
+          <div class="delta down">&#9660; -0.32%</div>
         </div>
         <div class="market-card">
           <div class="name">Gold</div>
-          <div class="value">$4,865</div>
-          <div class="delta up">&#9650; +0.38%</div>
+          <div class="value">$4,813</div>
+          <div class="delta down">&#9660; -0.31%</div>
         </div>
       </div>
-      <div class="watchlist-section">
-        <div class="watchlist-label">My Positions</div>
-        <div class="watchlist-grid">
-          <div class="watchlist-item"><div class="symbol">SPY</div><div class="company">S&amp;P 500 ETF</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">QQQ</div><div class="company">Nasdaq 100 ETF</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">SMH</div><div class="company">VanEck Semiconductor ETF</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">GOOGL</div><div class="company">Alphabet</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">AMZN</div><div class="company">Amazon</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">MSFT</div><div class="company">Microsoft</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">UBER</div><div class="company">Uber</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">GLD</div><div class="company">SPDR Gold Shares</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">META</div><div class="company">Meta Platforms</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">AAPL</div><div class="company">Apple</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">PLTR</div><div class="company">Palantir</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">NLR</div><div class="company">VanEck Uranium+Nuclear</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">COHR</div><div class="company">Coherent Corp</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">BX</div><div class="company">Blackstone</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">STX</div><div class="company">Seagate Technology</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">SCHD</div><div class="company">Schwab Dividend ETF</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">VXUS</div><div class="company">Vanguard Total Intl</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">CRWV</div><div class="company">CoreWeave</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">APLD</div><div class="company">Applied Digital</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">SOFI</div><div class="company">SoFi Technologies</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">BABA</div><div class="company">Alibaba</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">ORCL</div><div class="company">Oracle</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">QCOM</div><div class="company">Qualcomm</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">XLU</div><div class="company">Utilities Select SPDR</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">BLK</div><div class="company">BlackRock</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">VUG</div><div class="company">Vanguard Growth ETF</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">ARKQ</div><div class="company">ARK Autonomous Tech ETF</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">UUUU</div><div class="company">Energy Fuels</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-          <div class="watchlist-item"><div class="symbol">GFS</div><div class="company">GlobalFoundries</div><div class="wi-price">—</div><div class="wi-change">—</div></div>
-        </div>
-      </div>
-      <p class="market-note">Markets closed green Tuesday despite the Iran deadline expiring. S&P +0.40% to 6,612, Nasdaq +0.53% to 21,996, Dow +0.35% to 46,670, Russell +0.47% to 2,542. VIX is elevated at 24.17 — fear is real but controlled. WTI at ~$115, Brent ~$113, Gold at $4,865. Yields: 2Y 3.87%, 10Y 4.34%, curve steepening at +47bp. Credit spreads healthy: IG ~86bp, HY ~313bp — no systemic credit panic yet. Goldman Sachs called this a "generational buying opportunity" in US tech stocks as growth names show their worst performance vs. the broad market in 50 years. April 10 CPI print is the next big catalyst.</p>
+      <p class="market-note">The Iran ceasefire is the only story that matters this morning. Dow futures +1,000 points, S&P futures surging, oil below $100 for the first time since the conflict escalated. European equities are up 4% across the board — travel stocks +7%, miners +6%, autos +5.6%. Energy names are the one exception: Shell is mixed as higher oil trading revenue gets offset by LNG production disruption. Treasury yields are sliding 10 basis points as flight-to-safety trades unwind. This is a risk-on rip — but it's built on a two-week pause, not a peace deal.</p>
       <div class="market-stories">
         <div class="market-story">
-          <div class="story-source">Markets · Oil Shock</div>
-          <div class="story-headline"><a href="https://fxdailyreport.com/wti-crude-oil-price-analysis-for-april-7-2026/" target="_blank">WTI Crude Hits $115 — Strait of Hormuz Closure Driving Sharpest Oil Rally in Years</a></div>
-          <div class="story-summary">West Texas Intermediate is at $115.21/barrel, up from ~$70 before the Iran conflict started. Brent is at $111. The Strait of Hormuz carries ~20% of global oil supply and Iran has declared its closure 'irreversible.' Goldman Sachs had flagged a sustained oil shock as capable of driving a 22% S&P decline — that scenario is now live.</div>
+          <div class="story-source">Energy Markets · Iran War Impact</div>
+          <div class="story-headline"><a href="https://www.cnbc.com/2026/04/07/energy-has-soared-amid-the-iran-war-these-traders-are-now-cautious.html" target="_blank">Oil Falls Below $100 on Ceasefire Deal — Shell Reports Mixed Q1 on War Disruption</a></div>
+          <div class="story-summary">Crude oil tumbled below $100/barrel overnight as the U.S.-Iran ceasefire removed the most acute Strait of Hormuz supply risk. Shell, the first major energy company to report Q1 earnings since the conflict began, showed the split: LNG production fell to 880-920K barrels of oil equivalent (from 948K in Q4 2025) due to Middle East disruption, while oil trading revenue was 'significantly higher.' Energy traders are now cautious after a historic run-up.</div>
         </div>
         <div class="market-story">
-          <div class="story-source">Fed · Monetary Policy</div>
-          <div class="story-headline"><a href="https://www.cnbc.com/2026/04/06/stock-market-today-live-updates.html" target="_blank">Fed Officials Signal Rate Hike Possible if Inflation Stays Above 2% — Oil Shock Complicates FOMC April 27-28</a></div>
-          <div class="story-summary">A top Fed official said Monday a rate hike could be appropriate if inflation stays persistently elevated. The Cleveland Fed's tracker has March CPI trending at 3.25% with oil-driven upside ahead. The FOMC meets April 27-28 and the rate-cut narrative is effectively dead — some desks are quietly modelling a hike for the first time since 2023. For the portfolio, this changes the calculus on duration and growth names.</div>
+          <div class="story-source">Fixed Income · Macro</div>
+          <div class="story-headline"><a href="https://www.cnbc.com/2026/04/07/gold-steady-as-trumps-iran-deadline-keeps-markets-cautious.html" target="_blank">Treasury Yields Plunge 10bps as Iran War Risk Premium Unwinds</a></div>
+          <div class="story-summary">U.S. Treasury yields dropped 10 basis points this morning as investors unwound the flight-to-safety trades that had piled up during the Iran conflict. India's central bank flagged Iran-war-fueled inflation and growth risks while keeping policy rates steady. Goldman Sachs published a note arguing India's economy can weather the energy shock — a sign the financial world is already positioning for post-conflict normalization.</div>
         </div>
       </div>
     </div>
@@ -298,15 +214,42 @@
     <!-- SPORTS -->
     <div class="brief-section">
       <div class="section-label">Sports</div>
-      <div class="scores-row" id="scores-row">
-        <!-- Populated by fetchScores() — static fallback below if ESPN fails -->
+      <div class="scores-row">
+        <div class="score-card">
+          <div class="teams"><strong>Oklahoma City Thunder</strong> vs. Los Angeles Lakers</div>
+          <div>
+            <div class="result">123 – 87</div>
+            <div class="status">Final · Thunder clinch best record in West at 63-16</div>
+          </div>
+        </div>
+        <div class="score-card">
+          <div class="teams"><strong>Houston Rockets</strong> vs. Phoenix Suns</div>
+          <div>
+            <div class="result">119 – 105</div>
+            <div class="status">Final · Rockets at 50-29, locked in for playoffs</div>
+          </div>
+        </div>
+        <div class="score-card">
+          <div class="teams"><strong>New Orleans Pelicans</strong> vs. Utah Jazz</div>
+          <div>
+            <div class="result">156 – 137</div>
+            <div class="status">Final · Combined 293 points, wild one</div>
+          </div>
+        </div>
+        <div class="score-card">
+          <div class="teams"><strong>LA Clippers</strong> vs. Dallas Mavericks</div>
+          <div>
+            <div class="result">116 – 103</div>
+            <div class="status">Final · Clippers hold 7-seed fight</div>
+          </div>
+        </div>
       </div>
       <div class="upcoming">
         <div class="upcoming-label">Today / Upcoming</div>
-        <div class="upcoming-item">NBA regular season final stretch — playoff seeding races tightening across both conferences</div>
-        <div class="upcoming-item">MLB Opening Week underway — early results setting tone for division races</div>
+        <div class="upcoming-item">NBA regular season winding down — final playoff seeding battles across both conferences this week</div>
+        <div class="upcoming-item">Thunder (63-16) is the story of the season — Shai Gilgeous-Alexander's MVP case is airtight after torching the Lakers by 36</div>
       </div>
-      <p class="market-note" style="margin-top:1rem">Stephon Castle announced himself last night: 17 points, 13 assists, and 10 rebounds in San Antonio's 115-102 blowout of Philly — a triple-double that signals the Spurs' future is very much alive. In New York, Brunson did what Brunson does: 17 of his 30 points in the fourth quarter to hold off Atlanta. Jokic, meanwhile, keeps stacking triple-doubles — his 33rd of the season in an OT grinder against Portland, with 35/13/13. The man is having an all-time year and it keeps going unnoticed nationally because Denver doesn't capture the vibe. Knicks and Nuggets are both locked in for seeding battles going into the final week.</p>
+      <p class="market-note" style="margin-top:1rem">OKC didn't just beat the Lakers last night — they embarrassed them, 123-87. A 36-point blowout in what could be a playoff preview is a statement. Shai Gilgeous-Alexander is firmly in MVP conversation, and the Thunder at 63-16 are the class of the Western Conference. Elsewhere, the Pelicans-Jazz game went full chaos, combining for 293 points in a 156-137 shootout. With two weeks left in the regular season, the play-in picture is tight — Golden State is fighting for their playoff lives.</p>
     </div>
 
     <!-- CULTURE & ENTERTAINMENT -->
@@ -315,30 +258,30 @@
       <div class="ent-grid">
         <div class="ent-card">
           <div class="ent-image" style="background: #1a1a2e; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
-            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">Euphoria S3</div>
-            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">HBO · TV · April 12</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">Project Hail Mary</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">Film · In Theaters · Now</div>
           </div>
-          <div class="ent-type">TV Drama · HBO</div>
-          <h4>Euphoria Season 3 Returns April 12 — The Most Anticipated Comeback on TV Right Now</h4>
-          <p>After years of delays, Sam Levinson's neon-soaked disaster parade comes back April 12 with Zendaya, Jacob Elordi, and Sydney Sweeney all returning. The show basically invented a visual language for Gen Z TV — whether S3 can deliver after all the off-screen drama (cast feuds, production meltdowns) is the real question. If you watched S1 or S2, you're watching this.</p>
-        </div>
-        <div class="ent-card">
-          <div class="ent-image" style="background: #1a0a0a; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
-            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#e8c4c4; text-align:center;">The Boys S7</div>
-            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#8a5a5a;">Prime Video · Final Season · Now</div>
-          </div>
-          <div class="ent-type">TV · Prime Video</div>
-          <h4>'The Boys' Season 7 — The Final Season Drops This Week With a Two-Episode Premiere</h4>
-          <p>The most unhinged show on television is ending. The Boys' final season kicked off this week on Prime Video with a two-episode drop. The series has been one of the smartest takedowns of corporate power and superhero culture in recent memory — and the ending is now in sight. Must-watch TV for the week.</p>
+          <div class="ent-type">Film · Theatrical</div>
+          <h4>'Project Hail Mary' Is In Theaters — Ryan Gosling's Space Epic Has Arrived</h4>
+          <p>Ryan Gosling stars in the big-screen adaptation of Andy Weir's beloved sci-fi novel — a solo astronaut wakes up alone in space with no memory and has to figure out how to save humanity. Variety calls it a lavish, feel-good outer-space thriller that 'wants to be Interstellar meets E.T.' Reviews are mixed but it's the biggest film event of the spring. Worth seeing on the big screen.</p>
         </div>
         <div class="ent-card">
           <div class="ent-image" style="background: #1a1a2e; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
-            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">Michael (Biopic)</div>
-            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">Lionsgate · Film · April 24</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">The Testaments</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">Hulu · Series Premiere · Now</div>
           </div>
-          <div class="ent-type">Film · Theaters</div>
-          <h4>Michael Jackson Biopic 'Michael' Hits Theaters April 24 — Jaafar Jackson in the Lead</h4>
-          <p>Lionsgate's sweeping MJ biopic stars his own nephew Jaafar Jackson in the lead role. The estate's direct involvement guarantees access to the full catalog — but also raises questions about how hagiographic it'll be. Given the cultural weight of the subject, this is the biggest film event of the month regardless of how you feel about it.</p>
+          <div class="ent-type">TV · Hulu</div>
+          <h4>Hulu's 'The Testaments' Picks Up Where 'The Handmaid's Tale' Left Off — Set Four Years Later</h4>
+          <p>Hulu dropped 'The Testaments,' the long-awaited sequel to The Handmaid's Tale, set four years after the original series finale. Elisabeth Moss returns as June Osborne in a Gilead that's evolved but no less sinister. If you binged the original, this is appointment TV.</p>
+        </div>
+        <div class="ent-card">
+          <div class="ent-image" style="background: #1a1a2e; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:1rem;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#c9d4e0; text-align:center;">A$AP Rocky — Don't Be Dumb</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase; color:#7a6a9a;">Album · Out Now</div>
+          </div>
+          <div class="ent-type">Music · Album</div>
+          <h4>A$AP Rocky Drops 'Don't Be Dumb' — His Most Ambitious Album Yet</h4>
+          <p>Rocky's long-awaited album is finally here, and Variety calls it his most ambitious project yet — 'all the wiser' with production that leans adventurous. After years of personal turbulence and legal drama, this is his full artistic statement. Already generating significant buzz in hip-hop circles.</p>
         </div>
       </div>
     </div>
@@ -348,223 +291,19 @@
       <div class="rabbit-hole">
         <div class="rh-label">Today&rsquo;s Rabbit Hole</div>
         <div class="rh-image" style="background: linear-gradient(135deg, #0d1b2a 0%, #1a2a1a 50%, #2a1a0d 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; padding: 2rem;">
-          <div style="font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#5a8a5a;">Markets · Geopolitics · Energy</div>
-          <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:#c9d4e0; line-height:1; letter-spacing:-0.03em; text-align:center;">Hormuz Choke</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#5a8a5a;">Geopolitics · Energy Markets · Macro Strategy</div>
+          <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:#c9d4e0; line-height:1; letter-spacing:-0.03em; text-align:center;">Strait of Hormuz</div>
         </div>
-        <h3>The Strait of Hormuz Is the World's Most Important 21-Mile Bottleneck — Here's What Happens If It Stays Closed</h3>
-        <p>The Strait of Hormuz is where the Persian Gulf meets the Gulf of Oman — a 21-mile-wide passage that about 17-21 million barrels of oil flow through every single day. That's roughly one-fifth of global oil consumption. Saudi Arabia, Iraq, Kuwait, UAE, and Iran all ship through it. There's no fully viable alternative. If it stays closed or meaningfully disrupted, the global energy market doesn't just tighten — it breaks.</p><p>Iran has threatened to close the Strait before — most notably in 2011-2012 during sanctions escalation — and markets flinched every time. But they never actually did it, and prices eventually normalized. This time feels different: Iran has declared the closure 'irreversible,' WTI is already at $115, and the Trump administration has publicly threatened to bomb power stations and bridges. The diplomatic off-ramps are narrowing. China and Russia are running interference at the UN. The Strait hasn't been physically closed in modern history — we're in unprecedented territory.</p><p>For Zubin specifically, this is a story that cuts across everything in your portfolio and career interests. On the markets side: energy stocks and GLD benefit directly; consumer discretionary (UBER, etc.) gets squeezed by fuel costs; tech stays relatively insulated but not immune to a broader macro shock. On the career side, if you're heading into sports/entertainment marketing in LA or NYC post-grad, understand that an inflationary shock from sustained $115+ oil compresses marketing budgets industry-wide. Brand spend gets cut when CFOs get nervous.</p><p>Watch: the UN Security Council vote today, whether Trump follows through on infrastructure strikes after the deadline passes, and how Gulf states (especially Saudi Arabia and UAE) respond. If Saudi production gets disrupted or damaged, Goldman's 22% S&P decline scenario becomes a real conversation. This is the macro story of 2026 — everything else is downstream of it.</p>
-        <a href="https://www.cbsnews.com/live-updates/iran-war-trump-deadline-power-plants-bridges-ceasefire-push-air-force-rescue/" target="_blank" class="read-full">Live updates: Iran war, Hormuz deadline &rarr;</a>
+        <h3>The Strait of Hormuz Is 21 Miles Wide — And It Controls the Global Economy</h3>
+        <p>Roughly 20% of the world's oil — and about 25% of its liquefied natural gas — passes through a narrow chokepoint between Iran and Oman called the Strait of Hormuz. At its tightest point, the navigable shipping lane is just 2 miles wide in each direction. When Trump threatened to destroy Iranian infrastructure unless Iran reopened the Strait, and markets responded by sending oil to $110+, that wasn't hysteria — it was a rational pricing of what a closed Strait actually means: immediate supply shock, spiking gasoline prices, aviation fuel chaos, and within weeks, real GDP contraction across oil-import-dependent economies.</p><p>Iran has threatened to close the Strait before — most recently in 2012, and multiple times during various U.S.-Iran tensions. They've never actually done it, because closing it hurts Iran too: the country's own oil exports flow through the same channel. But 'never done it before' is cold comfort when Trump is literally posting 'whole civilization' threats on Truth Social. The real risk isn't that Iran formally closes the Strait — it's that they make transit sufficiently dangerous (mines, missile threats, harassment of tankers) that insurers won't cover shipping, and commercial traffic stops voluntarily.</p><p>For markets, the two-week ceasefire does a specific thing: it removes the immediate tail risk that had traders hedging oil at $120-130. Energy stocks in Zubin's portfolio — look at NLR (nuclear) and XLU (utilities), which rallied during the conflict as alternatives to petroleum-based generation — may see some pullback as oil eases. Meanwhile, airlines, travel, and logistics names rip today because jet fuel and diesel costs are the single biggest line item in their cost structures. A $20/barrel drop in crude is a massive margin tailwind for those sectors.</p><p>What to watch: whether Iran actually stops charging tolls through Hormuz (they said they won't), whether Gulf air defense reports quiet down over the next 48 hours, and whether Trump extends the ceasefire or lets it lapse in two weeks. This is not over — it's intermission.</p>
+        <a href="https://www.cnbc.com/2026/04/08/european-markets-ftse-dax-cac-ftsemib-ibex-react-to-iran-us-ceasefire-deal.html" target="_blank" class="read-full">Market reaction to the ceasefire deal — CNBC &rarr;</a>
       </div>
     </div>
 
   </div>
 
   <div class="brief-footer">
-    <p>Updated 7:00 AM MT, April 7, 2026 &middot; <a href="index.html">Back to site</a></p>
+    <p>Updated 4:04 AM MT, April 8, 2026 &middot; <a href="index.html">Back to site</a></p>
   </div>
-
-  <!-- BOX SCORE MODAL -->
-  <div id="boxscore-modal" role="dialog" aria-modal="true" aria-labelledby="boxscore-title">
-    <div id="boxscore-inner">
-      <div id="boxscore-header">
-        <div>
-          <div id="boxscore-title">Box Score</div>
-          <div id="boxscore-subtitle"></div>
-        </div>
-        <button id="boxscore-close" aria-label="Close">✕</button>
-      </div>
-      <div id="boxscore-body">
-        <div id="boxscore-loading">Loading box score&hellip;</div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-  // ── ESPN Box Score ──────────────────────────────────────────────────────────
-  const ESPN_SCOREBOARD = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard';
-  const ESPN_SUMMARY    = 'https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/summary';
-
-  const STATIC_GAMES = [
-    { away:'76ers',    home:'Spurs',      awayScore:102, homeScore:115, status:'Final',
-      note:'Castle 17/13/10 — triple-double', espnId:'401768400' },
-    { away:'Hawks',    home:'Knicks',     awayScore:105, homeScore:108, status:'Final',
-      note:'Brunson 30 pts, 17 in Q4', espnId:'401768401' },
-    { away:'Blazers',  home:'Nuggets',    awayScore:132, homeScore:137, status:'Final/OT',
-      note:'Jokic 35/13/13 — 33rd triple-double', espnId:'401768402' },
-    { away:'Grizzlies',home:'Cavaliers',  awayScore:'—', homeScore:'—', status:'Results pending',
-      note:'', espnId:null },
-  ];
-
-  function renderCards(games) {
-    const row = document.getElementById('scores-row');
-    row.innerHTML = '';
-    games.forEach(g => {
-      const card = document.createElement('div');
-      card.className = 'score-card';
-      if (g.espnId) card.setAttribute('data-espn-id', g.espnId);
-      card.innerHTML = `
-        <div class="teams">
-          <div><strong>${g.away}</strong> vs. ${g.home}</div>
-          ${g.note ? `<div style="font-family:'JetBrains Mono',monospace;font-size:0.5rem;letter-spacing:0.08em;color:var(--warm-gray);margin-top:3px;">${g.note}</div>` : ''}
-          ${g.espnId ? '<div class="box-hint">&#8599; tap for box score</div>' : ''}
-        </div>
-        <div style="text-align:right;">
-          <div class="result">${g.awayScore} – ${g.homeScore}</div>
-          <div class="status">${g.status}</div>
-        </div>`;
-      if (g.espnId) {
-        card.addEventListener('click', () => openBoxScore(g.espnId, `${g.away} vs. ${g.home}`, g.status));
-      }
-      row.appendChild(card);
-    });
-  }
-
-  async function fetchScores() {
-    try {
-      const yd = new Date(); yd.setDate(yd.getDate() - 1);
-      const yStr = yd.toISOString().slice(0,10).replace(/-/g,'');
-      const res = await fetch(`${ESPN_SCOREBOARD}?dates=${yStr}&limit=20`);
-      if (!res.ok) throw new Error('ESPN error');
-      const data = await res.json();
-      const events = (data.events || []).filter(ev => {
-        const s = ev.competitions?.[0]?.status?.type?.completed;
-        return s === true;
-      });
-      if (!events.length) throw new Error('No completed games');
-      const games = events.map(ev => {
-        const comp  = ev.competitions[0];
-        const away  = comp.competitors.find(c => c.homeAway === 'away');
-        const home  = comp.competitors.find(c => c.homeAway === 'home');
-        const status = comp.status.type.shortDetail || 'Final';
-        return {
-          away: away.team.shortDisplayName || away.team.displayName,
-          home: home.team.shortDisplayName || home.team.displayName,
-          awayScore: away.score || '–',
-          homeScore: home.score || '–',
-          status, note: '', espnId: ev.id,
-        };
-      });
-      renderCards(games);
-    } catch(e) {
-      renderCards(STATIC_GAMES);
-    }
-  }
-
-  const bsModal    = document.getElementById('boxscore-modal');
-  const bsBody     = document.getElementById('boxscore-body');
-  const bsTitle    = document.getElementById('boxscore-title');
-  const bsSub      = document.getElementById('boxscore-subtitle');
-
-  document.getElementById('boxscore-close').addEventListener('click', closeModal);
-  bsModal.addEventListener('click', e => { if (e.target === bsModal) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-  function openModal()  { bsModal.classList.add('open'); document.body.style.overflow = 'hidden'; }
-  function closeModal() { bsModal.classList.remove('open'); document.body.style.overflow = ''; }
-
-  async function openBoxScore(espnId, matchup, status) {
-    bsTitle.textContent = matchup;
-    bsSub.textContent   = status;
-    bsBody.innerHTML    = '<div id="boxscore-loading">Loading box score&hellip;</div>';
-    openModal();
-    try {
-      const res = await fetch(`${ESPN_SUMMARY}?region=us&lang=en&contentorigin=espn&event=${espnId}`);
-      if (!res.ok) throw new Error('ESPN summary error');
-      renderBoxScore(await res.json(), espnId);
-    } catch(e) {
-      bsBody.innerHTML = `<div id="boxscore-error">
-        Could not load box score from ESPN.<br><br>
-        <a href="https://www.espn.com/nba/game/_/gameId/${espnId}" target="_blank" rel="noopener">View on ESPN &rarr;</a>
-      </div>`;
-    }
-  }
-
-  function renderBoxScore(data, espnId) {
-    const boxscore = data.boxscore;
-    if (!boxscore) { bsBody.innerHTML = '<div id="boxscore-error">No box score data available.</div>'; return; }
-    const header   = data.header || {};
-    const comp     = (header.competitions || [])[0] || {};
-    const teams    = comp.competitors || [];
-    const awayTeam = teams.find(t => t.homeAway === 'away') || teams[0] || {};
-    const homeTeam = teams.find(t => t.homeAway === 'home') || teams[1] || {};
-    const lines    = boxscore.teams || [];
-    const awayLine = lines.find(t => t.homeAway === 'away') || lines[0] || {};
-    const homeLine = lines.find(t => t.homeAway === 'home') || lines[1] || {};
-    function qtrs(lt) { return (lt.linescores||[]).map(q => q.displayValue || q.value || '').join('  '); }
-    let html = `<div class="linescore">
-      <div class="linescore-team">
-        <div class="linescore-name">${awayTeam.team?.displayName || awayLine.team?.displayName || 'Away'}</div>
-        <div class="linescore-score">${awayTeam.score || awayLine.score || '–'}</div>
-        <div class="linescore-quarters">${qtrs(awayLine)}</div>
-      </div>
-      <div class="linescore-team">
-        <div class="linescore-name">${homeTeam.team?.displayName || homeLine.team?.displayName || 'Home'}</div>
-        <div class="linescore-score">${homeTeam.score || homeLine.score || '–'}</div>
-        <div class="linescore-quarters">${qtrs(homeLine)}</div>
-      </div>
-    </div>`;
-    const players = boxscore.players || [];
-    players.forEach(tp => {
-      const teamName = tp.team?.displayName || 'Team';
-      const stats    = tp.statistics || [];
-      const main     = stats[0];
-      if (!main) return;
-      const cols     = main.labels || [];
-      const athletes = main.athletes || [];
-      html += `<div class="bs-team-label">${teamName}</div>
-      <table class="bs-table"><thead><tr>
-        <th>Player</th>${cols.map(c => `<th>${c}</th>`).join('')}
-      </tr></thead><tbody>`;
-      athletes.forEach(a => {
-        const name = a.athlete?.shortName || a.athlete?.displayName || '–';
-        const pos  = a.athlete?.position?.abbreviation || '';
-        html += `<tr class="${a.starter ? 'starter' : ''}">
-          <td>${name}${pos ? ` <span style="font-weight:300;opacity:0.4;font-size:0.65rem">${pos}</span>` : ''}</td>
-          ${(a.stats||[]).map(s => `<td>${s}</td>`).join('')}
-        </tr>`;
-      });
-      html += `</tbody></table>`;
-    });
-    if (!players.length) {
-      html += `<div style="padding:1rem 0;opacity:0.55;font-size:0.85rem">
-        Box score not yet available. <a href="https://www.espn.com/nba/game/_/gameId/${espnId}" target="_blank">View on ESPN &rarr;</a>
-      </div>`;
-    }
-    bsBody.innerHTML = html;
-  }
-
-  // ── Live portfolio prices (via /api/prices Vercel endpoint) ────────────────
-  async function fetchPositionPrices() {
-    const tickers = ['SPY','QQQ','SMH','GOOGL','AMZN','MSFT','UBER','GLD','META','AAPL','PLTR','NLR','COHR','BX','STX','SCHD','VXUS','CRWV','APLD','SOFI','BABA','ORCL','QCOM','XLU','BLK','VUG','ARKQ','UUUU','GFS'];
-    try {
-      const res = await fetch(`/api/prices?symbols=${tickers.join(',')}`);
-      if (!res.ok) throw new Error('prices API error');
-      const data    = await res.json();
-      const results = data.quoteResponse?.result || [];
-      const map     = {};
-      results.forEach(q => { if (q.symbol) map[q.symbol] = q; });
-      document.querySelectorAll('.watchlist-item').forEach(item => {
-        const sym    = item.querySelector('.symbol')?.textContent.trim();
-        const pEl    = item.querySelector('.wi-price');
-        const cEl    = item.querySelector('.wi-change');
-        const q      = map[sym];
-        if (!q || !pEl || !cEl) return;
-        const price = q.regularMarketPrice;
-        const chgPct = q.regularMarketChangePercent;
-        if (price != null)  pEl.textContent = '$' + price.toFixed(2);
-        if (chgPct != null) {
-          const up = chgPct >= 0;
-          cEl.textContent = `${up ? '▲' : '▼'} ${up ? '+' : ''}${chgPct.toFixed(2)}%`;
-          cEl.className   = 'wi-change ' + (up ? 'up' : 'down');
-        }
-      });
-    } catch(e) {
-      // Leave '—' placeholders — silent fail
-    }
-  }
-
-  fetchScores();
-  fetchPositionPrices();
-  </script>
 </body>
 </html>
